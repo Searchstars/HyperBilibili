@@ -1,0 +1,44 @@
+{
+  "package": "com.application.watch.demo",
+  "name": "HyperBilibili",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "minAPILevel": 2,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 480
+  },
+  "router": {
+    "entry": "pages/main",
+    "pages": {
+      "pages/main": {
+        "component": "main"
+      },
+      "pages/login": {
+        "component": "login"
+      },
+      "pages/home": {
+        "component": "home"
+      },
+      "pages/settings": {
+        "component": "settings"
+      },
+      "pages/videopush": {
+        "component": "videopush"
+      }
+    }
+  },
+  "display": {
+    "backgroundColor": "#000000"
+  }
+}

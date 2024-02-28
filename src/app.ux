@@ -1,0 +1,13 @@
+<script>
+import * as bilirequest_imported from './bilirequest'
+
+export default {
+  bilirequest: bilirequest_imported,
+  onCreate() {
+    console.log('app created')
+  },
+  onDestroy() {
+    console.log('app destroyed')
+  }
+}
+</script>

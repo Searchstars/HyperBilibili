@@ -1,0 +1,89 @@
+<template>
+    <div class="settings-page">
+        <div class="setting_item" style="margin-top: 40px" @click="UpdateFreshType()">
+            <text class="setting_item_text">视频推荐相关性：{{video_fresh_type}}</text>
+        </div>
+        <div class="setting_item" style="margin-top: 180px" @click="Logout()">
+            <text class="setting_item_text">退出登录</text>
+            <text class="setting_item_arrow">></text>
+        </div>
+    </div>
+</template>
+
+<script>
+import file from '@system.file'
+import prompt from '@system.prompt'
+import router from '@system.router'
+import storage from '@system.storage'
+export default{
+    private: {
+        video_fresh_type: 0,
+        UpdateFreshType(){
+            if(this.video_fresh_type > 2){
+                this.video_fresh_type = "0"
+            }
+            else{
+                this.video_fresh_type = (Number(this.video_fresh_type) + 1).toString()
+            }
+            storage.set({
+                key: "video_fresh_type",
+                value: this.video_fresh_type,
+                success: (data) => {
+                    console.log("修改完成: " + this.video_fresh_type)
+                }
+            })
+        },
+        Logout(){
+            console.log("logout")
+            file.delete({
+                uri: "internal://files/hbili_SESSDATA.txt",
+                success: function(data){
+                    router.push({
+                        uri: "pages/login"
+                    })
+                },
+                fail: function(data, code){
+                    console.log(data)
+                    prompt.showToast({
+                        message: "退出登录失败，错误信息：" + data,
+                        duration: 6000
+                    })
+                }
+            })
+        }
+    },
+    onInit(){
+        storage.get({
+            key: "video_fresh_type",
+            success: (data) => {
+                this.video_fresh_type = data
+            }
+        })
+    }
+}
+</script>
+
+<style>
+    .settings-page{
+        justify-content: center;
+    }
+    .setting_item{
+        background-color: rgba(255, 255, 255, 0.178);
+        width: 80%;
+        height: 100px;
+        border-radius: 30px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+    }
+    .setting_item_text{
+        color: white;
+        font-size: 28px;
+        margin-left: 40px;
+    }
+    .setting_item_arrow{
+        color: white;
+        font-size: 28px;
+        margin-left: 15px
+    }
+</style>

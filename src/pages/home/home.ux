@@ -1,0 +1,162 @@
+<template>
+  <div class="home-page">
+    <image class="profile_image" src={{profile_image_src}} alt="/common/icons8-loading-96.png"></image>
+    <text class="normal_welcome_text">欢迎回来，{{user_name}}</text>
+    <div class="features_div">
+        <div class="feature" @click="OpenVideoPushPage()">
+            <div class="feature_icon_div">
+                <image class="feature_icon" src="/common/icons8-pushes-96.png"></image>
+            </div>
+            <text class="feature_text">首页视频推荐</text>
+            <text class="feature_arrow">></text>
+        </div>
+        <div class="feature" style="margin-top: 80px">
+            <div class="feature_icon_div">
+                <image class="feature_icon" src="/common/icons8-history-96.png"></image>
+            </div>
+            <text class="feature_text">观看历史</text>
+            <text class="feature_arrow">></text>
+        </div>
+        <div class="feature" style="margin-top: 160px">
+            <div class="feature_icon_div">
+                <image class="feature_icon" src="/common/icons8-star-96.png"></image>
+            </div>
+            <text class="feature_text">我的收藏</text>
+            <text class="feature_arrow">></text>
+        </div>
+        <div class="feature" style="margin-top: 240px">
+          <div class="feature_icon_div">
+              <image class="feature_icon" src="/common/icons8-chat-message-96.png"></image>
+          </div>
+          <text class="feature_text">我的私信</text>
+          <text class="feature_arrow">></text>
+        </div>
+        <div class="feature" style="margin-top: 320px" @click="OpenSettingsPage()">
+          <div class="feature_icon_div">
+              <image class="feature_icon" src="/common/icons8-settings-96.png"></image>
+          </div>
+          <text class="feature_text">设置</text>
+          <text class="feature_arrow">></text>
+        </div>
+        <div class="feature" style="margin-top: 400px">
+          <div class="feature_icon_div">
+              <image class="feature_icon" src="/common/icons8-info-96.png"></image>
+          </div>
+          <text class="feature_text">关于</text>
+          <text class="feature_arrow">></text>
+        </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+
+export default {
+  private: {
+    profile_image_src: "",
+    login_info: null,
+    user_name: "Loading...",
+    async MainInit(){
+      router.clear() //清内存
+      await this.$app.$def.bilirequest.InitBiliRequest(false)
+      this.profile_image_src = "/common/icons8-loading-96.png"
+      var login_ret = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/nav","json")
+      this.login_info = login_ret
+      console.log(this.login_info.code)
+      this.profile_image_src = this.login_info.data.face + "@120w_120h" //向后端请求低分辨率图片以加快加载速度
+      console.log(this.profile_image_src)
+      this.user_name = this.login_info.data.uname
+    },
+    OpenSettingsPage(){
+      router.push({
+        uri: "pages/settings"
+      })
+    },
+    OpenVideoPushPage(){
+      router.push({
+        uri: "pages/videopush"
+      })
+    }
+  },
+
+  onInit(){
+    this.MainInit()
+  },
+
+  onReady(){
+    setTimeout(() => {
+      if(this.login_info.data.isLogin == false){
+        prompt.showToast({
+          message: "登录失效，请退出后重新登录",
+          duration: 3000
+        })
+      }
+    },6000) // 给予6秒的等待时间，在一切加载完后再进行登录结果检测
+            // 但由于模拟器的垃圾效率 在模拟器里这个提示可能会在账户登录成功的情况下仍然出现
+            // 判断账户是否登录成功的最好方法就是看你自己的头像有没有出来
+  }
+}
+</script>
+
+<style>
+    .profile_image{
+      /* Vela快应用的图片似乎没法变圆 迫于无奈只能使用正方形 */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        position: relative;
+        left: 240px;
+        margin-left: -60px;
+        margin-top: 50px;
+    }
+    .normal_welcome_text{
+        color: white;
+        font-size: 22px;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        top: 200px;
+    }
+    .features_div{
+        /*background-color: gray;*/
+        width: 60%;
+        height: 120%;
+        position: relative;
+        margin-left: 35px;
+        top: 250px
+    }
+    .feature{
+        background-color: rgba(255, 255, 255, 0.178);
+        width: 100%;
+        height: 70px;
+        border-radius: 50px;
+        position: absolute;
+        display: flex;
+    }
+    .feature_icon_div{
+        width: 50px;
+        height: 50px;
+        background-color: pink;
+        border-radius: 100px;
+        margin-left: 20px;
+        margin-top: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+    .feature_icon{
+      width: 35px;
+      height: 35px;
+    }
+    .feature_text{
+        color: white;
+        font-size: 20px;
+        margin-left: 20px;
+    }
+    .feature_arrow{
+        color: white;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+</style>

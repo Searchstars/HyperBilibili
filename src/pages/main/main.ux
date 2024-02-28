@@ -1,0 +1,64 @@
+<template>
+    <div>
+        
+    </div>
+</template>
+
+<script>
+import file from '@system.file'
+import router from '@system.router'
+import storage from '@system.storage'
+
+function JumpToNext(){
+    file.readText({
+        uri: "internal://files/hbili_SESSDATA.txt",
+        success: function(data){
+            console.log(data)
+            if(data != "" && data != void 0){
+                router.push({
+                    uri: "pages/home"
+                })
+            }
+            else{
+                router.push({
+                    uri: "pages/login"
+                })
+            }
+        },
+        fail: function(data, code){
+            router.push({
+                uri: "pages/login"
+            })
+        }
+    })
+}
+
+export default{
+    public:{
+        async onReadyInit(){
+            storage.get({
+                key: "video_fresh_type",
+                success: function(data){
+                    if(data == ""){
+                        storage.set({
+                            key: "video_fresh_type",
+                            value: "2",
+                            success: function(data){
+                                console.log("Inited video_fresh_type")
+                                JumpToNext()
+                            }
+                        })
+                    }
+                    else{
+                        JumpToNext()
+                    }
+                }
+            })
+        }
+    },
+    onReady(){
+        console.log("Ready")
+        this.onReadyInit()
+    }
+}
+</script>

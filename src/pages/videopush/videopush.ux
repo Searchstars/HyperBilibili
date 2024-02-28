@@ -1,0 +1,131 @@
+<template>
+    <div class="videopush-page">
+        <input type="button" value="刷新" style="margin-top: 40px; font-size: 22px; width: 90px; height: 40px" @click="refresh()"></input>
+        <div class="video" style="margin-top: 120px">
+            <image class="video_image" src="{{videolist.data.item[0].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[0].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[0].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[0].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 260px">
+            <image class="video_image" src="{{videolist.data.item[1].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[1].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[1].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[1].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 400px">
+            <image class="video_image" src="{{videolist.data.item[2].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[2].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[2].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[2].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 540px">
+            <image class="video_image" src="{{videolist.data.item[3].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[3].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[3].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[3].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 680px">
+            <image class="video_image" src="{{videolist.data.item[4].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[4].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[4].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[4].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 820px">
+            <image class="video_image" src="{{videolist.data.item[5].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[5].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[5].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[5].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 960px">
+            <image class="video_image" src="{{videolist.data.item[6].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[6].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[6].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[6].stat.view)}}</text>
+        </div>
+        <div class="video" style="margin-top: 1100px">
+            <image class="video_image" src="{{videolist.data.item[7].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <text class="video_title">{{videolist.data.item[7].title}}</text>
+            <text class="video_up_name">UP: {{videolist.data.item[7].owner.name}}</text>
+            <text class="video_stat_view">{{formatNumber_(videolist.data.item[7].stat.view)}}</text>
+        </div>
+    </div>
+</template>
+
+<script>
+import storage from '@system.storage'
+import { formatNumber } from '../../tools'
+export default{
+    private:{
+        videolist: null,
+        async MainInit(){
+            var a = await storage.get({
+                key: "video_fresh_type",
+                success: async(data) => {
+                    this.videolist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/index/top/rcmd?" + "fresh_type=" + data + "&version=1","json")
+                }
+            })
+        },
+        async refresh(){
+            storage.get({
+                key: "video_fresh_type",
+                success: async(data) => {
+                    this.videolist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/index/top/rcmd?" + "fresh_type=" + data + "&version=1","json")
+                }
+            })
+        },
+        formatNumber_(num){
+            return formatNumber(num)
+        }
+    },
+    onInit(){
+        this.MainInit()
+    }
+}
+</script>
+
+<style>
+    .videopush-page{
+        justify-content: center;
+        position: absolute;
+    }
+    .video{
+        background-color: rgba(255, 255, 255, 0.178);
+        border-radius: 25px;
+        width: 80%;
+        height: 130px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+    }
+    .video_image{
+        margin-left: 25px;
+        width: 151px;
+        height: 85px;
+        border-radius: 10px;
+    }
+    .video_title{
+        width: 90%;
+        height: 70%;
+        font-size: 16px;
+        text-align:start;
+        color: white;
+        margin-left: 15px;
+    }
+    .video_up_name{
+        color: white;
+        font-size: 14px;
+        text-align: left;
+        position: absolute;
+        top: 102px;
+        margin-left: 146px;
+    }
+    .video_stat_view{
+        color: white;
+        font-size: 14px;
+        text-align: left;
+        position: absolute;
+        top: 102px;
+        margin-left: 306px;
+    }
+</style>

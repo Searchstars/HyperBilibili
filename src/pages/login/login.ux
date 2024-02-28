@@ -1,0 +1,202 @@
+<template>
+	<div class="login-page">
+		<text
+			style="
+				position: absolute;
+				justify-content: center;
+				align-items: center;
+				margin-top: 50%;
+				margin-left: 55%;
+				font-size: 24px;
+				color: white;
+			"
+		>
+			使用哔哩哔哩APP扫描二维码以登录
+		</text>
+		<qrcode
+			id="login_qr"
+			style="
+				position: absolute;
+				justify-content: center;
+				align-items: center;
+				margin-top: 130%;
+				margin-left: 100%;
+				width: 60%;
+				height: 60%;
+			"
+			value="{{qr_value}}"
+			show="{{qr_show}}"
+		></qrcode>
+		<text
+			style="
+				position: absolute;
+				justify-content: center;
+				align-items: center;
+				margin-top: 100%;
+				text-align: center;
+				width: 100%;
+				height: 100%;
+				font-size: 16px;
+				color: white;
+			"
+			show="{{qr_loading_show}}"
+		>
+			Loading...
+		</text>
+	</div>
+</template>
+
+<script>
+/*
+  下面的代码很好的诠释了这句话：
+    “此程序依赖bug运行，如非大难临头请勿修改”
+*/
+
+import router from "@system.router";
+import fetch from '@system.fetch'
+import prompt from '@system.prompt'
+import file from '@system.file'
+import { ParseSetCookie } from '../../tools'
+
+// 定义一个异步函数，返回一个Promise对象
+async function SetQRCode(){
+  // 使用try...catch语句处理可能的异常
+  try {
+    // 使用await关键字等待fetch请求的结果
+    let res = await fetch.fetch({
+      url: "https://passport.bilibili.com/x/passport-login/web/qrcode/generate",
+      responseType: "json",
+    })
+    // 返回二维码的url
+    return [res.data.data.data.url,res.data.data.data.qrcode_key]
+  } catch (error) {
+    // 使用error.message和error.code获取错误信息
+    prompt.showToast({
+        message: '在请求登录二维码时发生错误！错误信息：' + error.message + "错误代码：" + error.code + "\n请重新启动此应用程序，然后再试",
+        duration: 5000
+    })
+  }
+}
+
+export default {
+  public:{
+    qr_value: void 0,
+    qr_show: false,
+    qr_loading_show: true,
+    qr_key: "N/A",
+    get_qr_num: 0,
+    set_qr_num: 0,
+    // 定义一个异步方法，用于获取和更新qr_value的值
+    async getQRInfos(){
+      this.get_qr_num++
+      // 如果qr_value为空，就调用SetQRCode函数
+      if (!this.qr_value){
+        this.set_qr_num++
+        var GetInfoRet = await SetQRCode()
+        this.qr_value = GetInfoRet[0]
+        this.qr_key = GetInfoRet[1]
+      }
+      console.log(`第${this.get_qr_num}次获取登录二维码，第${this.set_qr_num}次设置登录二维码`)
+      // 返回qr_value的值
+      return [this.qr_value, this.qr_key]
+    },
+    async writeLoginRetCookies(headers){
+      console.log("开始写入headers")
+      console.log(headers)
+      try{
+        for (var i=0;i<headers.length;i++){
+          console.log(headers[i])
+          if(headers[i]["DedeUserID"] != void 0 && headers[i]["DedeUserID"] != undefined && headers[i]["DedeUserID"] != ""){
+            console.log(`发现DedeUserID=${headers[i]["DedeUserID"]}，写入！`)
+            await file.writeText({
+              uri: "internal://files/hbili_DedeUserID.txt",
+              text: headers[i]["DedeUserID"]
+            })
+          }
+          if(headers[i]["DedeUserID__ckMd5"] != void 0 && headers[i]["DedeUserID__ckMd5"] != undefined && headers[i]["DedeUserID__ckMd5"] != ""){
+            console.log(`发现DedeUserID__ckMd5=${headers[i]["DedeUserID__ckMd5"]}，写入！`)
+            await file.writeText({
+              uri: "internal://files/hbili_DedeUserID__ckMd5.txt",
+              text: headers[i]["DedeUserID__ckMd5"]
+            })
+          }
+          if(headers[i]["SESSDATA"] != void 0 && headers[i]["SESSDATA"] != undefined && headers[i]["SESSDATA"] != ""){
+            console.log(`发现SESSDATA=${headers[i]["SESSDATA"]}，写入！`)
+            await file.writeText({
+              uri: "internal://files/hbili_SESSDATA.txt",
+              text: headers[i]["SESSDATA"]
+            })
+          }
+          if(headers[i]["bili_jct"] != void 0 && headers[i]["bili_jct"] != undefined && headers[i]["bili_jct"] != ""){
+            console.log(`发现bili_jct=${headers[i]["bili_jct"]}，写入！`)
+            await file.writeText({
+              uri: "internal://files/hbili_bili_jct.txt",
+              text: headers[i]["bili_jct"]
+            })
+          }
+        }
+      }
+      catch(err){
+        console.log("Cookies写入失败，错误信息：" + err)
+      }
+      console.log("Cookies写入完成")
+      return;
+    },
+    PollInterval: null,
+    GetQRInterval: null,
+    async DoPollCheck(){
+      console.log("qr_key=" + this.qr_key)
+      try {
+        // 使用await关键字等待fetch请求的结果
+        fetch.fetch({
+          url: "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + this.qr_key,
+          responseType: "json",
+        }).then(async (res) => {
+          if(res.data.data.data.code === 0){
+            console.log("登录成功")
+            let headers = ParseSetCookie(res.data.headers["Set-Cookie"])
+            console.log(headers)
+            clearInterval(this.PollInterval)
+            clearInterval(this.GetQRInterval)
+            await this.writeLoginRetCookies(headers)
+            router.push({
+              uri: "pages/home"
+            })
+          }
+        })
+        } catch (error) {
+          // 使用error.message和error.code获取错误信息
+          prompt.showToast({
+              message: '在进行二维码登录短轮询时发生错误！错误信息：' + error.message + "错误代码：" + error.code + "\n请重新启动此应用程序，然后再试",
+              duration: 5000
+          })
+        }
+    },
+    async AsyncOnInitDo(){
+      this.getQRInfos().then((v) => {
+        this.qr_value = v[0]
+        this.qr_key = v[1]
+        this.qr_show = true
+        this.qr_loading_show = false
+      })
+      this.GetQRInterval = setInterval(() => {
+        this.qr_show = false
+        this.qr_loading_show = true
+        this.getQRInfos().then((v) => {
+          this.qr_value = v[0]
+          this.qr_key = v[1]
+          this.qr_show = true
+          this.qr_loading_show = false
+        })
+      }, 15000);
+      this.PollInterval = setInterval(() => {
+        this.DoPollCheck()
+          },1500)
+      }
+  },
+  onInit(){
+    router.clear() //清内存
+    this.AsyncOnInitDo()
+  }
+};
+</script>
