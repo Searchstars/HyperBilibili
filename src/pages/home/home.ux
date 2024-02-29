@@ -58,6 +58,8 @@ export default {
     profile_image_src: "",
     login_info: null,
     user_name: "Loading...",
+    var_poll_check_interval: null,
+    network_ok: false,
     async MainInit(){
       router.clear() //清内存
       await this.$app.$def.bilirequest.InitBiliRequest(false)
@@ -83,14 +85,32 @@ export default {
 
   onInit(){
     this.MainInit()
+    this.var_poll_check_interval = setInterval(() => {
+      if(this.login_info.data.isLogin){
+        this.network_ok = true;
+        console.log("logined")
+        if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
+          this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)
+          clearInterval(this.var_poll_check_interval)
+        }
+      }
+      else if((this.login_info.data.isLogin != void 0 && this.login_info.data.isLogin != undefined) && this.login_info.data.isLogin != true){
+        this.network_ok = true;
+        prompt.showToast({
+          message: "登录已失效，请退出后重新登录，否则各项功能将无法正常使用",
+          duration: 6000
+        })
+        clearInterval(this.var_poll_check_interval)
+      }
+    }, 500)
   },
 
   onReady(){
     setTimeout(() => {
-      if(this.login_info.data.isLogin == false){
+      if(this.login_info.data.isLogin == false && this.network_ok == false){
         prompt.showToast({
-          message: "登录失效，请退出后重新登录",
-          duration: 3000
+          message: "网络错误，请退出后重新登录，并检查您的网络连接",
+          duration: 6000
         })
       }
     },6000) // 给予6秒的等待时间，在一切加载完后再进行登录结果检测

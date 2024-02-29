@@ -35,6 +35,9 @@
       },
       "pages/videopush": {
         "component": "videopush"
+      },
+      "pages/videodetail": {
+        "component": "videodetail"
       }
     }
   },
