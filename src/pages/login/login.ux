@@ -1,17 +1,17 @@
 <template>
-	<div class="login-page">
+	<div class="login-page" style="justify-content: center">
 		<text
 			style="
 				position: absolute;
-				justify-content: center;
-				align-items: center;
+        text-align: center;
 				margin-top: 50%;
-				margin-left: 55%;
 				font-size: 24px;
 				color: white;
+        height: 20%;
+        width: 80%;
 			"
 		>
-			使用哔哩哔哩APP扫描二维码以登录
+			使用哔哩哔哩APP扫描以登录
 		</text>
 		<qrcode
 			id="login_qr"
@@ -20,7 +20,6 @@
 				justify-content: center;
 				align-items: center;
 				margin-top: 130%;
-				margin-left: 100%;
 				width: 60%;
 				height: 60%;
 			"
@@ -30,8 +29,6 @@
 		<text
 			style="
 				position: absolute;
-				justify-content: center;
-				align-items: center;
 				margin-top: 100%;
 				text-align: center;
 				width: 100%;

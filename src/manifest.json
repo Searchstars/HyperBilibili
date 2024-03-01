@@ -19,7 +19,7 @@
     "designWidth": 480
   },
   "router": {
-    "entry": "pages/main",
+    "entry": "pages/videoaisummary",
     "pages": {
       "pages/main": {
         "component": "main"
@@ -36,8 +36,8 @@
       "pages/videopush": {
         "component": "videopush"
       },
-      "pages/videodetail": {
-        "component": "videodetail"
+      "pages/videoaisummary": {
+        "component": "videoaisummary"
       }
     }
   },

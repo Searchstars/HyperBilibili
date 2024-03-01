@@ -60,6 +60,7 @@ export default {
     user_name: "Loading...",
     var_poll_check_interval: null,
     network_ok: false,
+    login_wait_num: 0,
     async MainInit(){
       router.clear() //清内存
       await this.$app.$def.bilirequest.InitBiliRequest(false)
@@ -80,27 +81,46 @@ export default {
       router.push({
         uri: "pages/videopush"
       })
+    },
+    isValidUserName(obj){
+      if (obj === null || obj === undefined){
+        return false;
+      }
+      const str = String(obj);
+      if(str.includes("Loading") || str.includes("undefined")){
+        return false;
+      }
+      return true;
     }
   },
 
   onInit(){
     this.MainInit()
     this.var_poll_check_interval = setInterval(() => {
-      if(this.login_info.data.isLogin){
-        this.network_ok = true;
-        console.log("logined")
-        if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
-          this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)
-          clearInterval(this.var_poll_check_interval)
-        }
+      if(this.login_info === null || this.login_info === undefined){
+        console.log("trying to login")
       }
-      else if((this.login_info.data.isLogin != void 0 && this.login_info.data.isLogin != undefined) && this.login_info.data.isLogin != true){
-        this.network_ok = true;
-        prompt.showToast({
-          message: "登录已失效，请退出后重新登录，否则各项功能将无法正常使用",
-          duration: 6000
-        })
-        clearInterval(this.var_poll_check_interval)
+      else{
+        if(this.isValidUserName(this.login_info.data.uname)){
+          this.network_ok = true;
+          console.log("logined")
+          if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
+            this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)
+            clearInterval(this.var_poll_check_interval)
+          }
+        }
+        else{
+          if(this.login_wait_num > 6){
+            this.network_ok = true
+            prompt.showToast({
+              message: "登录已失效，请退出后重新登录，否则各项功能将无法正常使用",
+              duration: 6000
+            })
+            clearInterval(this.var_poll_check_interval)
+          }
+          console.log("wait")
+          this.login_wait_num ++
+        }
       }
     }, 500)
   },
