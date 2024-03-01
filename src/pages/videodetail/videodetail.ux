@@ -1,0 +1,100 @@
+<template>
+    <div class="videodetail-page">
+        <image src="{{img_src}}@300w_168h" class="vid-pic"></image>
+        <text class="vid-title">{{vid_title}}</text>
+        <div class="entry_item" style="margin-top: 305px" @click="OpenAiSummary()">
+            <text class="entry_item_text">AI视频总结</text>
+            <text class="entry_item_arrow">></text>
+        </div>
+        <div class="third_click_bar" style="margin-top: 375px">
+            <image class="third_click_btn" src="/common/icons8-facebook-like-96.png" style="margin-left: 45px"></image>
+            <image class="third_click_btn" src="/common/icons8-coin-100.png" style="margin-left: 45px"></image>
+            <image class="third_click_btn" src="/common/icons8-star-96.png" style="margin-left: 45px"></image>
+        </div>
+        <div class="entry_item" style="margin-top: 515px" @click="">
+            <text class="entry_item_text">评论区</text>
+            <text class="entry_item_arrow">></text>
+        </div>
+        <text style="height: 50px; margin-top: 610px"></text>
+    </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default{
+    public:{
+        img_src: "",
+        vid_title: "",
+        bv: "",
+        cid: "",
+        up_mid: ""
+    },
+    OpenAiSummary(){
+        router.push({
+            uri: "pages/videoaisummary",
+            params: {
+                img_src: this.img_src,
+                bv: this.bv,
+                cid: this.cid,
+                up_mid: this.up_mid
+            }
+        })
+    }
+}
+</script>
+
+<style>
+    .videodetail-page{
+        justify-content: center;
+        position: absolute;
+    }
+    .vid-pic{
+        width: 300px;
+        height: 168px;
+        min-width: 300px;
+        min-height: 168px;
+        margin-top: 30px;
+        position: absolute;
+        border-radius: 10px;
+    }
+    .vid-title{
+        width: 80%;
+        height: 20%;
+        text-align: center;
+        margin-top: 205px;
+        color: white;
+        position: absolute;
+        font-size: 20px;
+        align-items: center;
+    }
+    .entry_item{
+        background-color: rgba(255, 255, 255, 0.178);
+        width: 60%;
+        height: 60px;
+        border-radius: 30px;
+        position: absolute;
+        display: flex;
+        align-items: center;
+    }
+    .entry_item_text{
+        color: white;
+        font-size: 22px;
+        margin-left: 40px;
+    }
+    .entry_item_arrow{
+        color: white;
+        font-size: 22px;
+        margin-left: 15px
+    }
+    .third_click_bar{
+        width: 70%;
+        height: 120px;
+        flex-direction: row;
+        align-items: center;
+    }
+    .third_click_btn{
+        width: 50px;
+        height: 50px;
+    }
+</style>

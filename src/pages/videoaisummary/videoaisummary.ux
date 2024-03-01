@@ -1,7 +1,7 @@
 <template>
     <div class="videoaisummary-page">
-        <div style="background-color: gray; margin-top: 20px; width: 230px; height: 75px"></div>
-        <text style="width: 65%; color: white; position: absolute; margin-top: 100px">{{AI_TEXT}}</text>
+        <image style="margin-top: 20px; width: 230px; height: 75px" src="/common/aisummary_logo.png"></image>
+        <text style="width: 65%; color: white; position: absolute; margin-top: 120px">{{AI_TEXT}}</text>
     </div>
 </template>
 
@@ -16,6 +16,7 @@ export default{
     private: {
         AI_TEXT: "加载中...若长时间未加载出来可以尝试重启应用程序",
         AI_TEXT_TMP: "loading l-o-a-d*i@n#g",
+        SummaryRetCode: -114514,
         SummaryUpdateInterval: null,
         SummaryTypeFXInterval: null,
         TypeFXIndex: 0,
@@ -25,20 +26,36 @@ export default{
                 cid: this.cid,
                 up_mid: this.up_mid
             })
+            this.SummaryRetCode = ai_ret.data.code
             this.AI_TEXT_TMP = ai_ret.data.model_result.summary + "\n \n \n \n \n "
         }
     },
     onInit(){
         this.MainInit()
         this.SummaryUpdateInterval = setInterval(() => {
-            if(!this.AI_TEXT_TMP.includes("loading l-o-a-d*i@n#g") && this.AI_TEXT_TMP.length > 1){
+            if(this.SummaryRetCode === -1){
+                this.AI_TEXT = "该视频不支持AI摘要，可能是B站后台检测到该视频讨论的话题涉及敏感内容，或存在其它异常情况"
+                clearInterval(this.SummaryUpdateInterval)
+            }
+            else if(this.SummaryRetCode === 1){
+                this.AI_TEXT = "该视频无摘要，可能是该视频没有语音"
+                clearInterval(this.SummaryUpdateInterval)
+            }
+            else if(this.SummaryRetCode != 0 && this.SummaryRetCode != -114514){
+                this.AI_TEXT = "获取摘要时出现错误！摘要返回代码：" + this.SummaryRetCode
+                clearInterval(this.SummaryUpdateInterval)
+            }
+            else if(!this.AI_TEXT_TMP.includes("loading l-o-a-d*i@n#g") && this.AI_TEXT_TMP.length > 1){
                 this.AI_TEXT = ""
                 this.SummaryTypeFXInterval = setInterval(() => {
                     if(this.TypeFXIndex < this.AI_TEXT_TMP.length){
                         this.AI_TEXT = this.AI_TEXT + this.AI_TEXT_TMP[this.TypeFXIndex]
                         this.TypeFXIndex ++
                     }
-                }, 50)
+                    else{
+                        clearInterval(this.SummaryTypeFXInterval)
+                    }
+                }, 100)
                 clearInterval(this.SummaryUpdateInterval)
             }
         },500)

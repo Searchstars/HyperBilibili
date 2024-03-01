@@ -2,6 +2,7 @@ import fetch from '@system.fetch'
 import file from '@system.file'
 import router from '@system.router'
 import prompt from '@system.prompt'
+import { ParseSetCookie } from './tools'
 import { md5 } from './tinymd5'
 
 let Inited = false
@@ -9,6 +10,7 @@ let DedeUserID = null
 let DedeUserID__ckMd5 = null
 let SESSDATA = null
 let bili_jct = null
+let buvid3 = null
 let wbi_img_key = null
 let wbi_sub_key = null
 
@@ -64,6 +66,17 @@ export function InitBiliWbi(wbi_img){
 
     wbi_img_key = img_key
     wbi_sub_key = sub_key
+}
+
+export async function InitBiliBUVID3(){
+    var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com")
+    var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"])
+    for (var i=0;i<headers.length;i++){
+        console.log(headers[i])
+        if(headers[i]["buvid3"] != void 0 && headers[i]["buvid3"] != undefined && headers[i]["buvid3"] != ""){
+            buvid3 = headers[i]["buvid3"]
+        }
+    }
 }
 
 // JumpToHomePage: bool
@@ -126,7 +139,7 @@ export async function InitBiliRequest(JumpToHomePage){
 
 export async function SendBiliGET(url, type){
     var headers = BILI_BASE_HEADERS;
-    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct;
+    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct + "; buvid3=" + buvid3;
     var ret = await fetch.fetch({
         url: url,
         responseType: type,
@@ -135,9 +148,20 @@ export async function SendBiliGET(url, type){
     return ret.data.data
 }
 
+export async function SendBiliGETReturnAll(url, type){
+    var headers = BILI_BASE_HEADERS;
+    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct + "; buvid3=" + buvid3;
+    var ret = await fetch.fetch({
+        url: url,
+        responseType: type,
+        header: headers
+    });
+    return ret.data
+}
+
 export async function SendWbiGET(url, type, paramsobj){
     var headers = BILI_BASE_HEADERS;
-    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct;
+    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct + "; buvid3=" + buvid3;
     url = url + "?" + encWbi(paramsobj, wbi_img_key, wbi_sub_key)
     console.log("WbiGet URL: " + url)
     var ret = await fetch.fetch({
@@ -150,7 +174,7 @@ export async function SendWbiGET(url, type, paramsobj){
 
 export async function SendBiliPOST(url, body, type){
     var headers = BILI_BASE_HEADERS;
-    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct;
+    headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct + "; buvid3=" + buvid3;
     var ret = await fetch.fetch({
         url: url,
         responseType: type,

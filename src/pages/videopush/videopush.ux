@@ -2,49 +2,49 @@
     <div class="videopush-page">
         <input type="button" value="刷新" style="margin-top: 40px; font-size: 22px; width: 90px; height: 40px" @click="refresh()"></input>
         <div class="video" style="margin-top: 120px" @click="videopush_vid0_click()">
-            <image class="video_image" src="{{videolist.data.item[0].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[0].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[0].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[0].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[0].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 260px" @click="videopush_vid1_click()">
-            <image class="video_image" src="{{videolist.data.item[1].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[1].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[1].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[1].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[1].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 400px" @click="videopush_vid2_click()">
-            <image class="video_image" src="{{videolist.data.item[2].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[2].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[2].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[2].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[2].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 540px" @click="videopush_vid3_click()">
-            <image class="video_image" src="{{videolist.data.item[3].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[3].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[3].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[3].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[3].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 680px" @click="videopush_vid4_click()">
-            <image class="video_image" src="{{videolist.data.item[4].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[4].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[4].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[4].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[4].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 820px" @click="videopush_vid5_click()">
-            <image class="video_image" src="{{videolist.data.item[5].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[5].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[5].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[5].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[5].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 960px" @click="videopush_vid6_click()">
-            <image class="video_image" src="{{videolist.data.item[6].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[6].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[6].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[6].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[6].stat.view)}}</text>
         </div>
         <div class="video" style="margin-top: 1100px" @click="videopush_vid7_click()">
-            <image class="video_image" src="{{videolist.data.item[7].pic}}@151w_85h" alt="/common/icons8-loading-96.png"></image>
+            <image class="video_image" src="{{videolist.data.item[7].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
             <text class="video_title">{{videolist.data.item[7].title}}</text>
             <text class="video_up_name">UP: {{videolist.data.item[7].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[7].stat.view)}}</text>
@@ -77,9 +77,10 @@ export default{
         },
         jmp_to_detail(num){
             router.push({
-                uri: "pages/videoaisummary",
+                uri: "pages/videodetail",
                 params: {
-                    img_src: "",
+                    img_src: this.videolist.data.item[num].pic,
+                    vid_title: this.videolist.data.item[num].title,
                     bv: this.videolist.data.item[num].bvid,
                     cid: this.videolist.data.item[num].cid,
                     up_mid: this.videolist.data.item[num].owner.mid
@@ -137,9 +138,11 @@ export default{
     }
     .video_image{
         margin-left: 25px;
-        width: 151px;
-        height: 85px;
+        width: 100.6px;
+        height: 80.6px;
         border-radius: 10px;
+        min-width: 100.6px;
+        min-height: 80.6px;
     }
     .video_title{
         width: 90%;

@@ -2,7 +2,7 @@
   <div class="home-page">
     <image class="profile_image" src={{profile_image_src}} alt="/common/icons8-loading-96.png"></image>
     <text class="normal_welcome_text">欢迎回来，{{user_name}}</text>
-    <div class="features_div">
+    <div class="features_div" show="{{show_features}}">
         <div class="feature" @click="OpenVideoPushPage()">
             <div class="feature_icon_div">
                 <image class="feature_icon" src="/common/icons8-pushes-96.png"></image>
@@ -10,21 +10,21 @@
             <text class="feature_text">首页视频推荐</text>
             <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 80px">
+        <div class="feature" style="margin-top: 80px" @click="ShowWIP()">
             <div class="feature_icon_div">
                 <image class="feature_icon" src="/common/icons8-history-96.png"></image>
             </div>
             <text class="feature_text">观看历史</text>
             <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 160px">
+        <div class="feature" style="margin-top: 160px" @click="ShowWIP()">
             <div class="feature_icon_div">
                 <image class="feature_icon" src="/common/icons8-star-96.png"></image>
             </div>
             <text class="feature_text">我的收藏</text>
             <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 240px">
+        <div class="feature" style="margin-top: 240px" @click="ShowWIP()">
           <div class="feature_icon_div">
               <image class="feature_icon" src="/common/icons8-chat-message-96.png"></image>
           </div>
@@ -38,7 +38,7 @@
           <text class="feature_text">设置</text>
           <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 400px">
+        <div class="feature" style="margin-top: 400px" @click="ShowWIP()">
           <div class="feature_icon_div">
               <image class="feature_icon" src="/common/icons8-info-96.png"></image>
           </div>
@@ -61,6 +61,8 @@ export default {
     var_poll_check_interval: null,
     network_ok: false,
     login_wait_num: 0,
+    show_features: false,
+    made_by_searchstars_with_love: "本软件永久免费，倒卖者户口本只有单页",
     async MainInit(){
       router.clear() //清内存
       await this.$app.$def.bilirequest.InitBiliRequest(false)
@@ -91,6 +93,11 @@ export default {
         return false;
       }
       return true;
+    },
+    ShowWIP(){
+      prompt.showToast({
+        message: "该功能还未开发完毕，请更新版本后再来看看吧！"
+      })
     }
   },
 
@@ -106,16 +113,23 @@ export default {
           console.log("logined")
           if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
             this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)
+            this.$app.$def.bilirequest.InitBiliBUVID3()
+            this.show_features = true
             clearInterval(this.var_poll_check_interval)
           }
         }
         else{
-          if(this.login_wait_num > 6){
+          if(this.login_wait_num > 10){
             this.network_ok = true
             prompt.showToast({
-              message: "登录已失效，请退出后重新登录，否则各项功能将无法正常使用",
+              message: "登录已失效，请重新登录，否则各项功能将无法正常使用",
               duration: 6000
             })
+            setTimeout(() => {
+              router.push({
+                uri: "pages/login"
+              })
+            },2000)
             clearInterval(this.var_poll_check_interval)
           }
           console.log("wait")
@@ -129,7 +143,7 @@ export default {
     setTimeout(() => {
       if(this.login_info.data.isLogin == false && this.network_ok == false){
         prompt.showToast({
-          message: "网络错误，请退出后重新登录，并检查您的网络连接",
+          message: "您的网络连接质量较差或网络连接已中断，请检查网络后再试",
           duration: 6000
         })
       }
