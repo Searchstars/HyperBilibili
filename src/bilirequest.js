@@ -74,6 +74,9 @@ export async function InitBiliBUVID3() {
             key: "BUVID3",
             success: async (data) => {
                 if (data != "") {
+                    buvid3 = data;
+                    resolve();
+                } else {
                     try {
                         var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com");
                         var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"]);
@@ -95,10 +98,6 @@ export async function InitBiliBUVID3() {
                     } catch (error) {
                         reject(error); // 如果在尝试过程中抛出错误，拒绝Promise
                     }
-                } else {
-                    // 如果data是空的，也解决Promise，但这种情况可能需要特别处理
-                    buvid3 = data;
-                    resolve();
                 }
             },
             fail: () => reject(), // 如果get失败，拒绝Promise
