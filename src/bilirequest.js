@@ -68,33 +68,44 @@ export function InitBiliWbi(wbi_img){
     wbi_sub_key = sub_key
 }
 
-export async function InitBiliBUVID3(){
-    storage.get({
-        key: "BUVID3",
-        success: async(data) => {
-            if(data != ""){
-                var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com")
-                var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"])
-                for (var i=0;i<headers.length;i++){
-                    console.log(headers[i])
-                    if(headers[i]["buvid3"] != void 0 && headers[i]["buvid3"] != undefined && headers[i]["buvid3"] != ""){
-                        buvid3 = headers[i]["buvid3"]
+export async function InitBiliBUVID3() {
+    await new Promise((resolve, reject) => {
+        storage.get({
+            key: "BUVID3",
+            success: async (data) => {
+                if (data != "") {
+                    try {
+                        var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com");
+                        var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"]);
+                        for (var i = 0; i < headers.length; i++) {
+                            console.log(headers[i]);
+                            if (headers[i]["buvid3"] !== void 0 && headers[i]["buvid3"] !== undefined && headers[i]["buvid3"] !== "") {
+                                buvid3 = headers[i]["buvid3"];
+                            }
+                        }
+                        storage.set({
+                            key: "BUVID3",
+                            value: buvid3.toString(),
+                            success: (data) => {
+                                console.log("Inited buvid3");
+                                resolve(); // 成功回调后解决Promise
+                            },
+                            fail: () => reject(), // 如果set失败，拒绝Promise
+                        });
+                    } catch (error) {
+                        reject(error); // 如果在尝试过程中抛出错误，拒绝Promise
                     }
+                } else {
+                    // 如果data是空的，也解决Promise，但这种情况可能需要特别处理
+                    buvid3 = data;
+                    resolve();
                 }
-                storage.set({
-                    key: "BUVID3",
-                    value: buvid3.toString(),
-                    success: (data) => {
-                        console.log("Inited buvid3")
-                    }
-                })
-            }
-            else{
-                buvid3 = data
-            }
-        }
-    })
+            },
+            fail: () => reject(), // 如果get失败，拒绝Promise
+        });
+    });
 }
+
 
 // JumpToHomePage: bool
 // 用于设置是否在初始化完BiliRequest后跳转到Home页
