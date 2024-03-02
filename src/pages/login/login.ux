@@ -156,9 +156,7 @@ export default {
             clearInterval(this.PollInterval)
             clearInterval(this.GetQRInterval)
             await this.writeLoginRetCookies(headers)
-            router.push({
-              uri: "pages/home"
-            })
+            this.$app.$def.bilirequest.InitBiliRequest(true)
           }
         })
         } catch (error) {

@@ -2,6 +2,7 @@
   <div class="home-page">
     <image class="profile_image" src={{profile_image_src}} alt="/common/icons8-loading-96.png"></image>
     <text class="normal_welcome_text">欢迎回来，{{user_name}}</text>
+    <text class="loading_status_text" show={{show_loading_status}}>{{loading_status}}</text>
     <div class="features_div" show="{{show_features}}">
         <div class="feature" @click="OpenVideoPushPage()">
             <div class="feature_icon_div">
@@ -61,18 +62,16 @@ export default {
     var_poll_check_interval: null,
     network_ok: false,
     login_wait_num: 0,
+    login_timeouted: false,
     show_features: false,
+    show_loading_status: true,
+    loading_status: "获取账号信息...",
     made_by_searchstars_with_love: "本软件永久免费，倒卖者户口本只有单页",
     async MainInit(){
       router.clear() //清内存
-      await this.$app.$def.bilirequest.InitBiliRequest(false)
       this.profile_image_src = "/common/icons8-loading-96.png"
       var login_ret = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/nav","json")
       this.login_info = login_ret
-      console.log(this.login_info.code)
-      this.profile_image_src = this.login_info.data.face + "@120w_120h" //向后端请求低分辨率图片以加快加载速度
-      console.log(this.profile_image_src)
-      this.user_name = this.login_info.data.uname
     },
     OpenSettingsPage(){
       router.push({
@@ -103,7 +102,7 @@ export default {
 
   onInit(){
     this.MainInit()
-    this.var_poll_check_interval = setInterval(() => {
+    this.var_poll_check_interval = setInterval(async() => {
       if(this.login_info === null || this.login_info === undefined){
         console.log("trying to login")
       }
@@ -111,15 +110,23 @@ export default {
         if(this.isValidUserName(this.login_info.data.uname)){
           this.network_ok = true;
           console.log("logined")
+          clearInterval(this.var_poll_check_interval)
+          console.log(this.login_info.code)
+          this.profile_image_src = this.login_info.data.face + "@120w_120h" //向后端请求低分辨率图片以加快加载速度
+          this.loading_status = "获取头像..."
+          console.log(this.profile_image_src)
+          this.user_name = this.login_info.data.uname
           if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
+            this.loading_status = "获取wbi签名密钥..."
             this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)
-            this.$app.$def.bilirequest.InitBiliBUVID3()
+            this.loading_status = "获取BUVID3，若太久未响应请重启程序..."
+            await this.$app.$def.bilirequest.InitBiliBUVID3()
             this.show_features = true
-            clearInterval(this.var_poll_check_interval)
+            this.show_loading_status = false
           }
         }
         else{
-          if(this.login_wait_num > 10){
+          if(this.login_wait_num > 8 && (!this.login_timeouted)){
             this.network_ok = true
             prompt.showToast({
               message: "登录已失效，请重新登录，否则各项功能将无法正常使用",
@@ -136,12 +143,13 @@ export default {
           this.login_wait_num ++
         }
       }
-    }, 500)
+    }, 1000)
   },
 
   onReady(){
     setTimeout(() => {
       if(this.login_info.data.isLogin == false && this.network_ok == false){
+        this.login_timeouted = true
         prompt.showToast({
           message: "您的网络连接质量较差或网络连接已中断，请检查网络后再试",
           duration: 6000
@@ -172,6 +180,14 @@ export default {
         width: 100%;
         position: absolute;
         top: 200px;
+    }
+    .loading_status_text{
+        color: white;
+        font-size: 16px;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        top: 240px;
     }
     .features_div{
         /*background-color: gray;*/
