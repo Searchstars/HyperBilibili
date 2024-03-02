@@ -1,7 +1,7 @@
 import fetch from '@system.fetch'
 import file from '@system.file'
 import router from '@system.router'
-import prompt from '@system.prompt'
+import storage from '@system.storage'
 import { ParseSetCookie } from './tools'
 import { md5 } from './tinymd5'
 
@@ -69,14 +69,31 @@ export function InitBiliWbi(wbi_img){
 }
 
 export async function InitBiliBUVID3(){
-    var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com")
-    var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"])
-    for (var i=0;i<headers.length;i++){
-        console.log(headers[i])
-        if(headers[i]["buvid3"] != void 0 && headers[i]["buvid3"] != undefined && headers[i]["buvid3"] != ""){
-            buvid3 = headers[i]["buvid3"]
+    storage.get({
+        key: "BUVID3",
+        success: async(data) => {
+            if(data != ""){
+                var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com")
+                var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"])
+                for (var i=0;i<headers.length;i++){
+                    console.log(headers[i])
+                    if(headers[i]["buvid3"] != void 0 && headers[i]["buvid3"] != undefined && headers[i]["buvid3"] != ""){
+                        buvid3 = headers[i]["buvid3"]
+                    }
+                }
+                storage.set({
+                    key: "BUVID3",
+                    value: buvid3.toString(),
+                    success: (data) => {
+                        console.log("Inited buvid3")
+                    }
+                })
+            }
+            else{
+                buvid3 = data
+            }
         }
-    }
+    })
 }
 
 // JumpToHomePage: bool

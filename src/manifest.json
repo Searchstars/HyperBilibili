@@ -41,6 +41,9 @@
       },
       "pages/videodetail": {
         "component": "videodetail"
+      },
+      "pages/networkerror":{
+        "component": "networkerror"
       }
     }
   },

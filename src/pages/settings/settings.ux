@@ -3,7 +3,11 @@
         <div class="setting_item" style="margin-top: 40px" @click="UpdateFreshType()">
             <text class="setting_item_text">视频推荐相关性：{{video_fresh_type}}</text>
         </div>
-        <div class="setting_item" style="margin-top: 180px" @click="Logout()">
+        <div class="setting_item" style="margin-top: 180px" @click="ClearStorageCache()">
+            <text class="setting_item_text">清除storage缓存</text>
+            <text class="setting_item_arrow">></text>
+        </div>
+        <div class="setting_item" style="margin-top: 320px" @click="Logout()">
             <text class="setting_item_text">退出登录</text>
             <text class="setting_item_arrow">></text>
         </div>
@@ -30,6 +34,17 @@ export default{
                 value: this.video_fresh_type,
                 success: (data) => {
                     console.log("修改完成: " + this.video_fresh_type)
+                }
+            })
+        },
+        ClearStorageCache(){
+            storage.set({
+                key: "BUVID3",
+                value: "",
+                success: (data) => {
+                    prompt.showToast({
+                        message: "清除完毕"
+                    })
                 }
             })
         },

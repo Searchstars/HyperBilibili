@@ -8,6 +8,8 @@
 import file from '@system.file'
 import router from '@system.router'
 import storage from '@system.storage'
+import network from '@system.network'
+import prompt from '@system.prompt'
 
 export default{
     private: {
@@ -35,22 +37,39 @@ export default{
         })
     },
     async onReadyInit(){
-        storage.get({
-            key: "video_fresh_type",
+        network.getType({
             success: (data) => {
-                if(data == ""){
-                    storage.set({
-                        key: "video_fresh_type",
-                        value: "2",
-                        success: (data) => {
-                            console.log("Inited video_fresh_type")
-                            this.JumpToNextPage()
-                        }
+                console.log(data.type)
+                if(data.type === 'none' && (!this.$app.$def.emu_mode)){
+                    router.push({
+                        uri: "pages/networkerror"
                     })
                 }
                 else{
-                    this.JumpToNextPage()
+                    storage.get({
+                        key: "video_fresh_type",
+                        success: (data) => {
+                            if(data == ""){
+                                storage.set({
+                                    key: "video_fresh_type",
+                                    value: "2",
+                                    success: (data) => {
+                                        console.log("Inited video_fresh_type")
+                                        this.JumpToNextPage()
+                                    }
+                                })
+                            }
+                            else{
+                                this.JumpToNextPage()
+                            }
+                        }
+                    })
                 }
+            },
+            fail: (data,code) => {
+                prompt.showToast({
+                    message: "获取网络信息失败，程序异常：" + data
+                })
             }
         })
     },

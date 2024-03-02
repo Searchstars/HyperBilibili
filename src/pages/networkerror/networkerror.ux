@@ -1,0 +1,46 @@
+<template>
+    <div class="networkerror-page">
+        <image class="error_img" src="/common/icons8-error-globe-64.png"></image>
+        <text class="error_tips">{{error_text}}</text>
+        <text class="sec_err_tips">{{error_text_2}}</text>
+    </div>
+</template>
+
+<script>
+export default{
+    private: {
+        error_text: "你似乎没连上网...",
+        error_text_2: "若您的设备不支持esim等独立联网方式，还请保持与手机的连接，并检查手机网络是否正常可用哦！"
+    }
+}
+</script>
+
+<style>
+.networkerror-page{
+    justify-content: center;
+    position: absolute;
+}
+.error_img{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin-top: 120px;
+}
+.error_tips{
+    color: white;
+    position: absolute;
+    width: 75%;
+    font-size: 26px;
+    margin-top: 260px;
+    text-align: center;
+}
+.sec_err_tips{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 20px;
+    margin-top: 290px;
+    text-align: center;
+}
+</style>

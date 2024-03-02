@@ -2,6 +2,7 @@
 import * as bilirequest_imported from './bilirequest'
 
 export default {
+  emu_mode: true, //发布真机版本时关闭
   bilirequest: bilirequest_imported,
   onCreate() {
     console.log('app created')
