@@ -7,7 +7,9 @@
 
 对于Aiot IDE的安装，推荐参阅：[https://www.projcora.club/OpenWearWiki/vela-developer-guide.html#preparing](https://www.projcora.club/OpenWearWiki/vela-developer-guide.html#preparing)
 
-### 2. 模拟器运行注意事项
+### 2. 旧版模拟器运行注意事项
+### 如果您在使用最新版本的Aiot-IDE，并将其附带的所有插件都已更新到最新版本，且使用的模拟器镜像是最新版本，则可以忽略这些内容
+
 模拟器和真机环境环境归根结底还是有所不同，部分功能的效果在模拟器和真机上的区别也不是可以忽略的，甚至可以直接影响到程序逻辑
 
 因此，我们设置了一个叫`emu_mode`的变量，当它为true时，部分检测功能（如网络类型判定）会被禁用，只有这样，应用才能正常在模拟器下运行，否则将会产生误判导致出现异常。

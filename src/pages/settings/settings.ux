@@ -70,6 +70,7 @@ export default{
     onInit(){
         storage.get({
             key: "video_fresh_type",
+            default: "",
             success: (data) => {
                 this.video_fresh_type = data
             }

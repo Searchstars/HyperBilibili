@@ -116,6 +116,9 @@ export default {
           this.loading_status = "获取头像..."
           console.log(this.profile_image_src)
           this.user_name = this.login_info.data.uname
+          this.loading_status = "获取收藏夹信息..."
+          this.$app.$def.folders_info = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=" + this.login_info.data.mid,"json");
+          console.log(this.$app.$def.folders_info)
           if((this.login_info.data.wbi_img.img_url != void 0 && this.login_info.data.wbi_img.img_url != undefined) && this.login_info.data.wbi_img.img_url != ""){
             this.loading_status = "获取wbi签名密钥..."
             this.$app.$def.bilirequest.InitBiliWbi(this.login_info.data.wbi_img)

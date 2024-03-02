@@ -11,6 +11,7 @@ let DedeUserID__ckMd5 = null
 let SESSDATA = null
 let bili_jct = null
 let buvid3 = null
+let sid = null
 let wbi_img_key = null
 let wbi_sub_key = null
 
@@ -72,6 +73,7 @@ export async function InitBiliBUVID3() {
     await new Promise((resolve, reject) => {
         storage.get({
             key: "BUVID3",
+            default: "",
             success: async (data) => {
                 if (data != "") {
                     buvid3 = data;
@@ -131,13 +133,23 @@ export async function InitBiliRequest(JumpToHomePage){
                                     success: function(BiliJCTReadRet){
                                         console.log(BiliJCTReadRet)
                                         bili_jct = BiliJCTReadRet.text
-                                        console.log("bilirequest初始化完毕: \nDedeUserID=" + DedeUserID + "\nDedeUserID__ckMd5=" + DedeUserID__ckMd5 + "\nSESSDATA=" + SESSDATA + "\nbili_jct=" + bili_jct)
-                                        Inited = true
-                                        if(JumpToHomePage){
-                                            router.push({
-                                                uri: "pages/home"
-                                            })
-                                        }
+                                        file.readText({
+                                            uri: "internal://files/hbili_sid.txt",
+                                            success: function(sidReadRet){
+                                                console.log(sidReadRet)
+                                                sid = sidReadRet.text
+                                                console.log("bilirequest初始化完毕: \nDedeUserID=" + DedeUserID + "\nDedeUserID__ckMd5=" + DedeUserID__ckMd5 + "\nSESSDATA=" + SESSDATA + "\nbili_jct=" + bili_jct + "\nsid=" + sid)
+                                                Inited = true
+                                                if(JumpToHomePage){
+                                                    router.push({
+                                                        uri: "pages/home"
+                                                    })
+                                                }
+                                            },
+                                            fail: function(data, code) {
+                                                console.log(`brequest.init.sid > handling fail, code = ${code}`)
+                                            }
+                                        })
                                     },
                                     fail: function(data, code) {
                                         console.log(`brequest.init.hbilibilijct > handling fail, code = ${code}`)
@@ -199,9 +211,10 @@ export async function SendWbiGET(url, type, paramsobj){
     return ret.data.data
 }
 
-export async function SendBiliPOST(url, body, type){
+export async function SendBiliPOST(url, body, type, content_type){
     var headers = BILI_BASE_HEADERS;
     headers["Cookie"] = "DedeUserID=" + DedeUserID + "; DedeUserID__ckMd5=" + DedeUserID__ckMd5 + "; SESSDATA=" + SESSDATA + "; bili_jct=" + bili_jct + "; buvid3=" + buvid3;
+    headers["Content-Type"] = content_type
     var ret = await fetch.fetch({
         url: url,
         responseType: type,
@@ -210,4 +223,9 @@ export async function SendBiliPOST(url, body, type){
         data: body
     });
     return ret.data.data
+}
+
+export function GetCSRF(){
+    console.log("Current CSRF: " + bili_jct)
+    return bili_jct
 }

@@ -49,6 +49,7 @@
             <text class="video_up_name">UP: {{videolist.data.item[7].owner.name}}</text>
             <text class="video_stat_view">{{formatNumber_(videolist.data.item[7].stat.view)}}</text>
         </div>
+        <text style="margin-top: 1200px;height: 100px"> </text>
     </div>
 </template>
 
@@ -62,6 +63,7 @@ export default{
         async MainInit(){
             var a = await storage.get({
                 key: "video_fresh_type",
+                default: "",
                 success: async(data) => {
                     this.videolist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/index/top/rcmd?" + "fresh_type=" + data + "&version=1","json")
                 }
@@ -70,6 +72,7 @@ export default{
         async refresh(){
             storage.get({
                 key: "video_fresh_type",
+                default: "",
                 success: async(data) => {
                     this.videolist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/index/top/rcmd?" + "fresh_type=" + data + "&version=1","json")
                 }
@@ -83,7 +86,8 @@ export default{
                     vid_title: this.videolist.data.item[num].title,
                     bv: this.videolist.data.item[num].bvid,
                     cid: this.videolist.data.item[num].cid,
-                    up_mid: this.videolist.data.item[num].owner.mid
+                    up_mid: this.videolist.data.item[num].owner.mid,
+                    id: this.videolist.data.item[num].id
                 }
             })
         },
@@ -148,7 +152,6 @@ export default{
         width: 90%;
         height: 70%;
         font-size: 16px;
-        text-align:start;
         color: white;
         margin-left: 15px;
     }

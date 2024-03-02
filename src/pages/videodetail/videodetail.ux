@@ -7,9 +7,9 @@
             <text class="entry_item_arrow">></text>
         </div>
         <div class="third_click_bar" style="margin-top: 375px">
-            <image class="third_click_btn" src="/common/icons8-facebook-like-96.png" style="margin-left: 45px"></image>
-            <image class="third_click_btn" src="/common/icons8-coin-100.png" style="margin-left: 45px"></image>
-            <image class="third_click_btn" src="/common/icons8-star-96.png" style="margin-left: 45px"></image>
+            <image class="third_click_btn" src={{likesrc}} style="margin-left: 45px" @click="LikeClick()"></image>
+            <image class="third_click_btn" src={{coinsrc}} style="margin-left: 45px" @click="CoinClick()"></image>
+            <image class="third_click_btn" src={{starsrc}} style="margin-left: 45px" @click="FavClick()"></image>
         </div>
         <div class="entry_item" style="margin-top: 515px" @click="">
             <text class="entry_item_text">评论区</text>
@@ -21,6 +21,7 @@
 
 <script>
 import router from '@system.router'
+import prompt from '@system.prompt'
 
 export default{
     public:{
@@ -28,7 +29,43 @@ export default{
         vid_title: "",
         bv: "",
         cid: "",
-        up_mid: ""
+        up_mid: "",
+        id: ""
+    },
+    private: {
+        likesrc: "/common/icons8-loading-96.png",
+        coinsrc: "/common/icons8-loading-96.png",
+        starsrc: "/common/icons8-loading-96.png",
+        csrf: "",
+        normal_media_id: ""
+    },
+    async InitThirdClickBtn(){
+        this.$app.$def.folders_info.data.list.forEach(folder => {
+            if(folder != null && folder != undefined){
+                if(String(folder.title).includes("默认收藏夹")){
+                    this.normal_media_id = folder.id.toString()
+                    console.log("默认收藏夹id: " + this.normal_media_id)
+                }
+            }
+        });
+        if((await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/archive/has/like?bvid=" + this.bv,"json")).data === 1){
+            this.likesrc = "/common/icons8-facebook-like-96-pink.png"
+        }
+        else{
+            this.likesrc = "/common/icons8-facebook-like-96.png"
+        }
+        if((await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/archive/coins?bvid=" + this.bv,"json")).data > 0){
+            this.coinsrc = "/common/icons8-coin-100-pink.png"
+        }
+        else{
+            this.coinsrc = "/common/icons8-coin-100.png"
+        }
+        if((await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/v2/fav/video/favoured?aid=" + this.bv,"json")).data.favoured === true){
+            this.starsrc = "/common/icons8-star-96-pink.png"
+        }
+        else{
+            this.starsrc = "/common/icons8-star-96.png"
+        }
     },
     OpenAiSummary(){
         router.push({
@@ -40,6 +77,59 @@ export default{
                 up_mid: this.up_mid
             }
         })
+    },
+    async LikeClick(){
+        prompt.showToast({
+                message: "由于B站风控，点赞暂不可用",
+                duration: 5000
+            })
+        /*
+        var likenum = 1
+        if(this.likesrc.includes("pink")){
+            likenum = 2
+        }
+        var like_ret = await this.$app.$def.bilirequest.SendBiliPOST("https://api.bilibili.com/x/web-interface/archive/like","bvid=" + this.bv + "&like=" + likenum + "&csrf=" + this.csrf,"json","application/x-www-form-urlencoded")
+        if(like_ret.code != 0){
+            prompt.showToast({
+                message: "点赞失败，错误代码：" + like_ret.code + " 错误信息：" + like_ret.message
+            })
+        }
+        this.InitThirdClickBtn()
+        */
+    },
+    async CoinClick(){
+        prompt.showToast({
+                message: "由于B站风控，投币暂不可用",
+                duration: 5000
+            })
+        /*
+        var like_ret = await this.$app.$def.bilirequest.SendBiliPOST("https://api.bilibili.com/x/web-interface/coin/add","bvid=" + this.bv + "&multiply=1" + "&csrf=" + this.csrf,"json","application/x-www-form-urlencoded")
+        if(like_ret.code != 0){
+            prompt.showToast({
+                message: "投币失败，错误代码：" + like_ret.code + " 错误信息：" + like_ret.message
+            })
+        }
+        this.InitThirdClickBtn()
+        */
+    },
+    async FavClick(){
+        var like_ret = await this.$app.$def.bilirequest.SendBiliPOST("https://api.bilibili.com/x/v3/fav/resource/deal","rid=" + this.id + "&type=2" + "&csrf=" + this.csrf + "&add_media_ids=" + this.normal_media_id + "&del_media_ids=","json","application/x-www-form-urlencoded")
+        if(like_ret.code != 0){
+            prompt.showToast({
+                message: "收藏失败，错误代码：" + like_ret.code + " 错误信息：" + like_ret.message
+            })
+        }
+        else{
+            prompt.showToast({
+                message: "已添加到默认收藏夹"
+            })
+        }
+        this.InitThirdClickBtn()
+    },
+
+    onInit(){
+        this.csrf = this.$app.$def.bilirequest.GetCSRF()
+        this.InitThirdClickBtn()
     }
 }
 </script>

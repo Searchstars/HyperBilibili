@@ -131,6 +131,13 @@ export default {
               text: headers[i]["bili_jct"]
             })
           }
+          if(headers[i]["sid"] != void 0 && headers[i]["sid"] != undefined && headers[i]["sid"] != ""){
+            console.log(`发现sid=${headers[i]["sid"]}，写入！`)
+            await file.writeText({
+              uri: "internal://files/hbili_sid.txt",
+              text: headers[i]["sid"]
+            })
+          }
         }
       }
       catch(err){
