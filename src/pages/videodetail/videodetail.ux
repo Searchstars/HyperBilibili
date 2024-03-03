@@ -1,6 +1,6 @@
 <template>
     <div class="videodetail-page">
-        <image src="{{img_src}}@300w_168h" class="vid-pic"></image>
+        <image src="{{img_src}}@300w_168h" class="vid-pic" alt="/common/icons8-loading-96.png"></image>
         <text class="vid-title">{{vid_title}}</text>
         <div class="entry_item" style="margin-top: 305px" @click="OpenAiSummary()">
             <text class="entry_item_text">AI视频总结</text>
@@ -11,7 +11,7 @@
             <image class="third_click_btn" src={{coinsrc}} style="margin-left: 45px" @click="CoinClick()"></image>
             <image class="third_click_btn" src={{starsrc}} style="margin-left: 45px" @click="FavClick()"></image>
         </div>
-        <div class="entry_item" style="margin-top: 515px" @click="">
+        <div class="entry_item" style="margin-top: 515px" @click="ShowReplies()">
             <text class="entry_item_text">评论区</text>
             <text class="entry_item_arrow">></text>
         </div>
@@ -75,6 +75,15 @@ export default{
                 bv: this.bv,
                 cid: this.cid,
                 up_mid: this.up_mid
+            }
+        })
+    },
+    ShowReplies(){
+        router.push({
+            uri: "pages/videoreplies",
+            params: {
+                typeid: 1,
+                oid: this.id
             }
         })
     },

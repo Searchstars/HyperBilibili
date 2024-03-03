@@ -148,6 +148,9 @@ export async function InitBiliRequest(JumpToHomePage){
                                             },
                                             fail: function(data, code) {
                                                 console.log(`brequest.init.sid > handling fail, code = ${code}`)
+                                                router.push({
+                                                    uri: "pages/login"
+                                                })
                                             }
                                         })
                                     },

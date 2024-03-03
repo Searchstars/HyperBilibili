@@ -44,6 +44,9 @@
       },
       "pages/networkerror":{
         "component": "networkerror"
+      },
+      "pages/videoreplies":{
+        "component": "videoreplies"
       }
     }
   },
