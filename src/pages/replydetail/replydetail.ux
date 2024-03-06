@@ -1,0 +1,208 @@
+<template>
+    <div class="replydetail-page">
+        <image src={{root_poster_avatar}} class="root_reply_profile_img"></image>
+        <text class="root_reply_uname">{{root_poster_uname}}</text>
+        <text class="reply_body">{{full_root_text}}</text>
+        <div class="sec_reply_div" style="margin-top: {{sec_replies_margin_top}}px;">
+            <div class="reply" style="margin-top: 50px">
+                <image class="reply_profile_img" src="{{sec_reply_info.data.replies[0].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
+                <text class="reply_uname">{{sec_reply_info.data.replies[0].member.uname}} (Lv.{{sec_reply_info.data.replies[0].member.level_info.current_level}})</text>
+                <text class="reply_content">{{sec_reply_info.data.replies[0].content.message}}</text>
+                <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
+                <text class="like_num">{{sec_reply_info.data.replies[0].like}}</text>
+            </div>
+            <div class="reply" style="margin-top: 240px">
+                <image class="reply_profile_img" src="{{sec_reply_info.data.replies[1].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
+                <text class="reply_uname">{{sec_reply_info.data.replies[1].member.uname}} (Lv.{{sec_reply_info.data.replies[1].member.level_info.current_level}})</text>
+                <text class="reply_content">{{sec_reply_info.data.replies[1].content.message}}</text>
+                <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
+                <text class="like_num">{{sec_reply_info.data.replies[1].like}}</text>
+            </div>
+            <div class="reply" style="margin-top: 430px">
+                <image class="reply_profile_img" src="{{sec_reply_info.data.replies[2].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
+                <text class="reply_uname">{{sec_reply_info.data.replies[2].member.uname}} (Lv.{{sec_reply_info.data.replies[2].member.level_info.current_level}})</text>
+                <text class="reply_content">{{sec_reply_info.data.replies[2].content.message}}</text>
+                <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
+                <text class="like_num">{{sec_reply_info.data.replies[2].like}}</text>
+            </div>
+            <div class="reply" style="margin-top: 620px">
+                <image class="reply_profile_img" src="{{sec_reply_info.data.replies[3].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
+                <text class="reply_uname">{{sec_reply_info.data.replies[3].member.uname}} (Lv.{{sec_reply_info.data.replies[3].member.level_info.current_level}})</text>
+                <text class="reply_content">{{sec_reply_info.data.replies[3].content.message}}</text>
+                <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
+                <text class="like_num">{{sec_reply_info.data.replies[3].like}}</text>
+            </div>
+            <div class="reply" style="margin-top: 810px">
+                <image class="reply_profile_img" src="{{sec_reply_info.data.replies[4].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
+                <text class="reply_uname">{{sec_reply_info.data.replies[4].member.uname}} (Lv.{{sec_reply_info.data.replies[4].member.level_info.current_level}})</text>
+                <text class="reply_content">{{sec_reply_info.data.replies[4].content.message}}</text>
+                <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
+                <text class="like_num">{{sec_reply_info.data.replies[4].like}}</text>
+            </div>
+            <div class="pagecontrol">
+                <input type="button" value="上一页" style="font-size: 22px; width: 90px; height: 40px" @click="BackPage()"></input>
+                <text style="width: 30px;"> </text>
+                <text style="color: white; font-size: 24px">{{pn}}/{{maxpn}}</text>
+                <text style="width: 30px;"> </text>
+                <input type="button" value="下一页" style="font-size: 22px; width: 90px; height: 40px" @click="NextPage()"></input>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { calculateDivHeightAndMargin } from '../../tools'
+import prompt from '@system.prompt'
+export default{
+    public:{
+        full_root_text: "Loading...",
+        root_poster_avatar: "",
+        root_poster_uname: "",
+        oid: "",
+        root_rpid: "",
+        typeid: 1
+    },
+    private: {
+        sec_replies_margin_top: 0,
+        pn: 1,
+        maxpn: 1,
+        ifInterval: null,
+        sec_reply_info: null,
+        async GetSecReplis(){
+            this.sec_reply_info = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/v2/reply/reply?type=" + this.typeid + "&oid=" + this.oid + "&ps=5&pn=" + this.pn + "&root=" + this.root_rpid,"json")
+        },
+        BackPage(){
+            if(this.pn < 2){
+                prompt.showToast({
+                    message: "已经到头啦！"
+                })
+            }
+            else{
+                this.pn = this.pn - 1
+                this.GetSecReplis()
+            }
+        },
+        NextPage(){
+            if(this.pn >= this.maxpn){
+                prompt.showToast({
+                    message: "已经到底啦！"
+                })
+            }
+            else{
+                this.pn = this.pn + 1
+                this.GetSecReplis()
+            }
+        }
+    },
+    onInit(){
+        this.sec_replies_margin_top = calculateDivHeightAndMargin(this.full_root_text, 480, 0.75, 24) + 195
+        this.GetSecReplis()
+        this.ifInterval = setInterval(() => {
+            if(this.sec_reply_info != null && this.sec_reply_info != undefined){
+                if(this.sec_reply_info.data.page.count < 5 || this.sec_reply_info.data.page.size < 5){
+                    prompt.showToast({
+                        message: "评论条数较少，如果在一条正常的评论下发现接下来的所有评论全部没加载出来，就是没评论啦！",
+                        duration: 5000
+                    })
+                }
+                this.maxpn = Math.ceil(this.sec_reply_info.data.page.acount / 5)
+                clearInterval(this.ifInterval)
+            }
+        },1000)
+    }
+}
+</script>
+
+<style>
+.root_reply_profile_img{
+    margin-top: 60px;
+    margin-left: 80px;
+    min-width: 60px;
+    min-height: 60px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.root_reply_uname{
+    margin-top: 73px;
+    margin-left: 30px;
+    font-size: 24px;
+    width: 240px;
+    height: 35px;
+    color: white;
+}
+.reply_body{
+    width: 67.5%;
+    margin-top: 145px;
+    margin-left: 85px;
+    position: absolute;
+    color: white;
+    font-size: 20px;
+}
+.sec_reply_div{
+    width: 75%;
+    min-height: 1200px;
+    position: absolute;
+    margin-left: 60px;
+    justify-content: center;
+}
+.reply{
+    background-color: rgba(255, 255, 255, 0.178);
+    width: 100%;
+    height: 180px;
+    border-radius: 15px;
+    position: absolute;
+}
+.reply_profile_img{
+    margin-top: 20px;
+    margin-left: 20px;
+    min-width: 40px;
+    min-height: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.reply_uname{
+    color: white;
+    font-size: 20px;
+    margin-top: 28px;
+    margin-left: 80px;
+    height: 22px;
+    width: 70%;
+    position: absolute;
+}
+
+.reply_content{
+    color: white;
+    font-size: 18px;
+    margin-top: 65px;
+    margin-left: 25px;
+    width: 85%;
+    height: 75px;
+    justify-content: flex-start;
+    position: absolute;
+}
+
+.like_img{
+    margin-top: 145px;
+    margin-left: 25px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+}
+
+.like_num{
+    margin-top: 145px;
+    margin-left: 50px;
+    font-size: 14px;
+    position: absolute;
+    color: white
+}
+.pagecontrol{
+    position: absolute;
+    margin-top: 1030px;
+    flex-direction: row;
+    align-items: center;
+    height: 100px;
+}
+</style>

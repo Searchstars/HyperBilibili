@@ -47,6 +47,9 @@
       },
       "pages/videoreplies":{
         "component": "videoreplies"
+      },
+      "pages/replydetail": {
+        "component": "replydetail"
       }
     }
   },

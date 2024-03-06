@@ -1,6 +1,6 @@
 <template>
     <div class="videoreplies-page">
-        <div class="reply" style="margin-top: 50px">
+        <div class="reply" style="margin-top: 50px" @click="jmp_to_det_0()">
             <image class="reply_profile_img" src="{{reply_info.data.replies[0].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[0].member.uname}} (Lv.{{reply_info.data.replies[0].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[0].content.message}}</text>
@@ -93,6 +93,7 @@
 
 <script>
 import prompt from '@system.prompt'
+import router from '@system.router'
 export default{
     public: {
         oid: "",
@@ -128,6 +129,22 @@ export default{
                 this.pn = this.pn + 1
                 this.UpdateReplies()
             }
+        },
+        OpenDetail(reply){
+            router.push({
+                uri: "pages/replydetail",
+                params:{
+                    full_root_text: reply.content.message,
+                    root_poster_avatar: reply.member.avatar,
+                    root_poster_uname: reply.member.uname + " (Lv." + reply_info.data.replies[0].member.level_info.current_level + ")",
+                    oid: this.oid,
+                    root_rpid: reply.rpid,
+                    typeid: this.typeid
+                }
+            })
+        },
+        jmp_to_det_0(){
+            this.OpenDetail(this.reply_info.data.replies[0])
         }
     },
     onInit(){
@@ -136,7 +153,8 @@ export default{
             if(this.reply_info != null && this.reply_info != undefined){
                 if(this.reply_info.data.page.count < 10 || this.reply_info.data.page.size < 10){
                     prompt.showToast({
-                        message: "评论条数较少，如果在一条正常的评论下发现接下来的所有评论全部没加载出来，就是没评论啦！"
+                        message: "评论条数较少，如果在一条正常的评论下发现接下来的所有评论全部没加载出来，就是没评论啦！",
+                        duration: 5000
                     })
                 }
                 this.maxpn = Math.ceil(this.reply_info.data.page.acount / 10)

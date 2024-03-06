@@ -168,6 +168,7 @@ export default {
 <style>
     .profile_image{
       /* Vela快应用的图片似乎没法变圆 迫于无奈只能使用正方形 */
+      /* 2024.3.6 Update: 这个问题只会在模拟器里出现 并且已经在最新版本里修复 */
         border-radius: 50%;
         width: 120px;
         height: 120px;
