@@ -2,7 +2,7 @@
 import * as bilirequest_imported from './bilirequest'
 
 export default {
-  emu_mode: true, //发布真机版本时关闭
+  emu_mode: false, //发布真机版本时关闭
   folders_info: "", // 用户收藏夹信息 这应在home初始化流程中被设置
   bilirequest: bilirequest_imported,
   onCreate() {
