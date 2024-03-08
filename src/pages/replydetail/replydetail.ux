@@ -1,38 +1,38 @@
 <template>
     <div class="replydetail-page">
-        <image src={{root_poster_avatar}} class="root_reply_profile_img"></image>
+        <image src={{root_poster_avatar}} class="root_reply_profile_img" alt="/common/icons8-loading-96.png"></image>
         <text class="root_reply_uname">{{root_poster_uname}}</text>
         <text class="reply_body">{{full_root_text}}</text>
         <div class="sec_reply_div" style="margin-top: {{sec_replies_margin_top}}px;">
-            <div class="reply" style="margin-top: 50px">
+            <div class="reply" style="margin-top: 50px" @click="OpenFullReplyShow(0)">
                 <image class="reply_profile_img" src="{{sec_reply_info.data.replies[0].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
                 <text class="reply_uname">{{sec_reply_info.data.replies[0].member.uname}} (Lv.{{sec_reply_info.data.replies[0].member.level_info.current_level}})</text>
                 <text class="reply_content">{{sec_reply_info.data.replies[0].content.message}}</text>
                 <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
                 <text class="like_num">{{sec_reply_info.data.replies[0].like}}</text>
             </div>
-            <div class="reply" style="margin-top: 240px">
+            <div class="reply" style="margin-top: 240px" @click="OpenFullReplyShow(1)">
                 <image class="reply_profile_img" src="{{sec_reply_info.data.replies[1].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
                 <text class="reply_uname">{{sec_reply_info.data.replies[1].member.uname}} (Lv.{{sec_reply_info.data.replies[1].member.level_info.current_level}})</text>
                 <text class="reply_content">{{sec_reply_info.data.replies[1].content.message}}</text>
                 <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
                 <text class="like_num">{{sec_reply_info.data.replies[1].like}}</text>
             </div>
-            <div class="reply" style="margin-top: 430px">
+            <div class="reply" style="margin-top: 430px" @click="OpenFullReplyShow(2)">
                 <image class="reply_profile_img" src="{{sec_reply_info.data.replies[2].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
                 <text class="reply_uname">{{sec_reply_info.data.replies[2].member.uname}} (Lv.{{sec_reply_info.data.replies[2].member.level_info.current_level}})</text>
                 <text class="reply_content">{{sec_reply_info.data.replies[2].content.message}}</text>
                 <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
                 <text class="like_num">{{sec_reply_info.data.replies[2].like}}</text>
             </div>
-            <div class="reply" style="margin-top: 620px">
+            <div class="reply" style="margin-top: 620px" @click="OpenFullReplyShow(3)">
                 <image class="reply_profile_img" src="{{sec_reply_info.data.replies[3].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
                 <text class="reply_uname">{{sec_reply_info.data.replies[3].member.uname}} (Lv.{{sec_reply_info.data.replies[3].member.level_info.current_level}})</text>
                 <text class="reply_content">{{sec_reply_info.data.replies[3].content.message}}</text>
                 <image class="like_img" src="/common/icons8-facebook-like-96.png"></image>
                 <text class="like_num">{{sec_reply_info.data.replies[3].like}}</text>
             </div>
-            <div class="reply" style="margin-top: 810px">
+            <div class="reply" style="margin-top: 810px" @click="OpenFullReplyShow(4)">
                 <image class="reply_profile_img" src="{{sec_reply_info.data.replies[4].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
                 <text class="reply_uname">{{sec_reply_info.data.replies[4].member.uname}} (Lv.{{sec_reply_info.data.replies[4].member.level_info.current_level}})</text>
                 <text class="reply_content">{{sec_reply_info.data.replies[4].content.message}}</text>
@@ -53,6 +53,7 @@
 <script>
 import { calculateDivHeightAndMargin } from '../../tools'
 import prompt from '@system.prompt'
+import router from '@system.router'
 export default{
     public:{
         full_root_text: "Loading...",
@@ -92,6 +93,15 @@ export default{
                 this.pn = this.pn + 1
                 this.GetSecReplis()
             }
+        },
+        OpenFullReplyShow(id){
+            router.push({
+                uri: "pages/textshow",
+                params:{
+                    title: "完整评论内容",
+                    content: this.sec_reply_info.data.replies[id].content.message
+                }
+            })
         }
     },
     onInit(){
@@ -105,7 +115,7 @@ export default{
                         duration: 5000
                     })
                 }
-                this.maxpn = Math.ceil(this.sec_reply_info.data.page.acount / 5)
+                this.maxpn = Math.ceil(this.sec_reply_info.data.page.count / 5)
                 clearInterval(this.ifInterval)
             }
         },1000)

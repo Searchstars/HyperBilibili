@@ -1,6 +1,6 @@
 <template>
     <div class="videoreplies-page">
-        <div class="reply" style="margin-top: 50px" @click="jmp_to_det_0()">
+        <div class="reply" style="margin-top: 50px" @click="OpenDetail(0)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[0].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[0].member.uname}} (Lv.{{reply_info.data.replies[0].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[0].content.message}}</text>
@@ -8,7 +8,7 @@
             <text class="like_num">{{reply_info.data.replies[0].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[0].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 240px">
+        <div class="reply" style="margin-top: 240px" @click="OpenDetail(1)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[1].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[1].member.uname}} (Lv.{{reply_info.data.replies[1].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[1].content.message}}</text>
@@ -16,7 +16,7 @@
             <text class="like_num">{{reply_info.data.replies[1].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[1].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 430px">
+        <div class="reply" style="margin-top: 430px" @click="OpenDetail(2)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[2].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[2].member.uname}} (Lv.{{reply_info.data.replies[2].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[2].content.message}}</text>
@@ -24,7 +24,7 @@
             <text class="like_num">{{reply_info.data.replies[2].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[2].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 620px">
+        <div class="reply" style="margin-top: 620px" @click="OpenDetail(3)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[3].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[3].member.uname}} (Lv.{{reply_info.data.replies[3].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[3].content.message}}</text>
@@ -32,7 +32,7 @@
             <text class="like_num">{{reply_info.data.replies[3].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[3].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 810px">
+        <div class="reply" style="margin-top: 810px" @click="OpenDetail(4)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[4].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[4].member.uname}} (Lv.{{reply_info.data.replies[4].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[4].content.message}}</text>
@@ -40,7 +40,7 @@
             <text class="like_num">{{reply_info.data.replies[4].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[4].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 1000px">
+        <div class="reply" style="margin-top: 1000px" @click="OpenDetail(5)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[5].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[5].member.uname}} (Lv.{{reply_info.data.replies[5].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[5].content.message}}</text>
@@ -48,7 +48,7 @@
             <text class="like_num">{{reply_info.data.replies[5].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[5].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 1190px">
+        <div class="reply" style="margin-top: 1190px" @click="OpenDetail(6)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[6].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[6].member.uname}} (Lv.{{reply_info.data.replies[6].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[6].content.message}}</text>
@@ -56,7 +56,7 @@
             <text class="like_num">{{reply_info.data.replies[6].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[6].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 1380px">
+        <div class="reply" style="margin-top: 1380px" @click="OpenDetail(7)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[7].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[7].member.uname}} (Lv.{{reply_info.data.replies[7].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[7].content.message}}</text>
@@ -64,7 +64,7 @@
             <text class="like_num">{{reply_info.data.replies[7].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[7].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 1570px">
+        <div class="reply" style="margin-top: 1570px" @click="OpenDetail(8)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[8].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[8].member.uname}} (Lv.{{reply_info.data.replies[8].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[8].content.message}}</text>
@@ -72,7 +72,7 @@
             <text class="like_num">{{reply_info.data.replies[8].like}}</text>
             <text class="click_to_show_more_text">评论详情与{{reply_info.data.replies[8].rcount}}条回复 ></text>
         </div>
-        <div class="reply" style="margin-top: 1760px">
+        <div class="reply" style="margin-top: 1760px" @click="OpenDetail(9)">
             <image class="reply_profile_img" src="{{reply_info.data.replies[9].member.avatar}}@40w_40h" alt="/common/icons8-loading-96.png"></image>
             <text class="reply_uname">{{reply_info.data.replies[9].member.uname}} (Lv.{{reply_info.data.replies[9].member.level_info.current_level}})</text>
             <text class="reply_content">{{reply_info.data.replies[9].content.message}}</text>
@@ -130,21 +130,18 @@ export default{
                 this.UpdateReplies()
             }
         },
-        OpenDetail(reply){
+        OpenDetail(id){
             router.push({
                 uri: "pages/replydetail",
                 params:{
-                    full_root_text: reply.content.message,
-                    root_poster_avatar: reply.member.avatar,
-                    root_poster_uname: reply.member.uname + " (Lv." + reply_info.data.replies[0].member.level_info.current_level + ")",
+                    full_root_text: this.reply_info.data.replies[id].content.message,
+                    root_poster_avatar: this.reply_info.data.replies[id].member.avatar,
+                    root_poster_uname: this.reply_info.data.replies[id].member.uname + " (Lv." + this.reply_info.data.replies[0].member.level_info.current_level + ")",
                     oid: this.oid,
-                    root_rpid: reply.rpid,
+                    root_rpid: this.reply_info.data.replies[id].rpid,
                     typeid: this.typeid
                 }
             })
-        },
-        jmp_to_det_0(){
-            this.OpenDetail(this.reply_info.data.replies[0])
         }
     },
     onInit(){
