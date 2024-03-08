@@ -30,7 +30,8 @@ export default{
         bv: "",
         cid: "",
         up_mid: "",
-        id: ""
+        id: "",
+        haplink: false
     },
     private: {
         likesrc: "/common/icons8-loading-96.png",
@@ -71,7 +72,6 @@ export default{
         router.push({
             uri: "pages/videoaisummary",
             params: {
-                img_src: this.img_src,
                 bv: this.bv,
                 cid: this.cid,
                 up_mid: this.up_mid
@@ -135,10 +135,16 @@ export default{
         }
         this.InitThirdClickBtn()
     },
-
-    onInit(){
+    async AsyncInit(){
+        if(this.haplink){
+            await this.$app.$def.bilirequest.InitBiliRequest(false)
+        }
         this.csrf = this.$app.$def.bilirequest.GetCSRF()
         this.InitThirdClickBtn()
+    },
+
+    onInit(){
+        this.AsyncInit()
     }
 }
 </script>

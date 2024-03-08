@@ -1,0 +1,116 @@
+<template>
+    <div class="myfolders-page">
+        <text style="margin-top: 70px; position:absolute; color:white; font-size: 28px;">收藏夹列表</text>
+        <div class="folder" style="margin-top: 150px;" @click="OpenFolder(div1_showid)">
+            <text class="folder_name">{{GetFolderByID(div1_showid).title}}   ></text>
+        </div>
+        <div class="folder" style="margin-top: 260px;" show="{{show_div2}}" @click="OpenFolder(div2_showid)">
+            <text class="folder_name">{{GetFolderByID(div2_showid).title}}   ></text>
+        </div>
+        <div class="pagecontrol" show="{{show_page_control}}">
+            <input type="button" value="上一页" style="font-size: 22px; width: 90px; height: 40px" @click="BackPage()"></input>
+            <text style="width: 30px;"> </text>
+            <text style="color: white; font-size: 24px">{{pn}}/{{maxpn}}</text>
+            <text style="width: 30px;"> </text>
+            <input type="button" value="下一页" style="font-size: 22px; width: 90px; height: 40px" @click="NextPage()"></input>
+        </div>
+    </div>
+</template>
+
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+export default{
+    private:{
+        show_page_control: true,
+        show_div2: true,
+        pn: 1,
+        maxpn: 1,
+        div1_showid: 0,
+        div2_showid: 1,
+        SetVar(){
+            if(this.$app.$def.folders_info.data.count < 3){
+                this.show_page_control = false
+            }
+            this.maxpn = this.maxpn = Math.ceil(this.$app.$def.folders_info.data.count / 2)
+            this.SetPageContent()
+        },
+        BackPage(){
+            if(this.pn > 1){
+                this.pn --
+                this.div1_showid -= 2
+                this.div2_showid -= 2
+                this.SetPageContent()
+            }
+            else{
+                prompt.showToast({
+                    message: "已经到头啦！"
+                })
+            }
+        },
+        NextPage(){
+            if(this.pn < this.maxpn){
+                this.pn ++
+                this.div1_showid += 2
+                this.div2_showid += 2
+                this.SetPageContent()
+            }
+            else{
+                prompt.showToast({
+                    message: "已经到底啦！"
+                })
+            }
+        },
+        OpenFolder(id){
+            router.push({
+                uri: "pages/foldercontent",
+                params: {
+                    media_id: this.GetFolderByID(id).id
+                }
+            })
+        },
+        SetPageContent(){
+            if(this.div2_showid == this.$app.$def.folders_info.data.count){
+                this.show_div2 = false
+            }
+            else{
+                this.show_div2 = true
+            }
+        },
+        GetFolderByID(id){
+            return this.$app.$def.folders_info.data.list[id]
+        }
+    },
+    onInit(){
+        this.SetVar()
+    }
+}
+</script>
+
+<style>
+.myfolders-page{
+    justify-content: center;
+    position: absolute;
+}
+.folder{
+    height: 80px;
+    width: 75%;
+    background-color: rgba(255, 255, 255, 0.178);
+    border-radius: 30px;
+    align-items: center;
+    position: absolute;
+}
+.folder_name{
+    position: absolute;
+    margin-left: 50px;
+    color: white;
+    font-size: 24px;
+}
+.pagecontrol{
+    position: absolute;
+    margin-top: 220px;
+    flex-direction: row;
+    align-items: center;
+    height: 370px;
+}
+</style>

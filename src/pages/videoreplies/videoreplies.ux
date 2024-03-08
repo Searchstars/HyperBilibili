@@ -151,7 +151,7 @@ export default{
                 if(this.reply_info.data.page.count < 10 || this.reply_info.data.page.size < 10){
                     prompt.showToast({
                         message: "评论条数较少，如果在一条正常的评论下发现接下来的所有评论全部没加载出来，就是没评论啦！",
-                        duration: 5000
+                        duration: 10000
                     })
                 }
                 this.maxpn = Math.ceil(this.reply_info.data.page.acount / 10)

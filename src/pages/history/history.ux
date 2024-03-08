@@ -1,0 +1,18 @@
+<template>
+    <div class="history-page">
+        
+    </div>
+</template>
+
+<script>
+export default{
+
+}
+</script>
+
+<style>
+.history-page{
+    justify-content: center;
+    position: absolute;
+}
+</style>

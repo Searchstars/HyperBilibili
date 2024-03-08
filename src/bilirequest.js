@@ -232,3 +232,8 @@ export function GetCSRF(){
     console.log("Current CSRF: " + bili_jct)
     return bili_jct
 }
+
+export async function GetVideoInfoByID(id){
+    var ret = await SendBiliGET("https://api.bilibili.com/x/web-interface/view?aid=" + id,"json")
+    return ret.data
+}

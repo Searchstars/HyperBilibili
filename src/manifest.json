@@ -53,6 +53,15 @@
       },
       "pages/textshow": {
         "component": "textshow"
+      },
+      "pages/myfolders": {
+        "component": "myfolders"
+      },
+      "pages/foldercontent": {
+        "component": "foldercontent"
+      },
+      "pages/history": {
+        "component": "history"
       }
     }
   },

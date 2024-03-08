@@ -1,0 +1,190 @@
+<template>
+    <div class="foldercontent-page">
+        <div class="content" style="margin-top: 60px" @click="OpenFolderContent(0)">
+            <image class="content_image" src="{{favlist.data.medias[0].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[0].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[0].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 200px" @click="OpenFolderContent(1)">
+            <image class="content_image" src="{{favlist.data.medias[1].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[1].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[1].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 340px" @click="OpenFolderContent(2)">
+            <image class="content_image" src="{{favlist.data.medias[2].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[2].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[2].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 480px" @click="OpenFolderContent(3)">
+            <image class="content_image" src="{{favlist.data.medias[3].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[3].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[3].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 620px" @click="OpenFolderContent(4)">
+            <image class="content_image" src="{{favlist.data.medias[4].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[4].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[4].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 760px" @click="OpenFolderContent(5)">
+            <image class="content_image" src="{{favlist.data.medias[5].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[5].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[5].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 900px" @click="OpenFolderContent(6)">
+            <image class="content_image" src="{{favlist.data.medias[6].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[6].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[6].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1040px" @click="OpenFolderContent(7)">
+            <image class="content_image" src="{{favlist.data.medias[7].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[7].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[7].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1180px" @click="OpenFolderContent(8)">
+            <image class="content_image" src="{{favlist.data.medias[8].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[8].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[8].upper.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1320px" @click="OpenFolderContent(9)">
+            <image class="content_image" src="{{favlist.data.medias[9].cover}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{favlist.data.medias[9].title}}</text>
+            <text class="content_up_name">UP: {{favlist.data.medias[9].upper.name}}</text>
+        </div>
+        <div class="pagecontrol">
+            <input type="button" value="上一页" style="font-size: 22px; width: 90px; height: 40px" @click="BackPage()"></input>
+            <text style="width: 30px;"> </text>
+            <text style="color: white; font-size: 24px">{{pn}}/{{maxpn}}</text>
+            <text style="width: 30px;"> </text>
+            <input type="button" value="下一页" style="font-size: 22px; width: 90px; height: 40px" @click="NextPage()"></input>
+        </div>
+        <text style="height: 50px; margin-top: 1620px"></text>
+    </div>
+</template>
+
+<script>
+import prompt from '@system.prompt'
+import router from '@system.router'
+export default{
+    public:{
+        media_id: 0
+    },
+    private: {
+        favlist: null,
+        pn: 1,
+        maxpn: 1,
+        ifInterval: null,
+        async UpdateFavList(){
+            this.favlist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/v3/fav/resource/list?" + "media_id=" + this.media_id + "&ps=10&pn=" + this.pn,"json")
+        },
+        BackPage(){
+            if(this.pn < 2){
+                prompt.showToast({
+                    message: "已经到头啦！"
+                })
+            }
+            else{
+                this.pn = this.pn - 1
+                this.UpdateFavList()
+            }
+        },
+        NextPage(){
+            if(this.pn >= this.maxpn){
+                prompt.showToast({
+                    message: "已经到底啦！"
+                })
+            }
+            else{
+                this.pn = this.pn + 1
+                this.UpdateFavList()
+            }
+        },
+        async OpenFolderContent(id){
+            if(this.favlist.data.medias[id].type == 2){
+                var vid_info = await this.$app.$def.bilirequest.GetVideoInfoByID(this.favlist.data.medias[id].id)
+                router.push({
+                    uri: "pages/videodetail",
+                    params: {
+                        img_src: vid_info.pic,
+                        vid_title: vid_info.title,
+                        bv: vid_info.bvid,
+                        cid: vid_info.cid,
+                        up_mid: vid_info.owner.mid,
+                        id: vid_info.aid
+                    }
+                })
+            }
+            else{
+                prompt.showToast({
+                    message: "目标稿件不是视频稿件，目前暂不支持除视频外的稿件"
+                })
+            }
+        }
+    },
+    onInit(){
+        this.UpdateFavList()
+        this.ifInterval = setInterval(() => {
+            if(this.favlist != null && this.favlist != undefined){
+                if(this.favlist.data.info.media_count < 1){
+                    prompt.showToast({
+                        message: "该收藏夹为空！！！",
+                        duration: 10000
+                    })
+                }
+                else if(this.favlist.data.info.media_count < 10){
+                    prompt.showToast({
+                        message: "收藏夹内容较少，如果在一条正常的收藏下发现接下来的所有收藏全部没加载出来，就是没东西啦！",
+                        duration: 10000
+                    })
+                }
+                this.maxpn = Math.ceil(this.favlist.data.info.media_count / 10)
+                clearInterval(this.ifInterval)
+            }
+        },1000)
+    }
+}
+</script>
+
+<style>
+.foldercontent-page{
+    justify-content: center;
+    position: absolute;
+}
+.content{
+    background-color: rgba(255, 255, 255, 0.178);
+    border-radius: 25px;
+    width: 80%;
+    height: 130px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+.content_image{
+    margin-left: 25px;
+    width: 100.6px;
+    height: 80.6px;
+    border-radius: 10px;
+    min-width: 100.6px;
+    min-height: 80.6px;
+}
+.content_title{
+    width: 90%;
+    height: 70%;
+    font-size: 16px;
+    color: white;
+    margin-left: 15px;
+}
+.content_up_name{
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 102px;
+    margin-left: 146px;
+}
+.pagecontrol{
+    position: absolute;
+    margin-top: 1440px;
+    flex-direction: row;
+    align-items: center;
+    height: 100px;
+}
+</style>

@@ -18,7 +18,7 @@
             <text class="feature_text">观看历史</text>
             <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 160px" @click="ShowWIP()">
+        <div class="feature" style="margin-top: 160px" @click="OpenMyFoldersPage()">
             <div class="feature_icon_div">
                 <image class="feature_icon" src="/common/icons8-star-96.png"></image>
             </div>
@@ -96,6 +96,11 @@ export default {
     ShowWIP(){
       prompt.showToast({
         message: "该功能还未开发完毕，请更新版本后再来看看吧！"
+      })
+    },
+    OpenMyFoldersPage(){
+      router.push({
+        uri: "pages/myfolders"
       })
     }
   },

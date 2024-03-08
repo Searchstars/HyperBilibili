@@ -31,7 +31,7 @@ export default{
     margin-top: 130px;
     font-size: 20px;
     text-align: center;
-    width: 100%;
+    width: 75%;
     color: white;
     position: absolute;
 }

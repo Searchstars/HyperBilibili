@@ -8,10 +8,10 @@
 <script>
 export default{
     public:{
-        img_src: "",
         bv: "",
         cid: "",
-        up_mid: ""
+        up_mid: "",
+        haplink: false
     },
     private: {
         AI_TEXT: "加载中...若长时间未加载出来可以尝试重启应用程序",
@@ -21,6 +21,9 @@ export default{
         SummaryTypeFXInterval: null,
         TypeFXIndex: 0,
         async MainInit(){
+            if(this.haplink){
+                await this.$app.$def.bilirequest.InitBiliRequest(false)
+            }
             var ai_ret = await this.$app.$def.bilirequest.SendWbiGET("https://api.bilibili.com/x/web-interface/view/conclusion/get","json",{
                 bvid: this.bv,
                 cid: this.cid,
