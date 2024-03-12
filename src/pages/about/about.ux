@@ -1,0 +1,92 @@
+<template>
+    <div class="about-page">
+        <image class="app_logo" src="/common/logo.png"></image>
+        <text class="appname">{{app_name}}</text>
+        <text class="app_ver">{{app_ver}}</text>
+        <text class="app_author">{{app_author}}</text>
+        <text class="free_tips">{{free_tips_text}}</text>
+        <text class="free_warn">{{free_warn_text}}</text>
+        <text class="github_url">{{github_url}}</text>
+    </div>
+</template>
+
+<script>
+import app from '@system.app'
+export default{
+    private: {
+        app_name: app.getInfo().name,
+        app_ver: "v" + app.getInfo().versionName,
+        app_author: "Made by @Searchstars with love",
+        free_tips_text: "本应用永久免费且开源，遵循GPL-v3协议",
+        free_warn_text: "若发现倒卖此应用或不遵循开源协议者，欢迎任何人泛滥他们的个人隐私信息",
+        github_url: "https://github.com/searchstars/hyperbilibili"
+    }
+}
+</script>
+
+<style>
+.about-page{
+    justify-content: center;
+    position: absolute;
+}
+.app_logo{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin-top: 90px;
+    border-radius: 50%;
+}
+.appname{
+    color: white;
+    position: absolute;
+    width: 75%;
+    font-size: 26px;
+    margin-top: 230px;
+    text-align: center;
+}
+.app_ver{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 18px;
+    margin-top: 160px;
+    text-align: center;
+}
+.app_author{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 18px;
+    margin-top: 190px;
+    text-align: center;
+}
+.free_tips{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 18px;
+    margin-top: 220px;
+    text-align: center;
+}
+.free_warn{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 18px;
+    margin-top: 260px;
+    text-align: center;
+}
+.github_url{
+    color: white;
+    position: absolute;
+    width: 75%;
+    height: 50%;
+    font-size: 18px;
+    margin-top: 310px;
+    text-align: center;
+}
+</style>

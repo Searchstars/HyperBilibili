@@ -39,7 +39,7 @@
           <text class="feature_text">设置</text>
           <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 400px" @click="ShowWIP()">
+        <div class="feature" style="margin-top: 400px" @click="OpenAboutPage()">
           <div class="feature_icon_div">
               <image class="feature_icon" src="/common/icons8-info-96.png"></image>
           </div>
@@ -53,6 +53,7 @@
 <script>
 import prompt from '@system.prompt'
 import router from '@system.router'
+import { CheckUpdates } from '../../ota'
 
 export default {
   private: {
@@ -72,6 +73,7 @@ export default {
       this.profile_image_src = "/common/icons8-loading-96.png"
       var login_ret = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/web-interface/nav","json")
       this.login_info = login_ret
+      CheckUpdates()
     },
     OpenSettingsPage(){
       router.push({
@@ -106,6 +108,11 @@ export default {
     OpenMyHistoryPage(){
       router.push({
         uri: "pages/history"
+      })
+    },
+    OpenAboutPage(){
+      router.push({
+        uri: "pages/about"
       })
     }
   },
