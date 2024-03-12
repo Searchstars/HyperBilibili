@@ -80,19 +80,17 @@ export async function InitBiliBUVID3() {
                     resolve();
                 } else {
                     try {
-                        var req_homepage_ret = await SendBiliGETReturnAll("https://bilibili.com");
-                        var headers = ParseSetCookie(req_homepage_ret.headers["Set-Cookie"]);
-                        for (var i = 0; i < headers.length; i++) {
-                            console.log(headers[i]);
-                            if (headers[i]["buvid3"] !== void 0 && headers[i]["buvid3"] !== undefined && headers[i]["buvid3"] !== "") {
-                                buvid3 = headers[i]["buvid3"];
-                            }
+                        console.log("buvid3: Send GET Request To https://api.bilibili.com/x/frontend/finger/spi")
+                        var ret_buvids = await SendBiliGET("https://api.bilibili.com/x/frontend/finger/spi");
+                        console.log("buvid3: reading")
+                        if (ret_buvids !== void 0 && ret_buvids !== undefined && ret_buvids !== "") {
+                            buvid3 = ret_buvids.data.b_3
                         }
                         storage.set({
                             key: "BUVID3",
                             value: buvid3.toString(),
                             success: (data) => {
-                                console.log("Inited buvid3");
+                                console.log("Inited buvid3=" + buvid3);
                                 resolve(); // 成功回调后解决Promise
                             },
                             fail: () => reject(), // 如果set失败，拒绝Promise
@@ -177,6 +175,10 @@ export async function InitBiliRequest(JumpToHomePage){
     catch(err){
         console.log("BiliRequest初始化失败，错误信息：" + err)
     }
+}
+
+export async function GetBUVID3(){
+    return buvid3
 }
 
 export async function SendBiliGET(url, type){
