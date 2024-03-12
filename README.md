@@ -61,6 +61,8 @@
     login：登录页面
     home：主页面
     myfolders：收藏夹列表
+    foldercontent：收藏夹内容
+    history：历史记录
     networkerror：网络错误提示
     replydetail：评论详情
     settings：设置

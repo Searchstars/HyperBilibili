@@ -1,18 +1,190 @@
 <template>
-    <div class="history-page">
-        
+    <div class="historycontent-page">
+        <div class="content" style="margin-top: 60px" @click="OpenHistoryContent(0)">
+            <image class="content_image" src="{{hislist.data[0].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[0].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[0].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 200px" @click="OpenHistoryContent(1)">
+            <image class="content_image" src="{{hislist.data[1].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[1].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[1].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 340px" @click="OpenHistoryContent(2)">
+            <image class="content_image" src="{{hislist.data[2].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[2].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[2].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 480px" @click="OpenHistoryContent(3)">
+            <image class="content_image" src="{{hislist.data[3].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[3].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[3].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 620px" @click="OpenHistoryContent(4)">
+            <image class="content_image" src="{{hislist.data[4].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[4].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[4].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 760px" @click="OpenHistoryContent(5)">
+            <image class="content_image" src="{{hislist.data[5].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[5].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[5].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 900px" @click="OpenHistoryContent(6)">
+            <image class="content_image" src="{{hislist.data[6].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[6].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[6].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1040px" @click="OpenHistoryContent(7)">
+            <image class="content_image" src="{{hislist.data[7].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[7].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[7].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1180px" @click="OpenHistoryContent(8)">
+            <image class="content_image" src="{{hislist.data[8].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[8].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[8].owner.name}}</text>
+        </div>
+        <div class="content" style="margin-top: 1320px" @click="OpenHistoryContent(9)">
+            <image class="content_image" src="{{hislist.data[9].pic}}@100w_80h" alt="/common/icons8-loading-96.png"></image>
+            <text class="content_title">{{hislist.data[9].title}}</text>
+            <text class="content_up_name">UP: {{hislist.data[9].owner.name}}</text>
+        </div>
+        <div class="pagecontrol">
+            <input type="button" value="上一页" style="font-size: 22px; width: 90px; height: 40px" @click="BackPage()"></input>
+            <text style="width: 30px;"> </text>
+            <text style="color: white; font-size: 24px">{{pn}}/{{maxpn}}</text>
+            <text style="width: 30px;"> </text>
+            <input type="button" value="下一页" style="font-size: 22px; width: 90px; height: 40px" @click="NextPage()"></input>
+        </div>
+        <text style="height: 50px; margin-top: 1620px"></text>
     </div>
 </template>
 
 <script>
+import prompt from '@system.prompt'
+import router from '@system.router'
 export default{
-
+    public:{
+        
+    },
+    private: {
+        hislist: null,
+        pn: 1,
+        maxpn: 1,
+        ifInterval: null,
+        async UpdateFavList(){
+            this.hislist = await this.$app.$def.bilirequest.SendBiliGET("https://api.bilibili.com/x/v2/history?" + "&ps=10&pn=" + this.pn,"json")
+        },
+        BackPage(){
+            if(this.pn < 2){
+                prompt.showToast({
+                    message: "已经到头啦！"
+                })
+            }
+            else{
+                this.pn = this.pn - 1
+                this.UpdateFavList()
+            }
+        },
+        NextPage(){
+            if(this.pn >= this.maxpn){
+                prompt.showToast({
+                    message: "已经到底啦！"
+                })
+            }
+            else{
+                this.pn = this.pn + 1
+                this.UpdateFavList()
+            }
+        },
+        async OpenHistoryContent(id){
+            if(this.hislist.data[id].type == 3){
+                var vid_info = await this.$app.$def.bilirequest.GetVideoInfoByID(this.hislist.data[id].aid)
+                router.push({
+                    uri: "pages/videodetail",
+                    params: {
+                        img_src: vid_info.pic,
+                        vid_title: vid_info.title,
+                        bv: vid_info.bvid,
+                        cid: vid_info.cid,
+                        up_mid: vid_info.owner.mid,
+                        id: vid_info.aid
+                    }
+                })
+            }
+            else{
+                prompt.showToast({
+                    message: "目标稿件不是视频稿件，目前暂不支持除视频外的稿件"
+                })
+            }
+        }
+    },
+    onInit(){
+        this.UpdateFavList()
+        this.ifInterval = setInterval(() => {
+            if(this.hislist != null && this.hislist != undefined){
+                if(this.hislist.data.length < 1){
+                    prompt.showToast({
+                        message: "历史记录为空！！！",
+                        duration: 10000
+                    })
+                }
+                else if(this.hislist.data.length < 10){
+                    prompt.showToast({
+                        message: "历史记录内容较少，如果在一条正常的记录下发现接下来的所有记录全部没加载出来，就是没东西啦！",
+                        duration: 10000
+                    })
+                }
+                this.maxpn = Math.ceil(this.hislist.data.length / 10)
+                clearInterval(this.ifInterval)
+            }
+        },1000)
+    }
 }
 </script>
 
 <style>
-.history-page{
+.historycontent-page{
     justify-content: center;
     position: absolute;
+}
+.content{
+    background-color: rgba(255, 255, 255, 0.178);
+    border-radius: 25px;
+    width: 80%;
+    height: 130px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+.content_image{
+    margin-left: 25px;
+    width: 100.6px;
+    height: 80.6px;
+    border-radius: 10px;
+    min-width: 100.6px;
+    min-height: 80.6px;
+}
+.content_title{
+    width: 90%;
+    height: 70%;
+    font-size: 16px;
+    color: white;
+    margin-left: 15px;
+}
+.content_up_name{
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 102px;
+    margin-left: 146px;
+}
+.pagecontrol{
+    position: absolute;
+    margin-top: 1440px;
+    flex-direction: row;
+    align-items: center;
+    height: 100px;
 }
 </style>

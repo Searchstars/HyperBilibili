@@ -11,7 +11,7 @@
             <text class="feature_text">首页视频推荐</text>
             <text class="feature_arrow">></text>
         </div>
-        <div class="feature" style="margin-top: 80px" @click="ShowWIP()">
+        <div class="feature" style="margin-top: 80px" @click="OpenMyHistoryPage()">
             <div class="feature_icon_div">
                 <image class="feature_icon" src="/common/icons8-history-96.png"></image>
             </div>
@@ -101,6 +101,11 @@ export default {
     OpenMyFoldersPage(){
       router.push({
         uri: "pages/myfolders"
+      })
+    },
+    OpenMyHistoryPage(){
+      router.push({
+        uri: "pages/history"
       })
     }
   },
