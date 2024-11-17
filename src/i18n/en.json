@@ -16,7 +16,7 @@
     "dmlist": {
         "title": "Messages",
         "currentNoMessage": "No messages currently",
-        "userCountLimit": "Currently only supports displaying up to 20 users~"
+        "userCountLimit": "Currently only supports displaying up to 10 users~"
     },
     "dmpage": {
         "withdrawn": "[Withdrawn]",

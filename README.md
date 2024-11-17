@@ -16,9 +16,17 @@
 
 克隆此仓库，然后在`Aiot IDE`中打开它
 
-随后执行以下命令，安装typescript支持：
+本项目不使用npm，而是使用yarn作为包管理器，因此你**不应该**按照IDE的引导去执行`npm i`，而是应该使用以下指令来安装项目依赖：
 
-`npm i -D typescript ts-loader`
+```bash
+#安装yarn，对于debian系linux来说
+sudo apt install yarn
+#安装yarn，对于windows
+winget install Yarn.Yarn
+
+#在项目目录下执行以安装项目依赖
+yarn
+```
 
 然后像普通快应用一样进行开发即可
 

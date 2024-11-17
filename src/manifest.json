@@ -4,7 +4,7 @@
     "versionName": "2.4.0",
     "versionCode": 2,
     "minPlatformVersion": 1000,
-    "icon": "/common/logo.png",
+    "icon": "/common/logoDEV.png",
     "deviceTypeList": [
         "watch"
     ],

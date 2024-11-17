@@ -8,6 +8,9 @@ interface SettingsInterface {
 
   // 下面的设置项将不在设置页面中展示
   agreedAllAgreements: boolean;
+  
+  // 校验字段
+  _loadedSettings: boolean;
 }
 
 // 初始设置
@@ -18,7 +21,9 @@ export let SETTINGS: SettingsInterface = {
   article_split_dom_count: 9999,
   enableFullAnimation: false,
 
-  agreedAllAgreements: false // 是否已同意所有协议（用户协议 隐私协议 etc.）
+  agreedAllAgreements: false, // 是否已同意所有协议（用户协议 隐私协议 etc.）
+
+  _loadedSettings: false
 };
 
 export function loadSettings(): void {

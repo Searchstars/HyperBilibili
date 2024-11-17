@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": ">=8.10"
+    "yarn": ">=1.22.0"
   },
+  "license": "GPL-3.0-only",
   "scripts": {
     "start": "aiot server --watch --open-nuttx --enable-custom-component true --enable-protobuf true",
-    "build": "aiot build --enable-custom-component --enable-jsc --enable-protobuf --enable-image-png8",
+    "build": "aiot build --enable-custom-component --enable-jsc --enable-protobuf",
     "release": "aiot release --enable-custom-component --enable-jsc --enable-protobuf --enable-image-png8",
     "watch": "aiot watch --open-nuttx",
-    "lint": "eslint --format codeframe --fix --ext .ux,.js src/"
+    "lint": "eslint --format codeframe --fix --ext .ux,.js src/",
+    "postinstall": "node -e \"if (process.env.npm_execpath && !process.env.npm_execpath.includes('yarn')) { console.error('Please use Yarn to install dependencies!'); process.exit(1); }\""
   },
   "lint-staged": {
     "*.{ux,js}": [
@@ -26,10 +28,9 @@
   },
   "devDependencies": {
     "@aiot-toolkit/jsc": "^1.0.7",
-    "@aiot-toolkit/velasim": "^0.1.26-beta.3",
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
-    "aiot-toolkit": "1.1.4",
+    "aiot-toolkit": "1.1.5-beta.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",
@@ -48,8 +49,8 @@
     "stylelint-config-recess-order": "^3.0.0",
     "stylelint-config-standard": "^25.0.0",
     "stylelint-order": "^5.0.0",
+    "ux-types": "^0.1.1",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.5.3",
-    "ux-types": "^0.1.1"
+    "typescript": "^5.6.3"
   }
 }

@@ -562,7 +562,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 .page {
 	width:100%;
 	position:absolute;

@@ -16,7 +16,7 @@
     "dmlist": {
         "title": "私信",
         "currentNoMessage": "暂无消息",
-        "userCountLimit": "暂时最多只支持显示20个用户哦~"
+        "userCountLimit": "暂时最多只支持显示10个用户哦~"
     },
     "dmpage": {
         "withdrawn": "[已撤回]",

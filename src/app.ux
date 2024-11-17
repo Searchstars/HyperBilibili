@@ -1,5 +1,5 @@
 <script>
-import * as animengine from "./animengine"
+import * as animengine from "./animation/engine"
 import { BilibiliClient }  from "./bilibiliclient/client"
 import * as tools from "./tools"
 import * as articletools from "./articletools"

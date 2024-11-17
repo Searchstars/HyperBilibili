@@ -37,6 +37,8 @@ export default {
     this.show_loading = true
 
     this.sessions = (await this.$app.$def.biliclient.getDMSessions(1, 2)).session_list
+    // 裁切至10个
+    this.sessions.length = Math.min(this.sessions, 10);
 
     var session_uids = []
     this.sessions.forEach((session) => {
@@ -82,59 +84,7 @@ export default {
 }
 </script>
 
-<style>
-.page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  position: absolute;
-  width: 100%;
-}
-
-.dmlist {
-  width: 313px;
-}
-
-.user {
-  height: 119px;
-  border-radius: 33px;
-  background-color: #222222;
-  flex-direction: row;
-  width: 313px;
-  align-items: center;
-}
-
-.userface {
-  min-width: 75px;
-  min-height: 75px;
-  max-width: 75px;
-  max-height: 75px;
-  object-fit: scale-down;
-  margin-left: 26px;
-  border-radius: 50%;
-}
-
-.infoarea {
-  flex-direction: column;
-  justify-content: center;
-  width: 195px;
-}
-
-.username {
-  font-size: 28px;
-  font-weight: 600;
-  margin-left: 11px;
-  max-height: 40px;
-  text-overflow: ellipsis;
-}
-
-.lastmsg {
-  font-size: 20px;
-  font-weight: 600;
-  margin-left: 11px;
-  max-height: 55px;
-  text-overflow: ellipsis;
-  color: #585858
-}
+<style lang="less">
+@import '../../less/global.less';
+@import './dmlist.less';
 </style>

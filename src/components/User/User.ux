@@ -44,7 +44,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '../../less/global.less';
+
 .user {
     background-color: #262626af;
     width: 337px;

@@ -15,7 +15,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '../../less/global.less';
+
 .titlebar {
   margin-top: 45px;
   align-items: center;

@@ -1,0 +1,18 @@
+.center(@x: center, @y: center) {
+    justify-content: @x;
+    align-items: @y;
+}
+
+.flex-row(@padding: 0px, @bgColor: @baseColor) {
+    display: flex;
+    flex-direction: row;
+    padding: @padding;
+    background-color: @bgColor;
+}
+
+.flex-column(@padding: 0px, @bgColor: @baseColor) {
+    display: flex;
+    flex-direction: column;
+    padding: @padding;
+    background-color: @bgColor;
+}

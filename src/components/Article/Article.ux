@@ -30,7 +30,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@import '../../less/global.less';
+
 .articlebg {
   width: 72%; 
   min-height: 120px; 
