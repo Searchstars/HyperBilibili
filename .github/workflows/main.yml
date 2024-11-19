@@ -21,11 +21,14 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Install Yarn
+      run: npm install -g yarn
+
     - name: Install dependencies
-      run: npm install
+      run: yarn
 
     - name: Build project
-      run: npx aiot build
+      run: npx aiot build --enable-custom-component --enable-jsc --enable-protobuf --enable-image-png8
 
     - name: Upload rpk files
       uses: actions/upload-artifact@v4.3.6
