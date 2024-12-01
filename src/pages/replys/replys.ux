@@ -10,7 +10,7 @@
   <div class="page">
     <title-bar title="{{titletext}}"></title-bar>
     <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
-    <list style="margin-top: 15px" class="replylist">
+    <list class="replylist">
       <list-item type="replies"
         style="width: 100%; justify-content: center; margin-top: 10px; height: {{PlaceHolderShowCheck($item.rpid)}}"
         for="{{replies}}">

@@ -6,7 +6,7 @@
     <image style="position: absolute" src="/common/rounddevices_savedcontentbg.png" static></image>
     <scroll class="scroll" scroll-y="true" bounces="true">
       <switch-bar title="savedcontent.title" static></switch-bar>
-      <div style="margin-top: 10px; flex-direction: column; align-items: center; width: 100%" for="{{content}}">
+      <div style="flex-direction: column; align-items: center; width: 100%" for="{{content}}">
         <div if="{{$item.type == 'article' ? true : false}}" style="flex-direction: column; align-items: center; width: 100%" onclick="OpenArticle({{$item.id}})">
           <articleshow article="{{$item}}"></articleshow>
         </div>

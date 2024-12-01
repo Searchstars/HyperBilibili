@@ -1,7 +1,21 @@
+<import name="time-view" src="../TimeView/TimeView.ux"></import>
+
 <template>
-  <div class="titlebar" @click="RouterBack()">
-    <image src="/common/icons8-back-100.png" style="width: 30px; height: 30px; margin-right: 5px"></image>
-    <text style="font-size: 40px; font-weight: bold">{{ _parentVM.$t(title) }}</text>
+  <div>
+    <div if="{{!useRowLayout}}" class="comp-root">
+      <time-view style="position: absolute;"></time-view>
+      <div class="titlebar" @click="RouterBack()">
+        <image src="/common/icons8-back-100.png" style="width: 30px; height: 30px; margin-right: 5px"></image>
+        <text style="font-size: 32px; font-weight: normal; margin-top: 3px">{{ _parentVM.$t(title) }}</text>
+      </div>
+    </div>
+    <div if="{{useRowLayout}}" class="comp-root row">
+      <div class="titlebar bar-row" style="{{barRowStyle}}" @click="RouterBack()">
+        <image src="/common/icons8-back-100.png" style="width: 30px; height: 30px; margin-right: 5px"></image>
+        <text style="font-size: 32px; font-weight: normal; margin-top: 3px">{{ _parentVM.$t(title) }}</text>
+      </div>
+      <time-view style="position: absolute;"></time-view>
+    </div>
   </div>
 </template>
 
@@ -9,8 +23,19 @@
 import router from "@system.router"
 export default {
   props: ["title"],
+  data: {
+    barRowStyle: {},
+    useRowLayout: false
+  },
   RouterBack() {
     router.back()
+  },
+  onInit() {
+    const deviceInfo = this.$app.$def.DEVICE_INFO;
+    if (deviceInfo.screenWidth <= 450){
+      this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
+      this.useRowLayout = true
+    }
   }
 }
 </script>
@@ -18,9 +43,26 @@ export default {
 <style lang="less">
 @import '../../less/global.less';
 
+.comp-root {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  flex-direction: row;
+}
+
 .titlebar {
   margin-top: 45px;
   align-items: center;
   justify-content: center;
+  padding-bottom: 10px;
+}
+
+.bar-row {
+  justify-content: flex-start;
+  margin-top: 10px;
+  margin-left: 15px;
 }
 </style>

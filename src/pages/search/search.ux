@@ -5,7 +5,7 @@
   <div class="page">
     <image style="position: absolute" src="/common/rounddevices_searchbg.png" static></image>
     <switch-bar title="search.title" static></switch-bar>
-    <div class="searchbtn" style="margin-top: 20px" @click="OpenInput">
+    <div class="searchbtn" @click="OpenInput">
       <image src="/common/searchpage_search.png" style="margin-left: 25px" static></image>
       <text class="searchtip" style="margin-left: 15px" static>{{ $t("search.clickToSearch") }}</text>
     </div>

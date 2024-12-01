@@ -1,0 +1,88 @@
+<template>
+  <div class="time-comp" style="{{compStyle}}">
+    <div if="{{!useRectTime}}">
+      <div class="circle-time">
+        <text class="timetxt" style="transform: rotate(-12.8deg)">{{ hourHigh }}</text>
+        <text class="timetxt" style="transform: rotate(-6.4deg); margin-bottom: 6px">
+          {{ hourLow }}
+        </text>
+        <text class="timetxt" style="padding: 4px; min-width: 10px; margin-bottom: 10px; justify-content: center">
+          :
+        </text>
+        <text class="timetxt" style="transform: rotate(6.4deg); margin-bottom: 10px">
+          {{ minuteHigh }}
+        </text>
+        <text class="timetxt" style="transform: rotate(12.8deg); margin-bottom: 7.5px">
+          {{ minuteLow }}
+        </text>
+      </div>
+    </div>
+    <div if="{{useRectTime}}" class="rect">
+      <text class="timetxt rect-txt">{{ hourHigh }}{{ hourLow }}:{{ minuteHigh }}{{ minuteLow }}</text>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data: {
+    hourHigh: "",
+    hourLow: "",
+    minuteHigh: "",
+    minuteLow: "",
+    compStyle: {},
+    useRectTime: false
+  },
+  UpdateTime() {
+    const hour = this.$app.$def.dayjs().hour()
+    const minute = this.$app.$def.dayjs().minute()
+
+    this.hourHigh = Math.floor(hour / 10).toString()
+    this.hourLow = (hour % 10).toString()
+
+    this.minuteHigh = Math.floor(minute / 10).toString()
+    this.minuteLow = (minute % 10).toString()
+  },
+  onInit() {
+    this.UpdateTime()
+
+    setInterval(() => {
+      this.UpdateTime()
+    }, 2000)
+
+    const deviceInfo = this.$app.$def.DEVICE_INFO
+    if (deviceInfo.screenWidth <= 450) {
+      this.compStyle["right"] = "15px"
+      this.useRectTime = true
+    }
+  }
+}
+</script>
+
+<style lang="less">
+@import "../../less/global.less";
+
+.time-comp {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 3.5px;
+}
+
+.circle-time {
+  justify-content: flex-start;
+}
+
+.timetxt {
+  font-size: 25px;
+  font-weight: 900;
+  top: 2px;
+  padding: 2px;
+}
+
+.rect-txt {
+  font-size: 30px;
+  padding-bottom: 8.5px;
+}
+</style>

@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <title-bar title="专栏缓存"></title-bar>
-    <image src="/common/articlesave_tips.png" style="margin-top: 35px"></image>
+    <image src="/common/articlesave_tips.png"></image>
     <default-button margin-top="20px" text="阅读更多信息" @click="ReadMore"></default-button>
     <default-button margin-top="20px" primary="true" text="缓存" @click="Download"></default-button>
     <text style="margin-top: 50px"></text>

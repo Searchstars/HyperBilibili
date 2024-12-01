@@ -1,37 +1,39 @@
+<import name="title-bar" src="../../components/TitleBar/TitleBar.ux"></import>
+
 <template>
     <div class="page">
         <scroll class="scroll" scroll-y="true" @scrollbottom="DoScrollTip" bounces="true">
-            <text class="time">{{time}}</text>
+            <title-bar title="arealist.title"></title-bar>
             <div class="btnline" style="margin-top: 15px;">
-                <div class="btn" onclick="GoPage({{pages[0]}})">
-                    <div class="btnbase">
+                <div class="btn" onclick="GoPage('main')">
+                    <div class="btnbase" style="background-color: {{colors.main}}">
                         <image src="/common/arealist_home.png" class="btnimg"></image>
                     </div>
                     <text class="btntext">{{ $t("arealist.home") }}</text>
                 </div>
-                <div class="btn" style="margin-left: 35px;" onclick="GoPage({{pages[1]}})">
-                    <div class="btnbase">
+                <div class="btn" style="margin-left: 35px;" onclick="GoPage('dynamic')">
+                    <div class="btnbase" style="background-color: {{colors.dynamic}}">
                         <image src="/common/arealist_updates.png" class="btnimg"></image>
                     </div>
                     <text class="btntext">{{ $t("arealist.dynamic") }}</text>
                 </div>
             </div>
             <div class="btnline" style="margin-top: 15px;">
-                <div class="btn" onclick="GoPage({{pages[2]}})">
-                    <div class="btnbase">
+                <div class="btn" onclick="GoPage('mypage')">
+                    <div class="btnbase" style="background-color: {{colors.mypage}}">
                         <image src="/common/arealist_my.png" class="btnimg"></image>
                     </div>
                     <text class="btntext">{{ $t("arealist.my") }}</text>
                 </div>
-                <div class="btn" style="margin-left: 35px;" onclick="GoPage({{pages[3]}})">
-                    <div class="btnbase">
+                <div class="btn" style="margin-left: 35px;" onclick="GoPage('settings')">
+                    <div class="btnbase"  style="background-color: {{colors.settings}}">
                         <image src="/common/arealist_settings.png" class="btnimg"></image>
                     </div>
                     <text class="btntext">{{ $t("arealist.settings") }}</text>
                 </div>
             </div>
             <div class="btnline" style="margin-top: 30px; justify-content: center">
-                <div class="smallbtn" onclick="GoPage({{pages[4]}})">
+                <div class="smallbtn" style="background-color: {{colors.savedcontent}}" onclick="GoPage('savedcontent')">
                     <image src="/common/arealist_savedcontent.png"></image>
                     <text class="smallbtntext">{{ $t("arealist.downloads") }}</text>
                 </div>
@@ -48,16 +50,18 @@
 import router from "@system.router"
 import prompt from "@system.prompt"
 export default {
+    public: {
+        lastpage: ""
+    },
     private: {
-        time: "",
         showChangePageFX: false,
-        pages: [
-            "main",
-            "dynamic",
-            "mypage",
-            "settings",
-            "savedcontent"
-        ],
+        colors: {
+            main: "#222222",
+            dynamic: "#222222",
+            mypage: "#222222",
+            settings: "#222222",
+            savedcontent: "#222222"
+        },
         anims: {
             ChangePageFX: null,
             ChangePageFXBTM: {
@@ -84,10 +88,8 @@ export default {
         },700)
     },
     onInit(){
-        this.time = this.$app.$def.tools.getCurrentTime()
-        setInterval(() => {
-            this.time = this.$app.$def.tools.getCurrentTime()
-        }, 1000)
+        console.log("lastpage=", this.lastpage)
+        this.colors[this.lastpage] = "#FF7DA8"
     },
     GoPage(pagename){
         if(pagename == "dynamic"){
@@ -96,6 +98,7 @@ export default {
             })
             return
         }
+        router.clear()
         router.replace({
             uri: "pages/" + pagename
         })

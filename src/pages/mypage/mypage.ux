@@ -3,7 +3,7 @@
 <template>
   <div class="page">
     <switch-bar title="mypage.title"></switch-bar>
-    <div class="profdiv" style="margin-top: 20px">
+    <div class="profdiv">
       <image src="{{accountInfo.face}}@106w_106h" alt="/common/fullgray.png" class="profimg"></image>
       <image src="{{accountInfo.pendant.image}}@176w_176h" alt="/common/alphaimg.png" class="profpendantimg"></image>
     </div>

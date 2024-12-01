@@ -3,7 +3,7 @@
 <template>
   <div class="page">
     <switch-bar title="settings.title"></switch-bar>
-    <div class="setbase" style="margin-top: 45px" onclick="ClickCountSet({{countset_name[0]}})">
+    <div class="setbase" style="margin-top: 30px" onclick="ClickCountSet({{countset_name[0]}})">
       <image class="seticon" src="/common/settings_freshtype.png"></image>
       <text class="setext_small">{{ $t("settings.videoPushRelevance") }}</text>
       <text class="countset_num">{{ fresh_type }}</text>

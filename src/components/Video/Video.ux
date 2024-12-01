@@ -4,7 +4,7 @@
     <div class="vid" @click="OpenVideo(video.bvid)">
         <div style="{{vidinfo_style}}" class="vidinfo">
             <div class="vidpicture" style="{{vidpicture_style}}">
-              <online-image width="{{vidpicture_style['max-width']}}" height="{{vidpicture_style['max-height']}}" lock-size="true" border-radius="30px" loading-anim="true" src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></online-image>
+              <online-image width="{{vidpicture_style['max-width']}}" height="{{vidpicture_style['max-height']}}" lock-size="true" border-radius="30px" object-fit="cover" loading-anim="true" src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></online-image>
             </div>
             <text class="vidtitle" if="{{!useColumnTitle}}">{{ video.title }}</text>
         </div>
@@ -43,11 +43,17 @@ export default {
       params: {bvid}
     })
   },
+  // 在线图片展示大小（UI层）
   SetOnlineImageSize(width, height){
     this.vidpicture_style["min-width"] = width + "px";
     this.vidpicture_style["max-width"] = width + "px";
     this.vidpicture_style["min-height"] = height + "px";
     this.vidpicture_style["max-height"] = height + "px";
+  },
+  // 在线图片加载大小（组件层）
+  // 使用比展示大小更小的加载大小可以节省设备RAM、降低渲染压力、节省流量等
+  // 推荐是展示大小的等比例缩放
+  SetOnlineImageLoadSize(width, height){
     this.onlineimg_width = width;
     this.onlineimg_height = height;
   },
@@ -57,12 +63,16 @@ export default {
     }
     
     const deviceInfo = this.$app.$def.DEVICE_INFO;
-    if (deviceInfo.screenWidth <= 336 || this.video.title.length > 25){
+    if (deviceInfo.screenWidth <= 450 || this.video.title.length > 25){
       this.useColumnTitle = true;
-      if (deviceInfo.screenWidth <= 336)
-        this.SetOnlineImageSize(200, 120);
-      else
+      if (deviceInfo.screenWidth <= 450){
+        this.SetOnlineImageSize(220, 120);
+        this.SetOnlineImageLoadSize(146, 80);
+      }
+      else{
         this.SetOnlineImageSize(300, 150);
+        this.SetOnlineImageLoadSize(200, 100);
+      }
     }
   }
 }
@@ -74,7 +84,7 @@ export default {
 .vid {
   margin-top: 10px;
   padding: 15px 15px;
-  border-radius: 50px;
+  border-radius: 30px;
   background-color: #262626af;
   justify-content: center;
   align-items: center;

@@ -1,6 +1,6 @@
 <template>
-  <div @click="Click" style="margin-top: {{marginTop}}; border-radius: {{borderRadius}}; justify-content: center; align-items: center">
-    <image if="{{show_image}}" src="{{localsrc}}" style="border-radius: {{borderRadius}}"></image>
+  <div @click="Click" style="{{div_style}}">
+    <image if="{{show_image}}" src="{{localsrc}}" style={{image_style}} class="img"></image>
     <image if="{{show_loading && loadingAnim}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
@@ -14,6 +14,7 @@ export default {
         show_image: false,
         localsrc: "",
         image_style: {},
+        div_style: {},
         anims: {
             loading: null,
             loading_src: {value: "/common/seqanims/dotloadingWhite/icons8-dotsloading_颜色反转-1.png"}
@@ -59,13 +60,27 @@ export default {
         )
         this.anims.loading.start()
 
+        this.div_style = {
+            "margin-top": this.marginTop,
+            "border-radius": this.borderRadius,
+            "justify-content": "center",
+            "align-items": "center"
+        }
+
         this.image_style = {
-            "object-fit": this.objectFit
+            "object-fit": this.objectFit,
+            "border-radius": this.borderRadius
         }
         if(this.lockSize){
             this.image_style["width"] = this.width
             this.image_style["height"] = this.height
+            this.div_style["min-width"] = this.width
+            this.div_style["min-height"] = this.height
         }
+
+        console.log(this.div_style)
+        console.log(this.image_style)
+
         request.download({
             url: this.src,
             success: (data) => {
@@ -100,4 +115,8 @@ export default {
 
 <style lang="less">
 @import '../../less/global.less';
+
+.img {
+    border-radius: 30px;
+}
 </style>

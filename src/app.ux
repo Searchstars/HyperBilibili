@@ -1,4 +1,8 @@
 <script>
+// third-party deps
+import dayjs from "dayjs"
+
+// local imports
 import * as animengine from "./animation/engine"
 import { BilibiliClient }  from "./bilibiliclient/client"
 import * as tools from "./tools"
@@ -11,6 +15,8 @@ import * as htmlparser from "./htmlparser"
 import * as savedcontent from "./savedcontent"
 import * as buildinfo from "./buildinfo"
 export default {
+  dayjs: dayjs,
+
   animengine: animengine,
   biliclient: null,
   tools: tools,

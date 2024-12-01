@@ -1,29 +1,76 @@
+<import name="time-view" src="../TimeView/TimeView.ux"></import>
+
 <template>
-    <div class="bar" @click="SwitchPage()">
+  <div>
+    <div if="{{!useRowLayout}}" class="comp-root">
+      <time-view style="position: absolute"></time-view>
+      <div class="bar" @click="SwitchPage()">
         <image src="/common/switch.png"></image>
-        <text style="font-weight: 600; font-size: 30px; margin-left: 15px">{{ _parentVM.$t(title) }}</text>
+        <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
+          {{ _parentVM.$t(title) }}
+        </text>
+      </div>
     </div>
+    <div if="{{useRowLayout}}" class="comp-root row">
+      <div class="bar bar-row" style="{{barRowStyle}}" @click="SwitchPage()">
+        <image src="/common/switch.png" style="object-fit: scale-down; width: 32px; height: 32px"></image>
+        <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
+          {{ _parentVM.$t(title) }}
+        </text>
+      </div>
+      <time-view style="position: absolute;"></time-view>
+    </div>
+  </div>
 </template>
 
 <script>
 import router from "@system.router"
 export default {
   props: ["title"],
+  data: {
+    barRowStyle: {},
+    useRowLayout: false
+  },
   SwitchPage() {
-    router.replace({
-      uri: "pages/arealist"
+    router.push({
+      uri: "pages/arealist",
+      params: {
+        lastpage: router.getState().name.split("/")[1]
+      }
     })
   },
-  onInit(){
+  onInit() {
+    const deviceInfo = this.$app.$def.DEVICE_INFO;
+    if (deviceInfo.screenWidth <= 450){
+      this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
+      this.useRowLayout = true
+    }
   }
 }
 </script>
 
 <style lang="less">
-@import '../../less/global.less';
+@import "../../less/global.less";
+
+.comp-root {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  flex-direction: row;
+}
 
 .bar {
-    flex-direction: row;
-    margin-top: 30px;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 45px;
+  padding-bottom: 15px;
+}
+
+.bar-row {
+  margin-top: 10px;
+  margin-left: 15px;
 }
 </style>

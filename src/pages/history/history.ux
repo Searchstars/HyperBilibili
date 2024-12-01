@@ -70,7 +70,6 @@ export default {
 @import '../../less/global.less';
 
 .historylist {
-  margin-top: 10px;
   width: 77%;
   align-items: center;
   justify-content: center;

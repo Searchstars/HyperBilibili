@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image if="{{this.$app.$def.DEVICE_INFO.screenShape == 'circle'}}" src="/common/rounddevices_bg.png"
+    <image if="{{this.$app.$def.DEVICE_INFO.screenWidth >= 464}}" src="/common/rounddevices_bg.png"
       style="position: absolute; transform: rotate({{ambientlight.rotatedeg}}); transform-origin: {{ambientlight.transform_origin}}; left: 0px">
     </image>
     <scroll scroll-y="true" class="scroll" bounces="true">

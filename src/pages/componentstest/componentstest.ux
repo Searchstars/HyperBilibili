@@ -7,7 +7,7 @@
 <template>
   <div class="page">
     <title-bar title="组件测试"></title-bar>
-    <text style="margin-top: 35px">BetterOnlineImage</text>
+    <text>BetterOnlineImage</text>
     <online-image margin-top="20px" src="https://i.pinimg.com/236x/fd/20/13/fd20135e219e1336b7fdc478dca13d90.jpg"></online-image>
     <text style="margin-top: 35px">DefaultButton</text>
     <default-button primary="true" margin-top="20px" text="Primary"></default-button>
@@ -21,9 +21,9 @@
     <reply reply="{{reply_tmp}}"></reply>
     <text style="margin-top: 35px">页面功能测试</text>
     <default-button margin-top="20px" text="splash（重开）" @click="GoSplash"></default-button>
-    <default-button margin-top="20px" text="prepage" @click="GoPrepage"></default-button>
-    <default-button margin-top="20px" text="arealist" @click="GoArealist"></default-button>
-    <default-button margin-top="15px" text="eularead" @click="GoEulaRead"></default-button>
+    <default-button margin-top="20px" text="prepage>" @click="GoPrepage"></default-button>
+    <default-button margin-top="20px" text="arealist>" @click="GoArealist"></default-button>
+    <default-button margin-top="15px" text="eularead>" @click="GoEulaRead"></default-button>
     <text style="margin-top: 25px"></text>
   </div>
 </template>

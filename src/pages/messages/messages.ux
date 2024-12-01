@@ -3,7 +3,7 @@
 <template>
     <div class="page">
         <title-bar title="messages.title"></title-bar>
-        <div class="featurebox" style="margin-top: 25px" @click="ShowOnPhoneTips()">
+        <div class="featurebox" @click="ShowOnPhoneTips()">
             <div class="boxline" style="margin-top: 20px">
                 <div class="feature" style="margin-left: 17px">
                     <image class="featureimg" src="/common/messages_replyme.png"></image>
