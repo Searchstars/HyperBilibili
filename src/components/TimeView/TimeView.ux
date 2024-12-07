@@ -6,13 +6,11 @@
         <text class="timetxt" style="transform: rotate(-6.4deg); margin-bottom: 6px">
           {{ hourLow }}
         </text>
-        <text class="timetxt" style="padding: 4px; min-width: 10px; margin-bottom: 10px; justify-content: center">
-          :
-        </text>
-        <text class="timetxt" style="transform: rotate(6.4deg); margin-bottom: 10px">
+        <text class="timetxt" style="padding: 0px; min-width: 10px; margin-bottom: 10px; justify-content: center">:</text>
+        <text class="timetxt" style="transform: rotate(6.4deg); margin-bottom: 7px">
           {{ minuteHigh }}
         </text>
-        <text class="timetxt" style="transform: rotate(12.8deg); margin-bottom: 7.5px">
+        <text class="timetxt" style="transform: rotate(12.8deg); margin-bottom: 6px">
           {{ minuteLow }}
         </text>
       </div>
@@ -52,7 +50,7 @@ export default {
 
     const deviceInfo = this.$app.$def.DEVICE_INFO
     if (deviceInfo.screenWidth <= 450) {
-      this.compStyle["right"] = "15px"
+      this.compStyle["right"] = "100px"
       this.useRectTime = true
     }
   }
@@ -60,7 +58,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../less/global.less";
+@import "@less/global.less";
 
 .time-comp {
   flex-direction: row;

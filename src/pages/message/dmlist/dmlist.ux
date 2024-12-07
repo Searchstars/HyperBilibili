@@ -1,0 +1,104 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+
+<template>
+  <div class="page">
+    <title-bar title="dmlist.title"></title-bar>
+    <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
+      <div class="user" onclick="GoDMPage({{$item.talker_id}})">
+        <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
+        <div class="infoarea">
+          <text class="username">{{ session_cards[$item.talker_id].name }}</text>
+          <text class="lastmsg">
+            {{
+            JSON.parse($item.last_msg.content).content ||
+            JSON.parse($item.last_msg.content).reply_content ||
+            JSON.parse($item.last_msg.content).text ||
+            $t("dmlist.currentNoMessage")
+            }}
+          </text>
+        </div>
+      </div>
+    </div>
+    <text style="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
+      {{ $t("dmlist.userCountLimit") }}
+    </text>
+    <text style="margin-top: 25px"></text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  private: {
+    sessions: [],
+    session_cards: {},
+    show_loading: false,
+    show_dmlist: false,
+    Show20UserLimit: false,
+    anims: {
+      loading: null,
+      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+    }
+  },
+  async InitSessions(){
+    try{
+      this.anims.loading.start()
+      this.show_loading = true
+
+      this.sessions = (await this.$app.$def.biliclient.getDMSessions(1, 2)).session_list
+      // 裁切至10个
+      this.sessions.length = Math.min(this.sessions.length, 10);
+
+      var session_uids = []
+      this.sessions.forEach((session) => {
+        if(session.talker_id){
+          session_uids.push(session.talker_id)
+        }
+        else{
+          // Pass掉非法UID
+          this.sessions = this.sessions.filter(item => item !== session)
+        }
+      })
+
+      this.session_cards = await this.$app.$def.biliclient.getMultiUserInfoByUID(session_uids)
+
+      this.anims.loading.stop()
+      this.show_loading = false
+      this.Show20UserLimit = true
+      this.show_dmlist = true
+    }
+    catch(e){
+      console.error(e.toString())
+    }
+  },
+  GoDMPage(targetId){
+    router.push({
+      uri: "pages/message/dmpage",
+      params: {
+        myId: this.$app.$def.biliclient.accountInfo.mid,
+        targetId: targetId,
+        myPic: this.$app.$def.biliclient.accountInfo.face,
+        targetPic: this.session_cards[`${targetId}`].face
+      }
+    })
+  },
+  onInit(){
+    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
+      "dmlistPage",
+      this.anims.loading_src,
+      28,
+      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
+      1000,
+      true
+    )
+
+    this.InitSessions()
+  }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+@import "./dmlist.less";
+</style>

@@ -1,5 +1,5 @@
 <import name="html-renderer" src="./HtmlRenderer.ux"></import>
-<import name="online-image" src="../../components/BetterOnlineImage/BetterOnlineImage.ux"></import>
+<import name="online-image" src="@components/BetterOnlineImage/BetterOnlineImage.ux"></import>
 
 <template>
   <div class="compbase">
@@ -85,7 +85,7 @@ export default {
   openImage(evt) {
     console.log("[html-renderer] image clicked. openImage src=" + evt.detail.src)
     router.push({
-      uri: "pages/picturedetail",
+      uri: "pages/tools/picturedetail",
       params: {
         img_uri: evt.detail.src
       }
@@ -95,7 +95,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../less/global.less';
+@import '@less/global.less';
 
 .compbase {
   flex-direction: column;

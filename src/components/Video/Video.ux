@@ -39,7 +39,7 @@ export default {
   },
   OpenVideo(bvid) {
     router.push({
-      uri: "pages/videodetail",
+      uri: "pages/video/videodetail",
       params: {bvid}
     })
   },
@@ -65,13 +65,20 @@ export default {
     const deviceInfo = this.$app.$def.DEVICE_INFO;
     if (deviceInfo.screenWidth <= 450 || this.video.title.length > 25){
       this.useColumnTitle = true;
-      if (deviceInfo.screenWidth <= 450){
-        this.SetOnlineImageSize(220, 120);
-        this.SetOnlineImageLoadSize(146, 80);
+      // 手环Pro 系列
+      if (deviceInfo.screenWidth <= 380){
+        this.SetOnlineImageSize(200, 150);
+        this.SetOnlineImageLoadSize(100, 75);
       }
+      // RW系列
+      else if (deviceInfo.screenWidth <= 450){
+        this.SetOnlineImageSize(265, 150);
+        this.SetOnlineImageLoadSize(265, 150);
+      }
+      // 圆屏系列
       else{
         this.SetOnlineImageSize(300, 150);
-        this.SetOnlineImageLoadSize(200, 100);
+        this.SetOnlineImageLoadSize(300, 150);
       }
     }
   }
@@ -79,7 +86,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../less/global.less';
+@import '@less/global.less';
 
 .vid {
   margin-top: 10px;

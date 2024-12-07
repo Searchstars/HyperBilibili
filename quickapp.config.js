@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
     webpack: {
         module: {
@@ -10,8 +12,14 @@ module.exports = {
                         },
                     ],
                 },
-            ],
+            ]
         },
+        resolve: {
+            alias: {
+                '@components': path.resolve(__dirname, 'src/components'),
+                '@less': path.resolve(__dirname, 'src/less')
+            }
+        }
     },
     cli: {
         "enable-custom-component": true,

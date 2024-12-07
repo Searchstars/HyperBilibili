@@ -1,0 +1,83 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+
+<template>
+    <div class="page">
+        <title-bar title="favfolders.title"></title-bar>
+        <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}">
+        </image>
+        <list style="width: 77%; height: 100%" class="folderlist">
+            <list-item type="folders" class="folder" for="{{folders}}"
+                onclick="GoFolderVideosPage({{$item.id}}, {{$item.media_count}})">
+                <image src="{{$item.cover}}@121w_68h" alt="/common/fullblack.png" class="folderimg"></image>
+                <div style="flex-direction: column">
+                    <div class="foldername">
+                        <text class="foldername_text">{{ $item.title }}</text>
+                    </div>
+                    <text class="foldercount">{{ $t("favfolders.count") }}：{{ $item.media_count }}</text>
+                </div>
+                <image src="/common/arrow_right.png" style="margin-left: 30px"></image>
+            </list-item>
+        </list>
+    </div>
+</template>
+
+<script>
+import router from "@system.router"
+
+export default {
+  private: {
+    folders: [],
+    show_loading: true,
+    anims: {
+      loading: null,
+      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+    }
+  },
+  public: {
+    user_mid: null
+  },
+  GoFolderVideosPage(mlid, vidcount) {
+    router.push({
+      uri: "pages/folders/favfolders/foldervideos",
+      params: {mlid, vidcount}
+    })
+  },
+  async LoadFolders() {
+    try {
+      const folderlist = await this.$app.$def.biliclient.getUserFavouriteFolders(this.user_mid)
+      const folderPromises = folderlist.list.map((folder) =>
+        this.$app.$def.biliclient.getFavouriteFolderMetadata(folder.id)
+      )
+
+      this.folders = await Promise.all(folderPromises)
+    } catch (error) {
+      console.error("加载收藏夹时发生错误:", error)
+    } finally {
+      this.show_loading = false
+      this.anims.loading.stop()
+    }
+  },
+  onInit() {
+    const {loading_src} = this.anims
+    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
+      "favfoldersPage",
+      loading_src,
+      28,
+      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
+      1000,
+      true
+    )
+
+    this.anims.loading.start()
+    this.LoadFolders()
+  },
+  onDestroy() {
+    this.$app.$def.animengine.clearPageAnims("favfoldersPage")
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+@import './favfolders.less';
+</style>

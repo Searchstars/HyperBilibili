@@ -1,0 +1,67 @@
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+
+<template>
+  <div class="page">
+    <image src="{{anims.loginsrc.value}}" style="width: 45px; height: 45px; object-fit: contain"></image>
+    <text style="font-weight: 600; font-size: 24px; margin-top: 10px">{{ $t("prepage.loadingTip") }}</text>
+    <default-button text="prepage.gotProblems" style="position: absolute; bottom: 50px" @click="ReLogin()" if={{ShowReLogin}}></default-button>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  private: {
+    ShowReLogin: false,
+    anims: {
+      login: null,
+      loginsrc: {value: "/common/seqanims/loginWhite/icons8-login-1.png"}
+    }
+  },
+  async PreLogin() {
+    await this.$app.$def.biliclient.login(false, null)
+    router.replace({
+      uri: "pages/app/features/main"
+    })
+  },
+  ReLogin(){
+    this.$app.$def.biliclient.logOut()
+    router.clear()
+    router.replace({
+        uri: "pages/app/entry/splash"
+    })
+  },
+  onInit() {
+    this.anims.login = new this.$app.$def.animengine.SequenceAnim(
+      "prePage",
+      this.anims.loginsrc,
+      28,
+      "/common/seqanims/loginWhite/icons8-login-*.png",
+      1000,
+      true
+    )
+
+    this.anims.login.start()
+
+    this.PreLogin()
+
+    setTimeout(() => {
+      this.ShowReLogin = true
+    }, 5000)
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+}
+</style>

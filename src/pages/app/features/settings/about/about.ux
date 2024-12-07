@@ -1,0 +1,73 @@
+<template>
+  <div class="page">
+    <image src="/common/settings_about.png" style="margin-top: 22px"></image>
+    <text class="text" style="margin-top: 5px">{{ $t("about.title") }}</text>
+    <div class="appbar" style="margin-top: 22px">
+      <image class="logo" src="/common/logo.png"></image>
+      <text class="text" style="margin-left: 20px">HyperBili</text>
+      <text class="text ver">{{ version }}</text>
+    </div>
+    <text class="text" style="margin-top: 22px">{{ $t("about.projectOwnerShip") }}</text>
+    <div class="appbar" style="margin-top: 22px">
+      <image class="logo" src="/common/about_projectownership.png"></image>
+      <text class="text" style="margin-left: 20px">AstralSight Studios</text>
+    </div>
+    <text class="text" style="margin-top: 30px">{{ $t("about.developers") }}</text>
+    <div class="developers" style="margin-top: 15px">
+      <div class="developer">
+        <image src="/common/aboutpage_code.png" class="img"></image>
+        <text class="text devname">@Searchstars</text>
+      </div>
+      <div class="developer">
+        <image src="/common/aboutpage_code.png" class="img"></image>
+        <text class="text devname">@xinghengCN</text>
+      </div>
+      <div class="developer">
+        <image src="/common/aboutpage_brush.png" class="img"></image>
+        <text class="text devname">@RX79XT</text>
+      </div>
+      <div class="developer">
+        <image src="/common/aboutpage_brush.png" class="img"></image>
+        <text class="text devname">@wuhaiqi</text>
+      </div>
+      <div class="developer">
+        <image src="/common/aboutpage_brush.png" class="img"></image>
+        <text class="text devname">@一個小果冻</text>
+      </div>
+    </div>
+    <text class="text" style="color: #9e9e9e; margin-top: 12px">
+      {{ $t("about.moreResources") }}
+    </text>
+    <text class="text" style="margin-top: 5px">bandbbs.cn</text>
+    <div @click="OpenDisclaimer" class="disclaimer-btn" style="margin-top: 20px;">
+      <text style="font-size: 28px; font-weight: 600">{{ $t("about.disclaimer") }}</text>
+    </div>
+    <text style="margin-top: 25px"></text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  private: {
+    version: "NA"
+  },
+  onInit() {
+    this.version = "v" + this.$app.$def.biliclient.version
+  },
+  OpenDisclaimer() {
+    router.push({
+      uri: "pages/tools/textdetail",
+      params: {
+        titletext: "免责声明",
+        text: "本项目与哔哩哔哩（Bilibili）官方无任何关联，包括但不限于 哔哩哔哩股份有限公司 上海幻电信息科技有限公司 上海宽娱数码科技有限公司，本项目所使用的所有API接口均来自https://github.com/SocialSisterYi/bilibili-API-collect，经过来自各界网友的测试与修正，本人未对哔哩哔哩（Bilibili）的任何客户端进行任何逆向工程（包括但不限于 反编译、反汇编、抓包、拆包）操作"
+      }
+    })
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+@import './about.less';
+</style>

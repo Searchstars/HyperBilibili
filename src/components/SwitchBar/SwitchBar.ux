@@ -32,10 +32,12 @@ export default {
     useRowLayout: false
   },
   SwitchPage() {
+    var pagename = router.getState().name.split("/")
+
     router.push({
-      uri: "pages/arealist",
+      uri: "pages/app/arealist",
       params: {
-        lastpage: router.getState().name.split("/")[1]
+        lastpage: pagename[pagename.length - 1]
       }
     })
   },
@@ -50,7 +52,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../less/global.less";
+@import "@less/global.less";
 
 .comp-root {
   flex-direction: column;
@@ -71,6 +73,6 @@ export default {
 
 .bar-row {
   margin-top: 10px;
-  margin-left: 15px;
+  margin-left: 100px;
 }
 </style>

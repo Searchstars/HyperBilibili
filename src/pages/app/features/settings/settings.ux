@@ -1,0 +1,162 @@
+<import name="switch-bar" src="@components/SwitchBar/SwitchBar.ux"></import>
+
+<template>
+  <div class="page">
+    <switch-bar title="settings.title"></switch-bar>
+    <div class="setbase" style="margin-top: 30px" onclick="ClickCountSet({{countset_name[0]}})">
+      <image class="seticon" src="/common/settings_freshtype.png"></image>
+      <text class="setext_small">{{ $t("settings.videoPushRelevance") }}</text>
+      <text class="countset_num">{{ fresh_type }}</text>
+    </div>
+    <div class="setbase" onclick="ClickCountSet({{countset_name[1]}})">
+      <image class="seticon" src="/common/settings_homevidcount.png"></image>
+      <text class="setext_small">{{ $t("settings.videoPushCount") }}</text>
+      <text class="countset_num">{{ home_vid_count }}</text>
+    </div>
+    <div class="setbase" onclick="SwitchSet({{switchset_name[0]}})">
+      <image class="seticon" src="/common/settings_enablefullanim.png"></image>
+      <text class="setext_small">{{ $t("settings.enableFullAnimation") }}</text>
+      <text class="countset_num">{{ enableFullAnimation ? "开" : "关" }}</text>
+    </div>
+    <div class="setbase" @click="ClearTmp()">
+      <image class="seticon" src="/common/settings_removetmp.png"></image>
+      <text class="setext_small">{{ $t("settings.clearTemp") }}</text>
+      <image src="/common/arrow_right.png"></image>
+    </div>
+    <div class="setbase" @click="logout()">
+      <image class="seticon" src="/common/settings_logout.png"></image>
+      <text class="setext_small">{{ $t("settings.logOut") }}</text>
+      <image src="/common/arrow_right.png"></image>
+    </div>
+    <div class="setbase" @click="GoDonation()">
+      <image class="seticon" src="/common/donation.png"></image>
+      <text class="setext_small">{{ $t("settings.donation") }}</text>
+      <image src="/common/arrow_right.png"></image>
+    </div>
+    <div class="setbase" @click="GoAbout()">
+      <image class="seticon" src="/common/settings_about.png"></image>
+      <text class="setext_small">{{ $t("settings.about") }}</text>
+      <image src="/common/arrow_right.png"></image>
+    </div>
+    <div class="setbase" @click="GoDebug()">
+      <div class="seticon"></div>
+      <text class="setext_small">{{ $t("settings.debug") }}</text>
+      <image src="/common/arrow_right.png"></image>
+    </div>
+    <image style="margin-top: 30px" src="/common/opensource_warning.png"></image>
+    <text style="margin-top: 25px"></text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+import prompt from "@system.prompt"
+export default {
+  private: {
+    fresh_type: 3,
+    home_vid_count: 10,
+    enableFullAnimation: false,
+    switchset_name: ["enable_full_anim"],
+    countset_name: ["fresh_type", "home_vid_count"],
+    countset: {
+      fresh_type_max: 3,
+      fresh_type_min: 1,
+      home_vid_count_max: 14,
+      home_vid_count_min: 1
+    }
+  },
+  GoDonation(){
+    router.push({
+      uri: "pages/app/features/settings/donation"
+    })
+  },
+  GoAbout() {
+    router.push({
+      uri: "pages/app/features/settings/about"
+    })
+  },
+  GoDebug() {
+    router.push({
+      uri: "pages/debug/componentstest"
+    })
+  },
+  ClearTmp() {
+    prompt.showToast({
+      message: "当前不可用"
+    })
+  },
+  SwitchSet(name) {
+    switch (name) {
+      case "enable_full_anim":
+        if (this.enableFullAnimation) {
+          this.enableFullAnimation = false
+          this.$app.$def.settings.saveSettings({
+            enableFullAnimation: this.enableFullAnimation
+          })
+        } else {
+          this.enableFullAnimation = true
+          this.$app.$def.settings.saveSettings({
+            enableFullAnimation: this.enableFullAnimation
+          })
+          prompt.showToast({
+            message: "开启此选项会导致首页等页面在低性能设备上严重卡顿，因此建议保持关闭！",
+            duration: 6000
+          })
+        }
+        this.UpdateNumView()
+    }
+  },
+  ClickCountSet(name) {
+    switch (name) {
+      case "fresh_type":
+        var new_fresh_type = null
+        if (this.fresh_type < this.countset.fresh_type_max) {
+          new_fresh_type = this.fresh_type + 1
+        } else {
+          new_fresh_type = this.countset.fresh_type_min
+        }
+        this.$app.$def.settings.saveSettings({
+          fresh_type: new_fresh_type
+        })
+        setTimeout(() => {
+          this.UpdateNumView()
+        }, 100)
+        break
+      case "home_vid_count":
+        var new_home_vid_count = null
+        if (this.home_vid_count < this.countset.home_vid_count_max) {
+          new_home_vid_count = this.home_vid_count + 1
+        } else {
+          new_home_vid_count = this.countset.home_vid_count_min
+        }
+        this.$app.$def.settings.saveSettings({
+          home_vid_count: new_home_vid_count
+        })
+        setTimeout(() => {
+          this.UpdateNumView()
+        }, 100)
+        break
+    }
+  },
+  logout() {
+    this.$app.$def.biliclient.logOut()
+    router.clear()
+    router.replace({
+      uri: "pages/app/entry/splash"
+    })
+  },
+  UpdateNumView() {
+    this.fresh_type = this.$app.$def.settings.SETTINGS.fresh_type
+    this.home_vid_count = this.$app.$def.settings.SETTINGS.home_vid_count
+    this.enableFullAnimation = this.$app.$def.settings.SETTINGS.enableFullAnimation
+  },
+  onInit() {
+    this.UpdateNumView()
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+@import './settings.less';
+</style>

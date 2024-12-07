@@ -1,0 +1,63 @@
+<import name="switch-bar" src="@components/SwitchBar/SwitchBar.ux"></import>
+<import name="articleshow" src="@components/Article/Article.ux"></import>
+
+<template>
+  <div class="page">
+    <image style="position: absolute" src="/common/rounddevices_savedcontentbg.png" static></image>
+    <scroll class="scroll" scroll-y="true" bounces="true">
+      <switch-bar title="savedcontent.title" static></switch-bar>
+      <div style="flex-direction: column; align-items: center; width: 100%" for="{{content}}">
+        <div if="{{$item.type == 'article' ? true : false}}"
+          style="flex-direction: column; align-items: center; width: 100%" onclick="OpenArticle({{$item.id}})">
+          <articleshow article="{{$item}}"></articleshow>
+        </div>
+      </div>
+      <text style="margin-top: 25px"></text>
+    </scroll>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  private: {
+    content: []
+  },
+  PatchContent(origin_content) {
+    try {
+      var new_content = []
+
+      // 暂无可进行的patch操作
+      new_content = origin_content
+
+      return new_content
+    } catch (e) {
+      console.error("[savedcontent.PatchContent] Patch Error: " + e.toString())
+    }
+  },
+  async OpenArticle(id) {
+    var html = await this.$app.$def.savedcontent.SavedContentManager.getContent(id)
+    router.push({
+      uri: "pages/article/articleshow",
+      params: {
+        cvid: "",
+        offline: true,
+        article_html: html
+      }
+    })
+  },
+  async LoadContent() {
+    var origin_content = await this.$app.$def.savedcontent.SavedContentManager.listAllContent()
+    console.log(origin_content)
+    this.content = this.PatchContent(origin_content)
+    console.log(this.content)
+  },
+  onInit() {
+    this.LoadContent()
+  }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+</style>

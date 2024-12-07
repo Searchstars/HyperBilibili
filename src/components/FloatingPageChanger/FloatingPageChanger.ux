@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../less/global.less';
+@import '@less/global.less';
 
 .pagechanger-container {
   bottom: 22px;

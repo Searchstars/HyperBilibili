@@ -6,11 +6,11 @@ export async function Jump() {
         success: async (bilibili_account) => {
             if (bilibili_account.length < 1) {
                 router.replace({
-                    uri: "pages/login"
+                    uri: "pages/app/entry/login"
                 })
             } else {
                 router.replace({
-                    uri: "pages/prepage"
+                    uri: "pages/app/entry/prepage"
                 })
             }
         }

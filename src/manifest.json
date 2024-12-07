@@ -27,93 +27,93 @@
         "backgroundColor": "#000000"
     },
     "router": {
-        "entry": "pages/splash",
+        "entry": "pages/app/entry/splash",
         "pages": {
-            "pages/splash": {
+            "pages/app/entry/splash": {
                 "component": "splash"
             },
-            "pages/login": {
+            "pages/app/entry/login": {
                 "component": "login"
             },
-            "pages/main": {
+            "pages/app/features/main": {
                 "component": "main"
             },
-            "pages/videodetail": {
+            "pages/video/videodetail": {
                 "component": "videodetail"
             },
-            "pages/arealist": {
+            "pages/app/arealist": {
                 "component": "arealist"
             },
-            "pages/settings": {
+            "pages/app/features/settings": {
                 "component": "settings"
             },
-            "pages/about": {
+            "pages/app/features/settings/about": {
                 "component": "about"
             },
-            "pages/mypage": {
+            "pages/app/features/mypage": {
                 "component": "mypage"
             },
-            "pages/favfolders": {
+            "pages/folders/favfolders": {
                 "component": "favfolders"
             },
-            "pages/foldervideos": {
+            "pages/folders/favfolders/foldervideos": {
                 "component": "foldervideos"
             },
-            "pages/prepage": {
+            "pages/app/entry/prepage": {
                 "component": "prepage"
             },
-            "pages/replys": {
+            "pages/reply/replys": {
                 "component": "replys"
             },
-            "pages/textdetail": {
+            "pages/tools/textdetail": {
                 "component": "textdetail"
             },
-            "pages/replytools": {
+            "pages/reply/replytools": {
                 "component": "replytools"
             },
-            "pages/search": {
+            "pages/search/search": {
                 "component": "search"
             },
-            "pages/introduction": {
+            "pages/app/entry/introduction": {
                 "component": "introduction"
             },
-            "pages/history": {
+            "pages/folders/history": {
                 "component": "history"
             },
-            "pages/searchresult": {
+            "pages/search/searchresult": {
                 "component": "searchresult"
             },
-            "pages/messages": {
+            "pages/message/messages": {
                 "component": "messages"
             },
-            "pages/dmlist": {
+            "pages/message/dmlist": {
                 "component": "dmlist"
             },
-            "pages/dmpage": {
+            "pages/message/dmpage": {
                 "component": "dmpage"
             },
-            "pages/picturedetail": {
+            "pages/tools/picturedetail": {
                 "component": "picturedetail"
             },
-            "pages/donation": {
+            "pages/app/features/settings/donation": {
                 "component": "donation"
             },
-            "pages/articleshow": {
+            "pages/article/articleshow": {
                 "component": "articleshow"
             },
-            "pages/articlesave": {
+            "pages/article/articlesave": {
                 "component": "articlesave"
             },
-            "pages/savedcontent": {
+            "pages/app/features/savedcontent": {
                 "component": "savedcontent"
             },
-            "pages/componentstest": {
+            "pages/debug/componentstest": {
                 "component": "componentstest"
             },
-            "pages/networkerror": {
+            "pages/error/networkerror": {
                 "component": "networkerror"
             },
-            "pages/eularead": {
+            "pages/app/entry/eularead": {
                 "component": "eularead"
             }
         }

@@ -1,6 +1,7 @@
 {
     "about": {
         "title": "关于应用",
+        "projectOwnerShip": "项目归属",
         "developers": "参与开发的人员",
         "moreResources": "更多资源请访问",
         "disclaimer": "免责声明"
@@ -74,7 +75,7 @@
     },
     "prepage": {
         "loadingTip": "正在加载账号数据...",
-        "gotProblems": "遇到问题？重新登录"
+        "gotProblems": "重新登录"
     },
     "replytools": {
         "title": "评论",

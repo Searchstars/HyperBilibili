@@ -1,0 +1,83 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="online-image" src="@components/BetterOnlineImage/BetterOnlineImage.ux"></import>
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+<import name="articleshow" src="@components/Article/Article.ux"></import>
+<import name="reply" src="@components/Reply/Reply.ux"></import>
+
+<template>
+  <div class="page">
+    <title-bar title="组件测试"></title-bar>
+    <text>BetterOnlineImage</text>
+    <online-image margin-top="20px" src="https://i.pinimg.com/236x/fd/20/13/fd20135e219e1336b7fdc478dca13d90.jpg"></online-image>
+    <text style="margin-top: 35px">DefaultButton</text>
+    <default-button primary="true" margin-top="20px" text="Primary"></default-button>
+    <default-button margin-top="15px" text="Normal"></default-button>
+    <default-button disabled="true" margin-top="15px" text="Disabled"></default-button>
+    <text style="margin-top: 35px">Article</text>
+    <text style="margin-top: 5px"></text>
+    <articleshow show-category="true" article="{{article_tmp}}"></articleshow>
+    <text style="margin-top: 35px">Reply</text>
+    <text style="margin-top: 5px"></text>
+    <reply reply="{{reply_tmp}}"></reply>
+    <text style="margin-top: 35px">页面功能测试</text>
+    <default-button margin-top="20px" text="splash（重开）" @click="GoSplash"></default-button>
+    <default-button margin-top="20px" text="prepage>" @click="GoPrepage"></default-button>
+    <default-button margin-top="20px" text="arealist>" @click="GoArealist"></default-button>
+    <default-button margin-top="15px" text="eularead>" @click="GoEulaRead"></default-button>
+    <text style="margin-top: 25px"></text>
+  </div>
+</template>
+ 
+<script>
+import router from "@system.router"
+export default {
+  private: {
+    article_tmp: {
+      title: "平壤今日来报：一切良好，手机屏幕完全展开！",
+      category_name: "每日还恩情"
+    },
+    reply_tmp: {
+      member: {
+        avatar: "/common/arealist_my.png",
+        uname: "理塘顶针",
+        level_info: {
+          current_level: 9
+        }
+      },
+      reply_control: {
+        time_desc: "5世纪前",
+        location: "IP属地：妈妈"
+      },
+      content: {
+        message: "我是妈妈生的"
+      },
+      like: 114,
+      rcount: 514
+    }
+  },
+  GoSplash(){
+    router.push({
+      uri: "pages/app/entry/splash"
+    })
+  },
+  GoPrepage(){
+    router.push({
+      uri: "pages/app/entry/prepage"
+    })
+  },
+  GoEulaRead(){
+    router.push({
+      uri: "pages/app/entry/eularead"
+    })
+  },
+  GoArealist(){
+    router.push({
+      uri: "pages/app/arealist"
+    })
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+</style>

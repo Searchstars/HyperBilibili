@@ -1,0 +1,195 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="full-screen-input" src="@components/FullScreenInput/FullScreenInput.ux"></import>
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+
+<template>
+  <div class="page">
+    <scroll scroll-y="true" class="scroll" bounces="true">
+      <title-bar title="video.title"></title-bar>
+      <image src="{{vid.pic}}@319w_150h" alt="/common/grayloading_cn.png" class="vidpic"></image>
+      <text class="vidtitle">{{ vid.title }}</text>
+      <div class="statbar">
+        <div class="stat">
+          <image class="statimg" src="/common/playcounticon.png" style="width: 23px; height: 25px; margin-top: 2px">
+          </image>
+          <text class="statext">{{ this.$app.$def.tools.formatNumber(vid.stat.view) }}</text>
+        </div>
+        <div class="stat" style="margin-left: 10px">
+          <image class="statimg" src="/common/uploadericon.png" style="width: 27px; height: 29px"></image>
+          <text class="statext">{{ vid.owner.name }}</text>
+        </div>
+      </div>
+      <scroll scroll-x="true" class="vidtoolbar" style="margin-top: 25px" bounces="true">
+        <div class="vidtool" style="margin-left: 0px" @click="LikeClick()" @longpress="PowerIt()">
+          <image class="vidtoolimg" src="{{likesrc}}"></image>
+          <text class="vidtooltext">{{ this.$app.$def.tools.formatNumber(vid.stat.like) }}</text>
+        </div>
+        <div class="vidtool" @click="CoinClick()">
+          <image class="vidtoolimg" src="{{coinsrc}}"></image>
+          <text class="vidtooltext">{{ this.$app.$def.tools.formatNumber(vid.stat.coin) }}</text>
+        </div>
+        <div class="vidtool" @click="AddToFav()">
+          <image class="vidtoolimg" src="{{starsrc}}"></image>
+          <text class="vidtooltext">
+            {{ this.$app.$def.tools.formatNumber(vid.stat.favorite) }}
+          </text>
+        </div>
+        <div class="vidtool" @click="AISummary()">
+          <image class="vidtoolimg" src="/common/vidtool_aisummary.png"></image>
+          <text class="vidtooltext">{{ $t("video.aisummary") }}</text>
+        </div>
+        <div class="vidtool" @click="WIPTips">
+          <image class="vidtoolimg" src="/common/vidtool_generatemanifest.png"></image>
+          <text class="vidtooltext">{{ $t("video.manifest") }}</text>
+        </div>
+        <div class="vidtool" @click="WIPTips">
+          <image class="vidtoolimg" src="/common/vidtool_watchlater.png"></image>
+          <text class="vidtooltext">{{ $t("video.showLater") }}</text>
+        </div>
+        <div class="vidtool" @click="WIPTips">
+          <image class="vidtoolimg" src="/common/vidtool_watchonphone.png"></image>
+          <text class="vidtooltext">{{ $t("video.showOnPhone") }}</text>
+        </div>
+      </scroll>
+      <default-button text="video.sendReply" margin-top="20px" @click="Reply"></default-button>
+      <image src="/common/featurebtn_replyarea.png" style="margin-top: 15px" @click="GoReplyArea()"></image>
+    </scroll>
+    <full-screen-input style="position: absolute" if="{{replymode}}" @send="SendReply" @exit="ExitInput"></full-screen-input>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+import prompt from "@system.prompt"
+
+export default {
+  public: {
+    bvid: 1 // 视频BVID
+  },
+  private: {
+    vid: {},
+    liked: false,
+    coined: false,
+    stared: false,
+    likesrc: "/common/vidtool_like.png",
+    coinsrc: "/common/vidtool_coin.png",
+    starsrc: "/common/vidtool_star.png",
+    replymode: false
+  },
+  onInit() {
+    console.log("[videodetail] load bvid: " + this.bvid);
+    this.GetVideoDetail()
+    this.UpdateVideoToolbarStatus()
+  },
+  WIPTips(){
+    prompt.showToast({
+      message: "该功能仍在开发中"
+    })
+  },
+  async GetVideoDetail() {
+    this.vid = await this.$app.$def.biliclient.getVideoInfoByBVID(this.bvid)
+  },
+  async UpdateVideoToolbarStatus() {
+    this.stared = await this.$app.$def.biliclient.isVideoStaredByBVID(this.bvid)
+    this.liked = await this.$app.$def.biliclient.isVideoLikedByBVID(this.bvid)
+    this.coined = await this.$app.$def.biliclient.isVideoCoinedByBVID(this.bvid)
+    this.UpdateToolBarIconSrc()
+  },
+  UpdateToolBarIconSrc() {
+    this.likesrc = this.liked ? "/common/vidtool_liked.png" : "/common/vidtool_like.png"
+    this.coinsrc = this.coined ? "/common/vidtool_coined.png" : "/common/vidtool_coin.png"
+    this.starsrc = this.stared ? "/common/vidtool_stared.png" : "/common/vidtool_star.png"
+  },
+  async PowerIt(){
+    prompt.showToast({message: "一键三连中！"})
+    this.LikeClick()
+    this.CoinClick()
+    this.AddToFav()
+  },
+  async LikeClick() {
+    var result = await this.$app.$def.biliclient.LikeVideo(this.vid.bvid, 1)
+    const message =
+      result.code === 0 ? "点赞成功" : `点赞失败，错误代码：${result.code} 原因：${result.message}`
+    prompt.showToast({
+      message,
+      duration: result.code === 0 ? 2000 : 4000
+    })
+    this.UpdateVideoToolbarStatus()
+  },
+  async CoinClick() {
+    var result = await this.$app.$def.biliclient.CoinVideo(this.vid.bvid, 1)
+    const message =
+      result.code === 0 ? "投币成功" : `投币失败，错误代码：${result.code} 原因：${result.message}`
+    prompt.showToast({
+      message,
+      duration: result.code === 0 ? 2000 : 4000
+    })
+    this.UpdateVideoToolbarStatus()
+  },
+  async SendReply(evt) {
+    this.replymode = false
+    if (evt.detail.content === 0) {
+      return prompt.showToast({
+        message: "评论内容不得为空！",
+        duration: 2000
+      })
+    }
+
+    const result = await this.$app.$def.biliclient.GiveReply(
+      1,
+      this.vid.aid,
+      evt.detail.content
+    )
+    const message =
+      result.code === 0 ? "发送成功" : `发送失败，错误代码：${result.code} 原因：${result.message}`
+    prompt.showToast({
+      message,
+      duration: result.code === 0 ? 2000 : 4000
+    })
+  },
+  ExitInput() {
+    this.replymode = false
+  },
+  Reply() {
+    this.replymode = true
+  },
+  DisabledFeaturesWarning() {
+    prompt.showToast({
+      message: "由于B站风控，该功能暂不可用"
+    })
+  },
+  async AISummary() {
+    const summary =
+      (await this.$app.$def.biliclient.getVideoAISummaryByBVID(
+        this.vid.bvid,
+        this.vid.cid,
+        this.vid.owner.mid
+      )) || "该视频没有摘要，可能是其内容中包含敏感信息或没有可识别的音频"
+    router.push({
+      uri: "pages/tools/textdetail",
+      params: {text: summary}
+    })
+  },
+  async AddToFav() {
+    const result = await this.$app.$def.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
+    const message = result ? "收藏失败，请重试，或重新登录后再试" : "收藏成功"
+    prompt.showToast({message})
+    this.UpdateVideoToolbarStatus()
+  },
+  GoReplyArea() {
+    router.push({
+      uri: "pages/reply/replys",
+      params: {
+        type: 1,
+        oid: this.vid.aid,
+        replycount: this.vid.stat.reply
+      }
+    })
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+@import './videodetail.less';
+</style>
