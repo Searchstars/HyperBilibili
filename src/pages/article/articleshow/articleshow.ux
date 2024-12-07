@@ -71,7 +71,6 @@ export default {
           article_html = await this.$app.$def.biliclient.getArticle(this.cvid)
         }
 
-        console.log(article_html)
         const article = this.$app.$def.articletools.parseArticlePageHtml(article_html)
         this.article.readInfo = article.readInfo // 原地更新 减少开辟内存空间
 

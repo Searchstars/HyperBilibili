@@ -18,7 +18,7 @@
           {{ _parentVM.$t(title) }}
         </text>
       </div>
-      <time-view style="position: absolute;"></time-view>
+      <time-view style="position: absolute"></time-view>
     </div>
   </div>
 </template>
@@ -42,8 +42,8 @@ export default {
     })
   },
   onInit() {
-    const deviceInfo = this.$app.$def.DEVICE_INFO;
-    if (deviceInfo.screenWidth <= 450){
+    const deviceInfo = this.$app.$def.DEVICE_INFO
+    if (deviceInfo.screenShape == "rect") {
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
       this.useRowLayout = true
     }

@@ -9,34 +9,41 @@ import * as tools from "./tools"
 import * as articletools from "./articletools"
 import * as funnytips from "./funnytips"
 import * as settings from "./settings"
-import * as ambientlight from "./ambientlight"
 import * as jumpcheck from "./jumpcheck"
 import * as htmlparser from "./htmlparser"
 import * as savedcontent from "./savedcontent"
+import * as bgimg from "./bgimg"
 import * as buildinfo from "./buildinfo"
 export default {
   dayjs: dayjs,
-
   animengine: animengine,
   biliclient: null,
   tools: tools,
   funnytips: funnytips,
   settings: settings,
-  ambientlight: ambientlight,
   jumpcheck: jumpcheck,
   articletools: articletools,
   htmlparser: htmlparser,
   savedcontent: savedcontent,
   buildinfo: buildinfo,
+  bgimg: bgimg,
   DEVICE_INFO: null,
   async onCreate() {
     console.log("app created")
+
     console.log("appinit > loadSettings")
     settings.loadSettings()
+
     console.log("appinit > initSavedContentManager")
     await this.savedcontent.SavedContentManager.initialize()
+
     console.log("appinit > initDeviceInfo")
     this.DEVICE_INFO = await this.tools.getDeviceInformation()
+    global.DEVICE_INFO = this.DEVICE_INFO
+
+    console.log("appinit > initBgImg")
+    bgimg.Init()
+
     console.log("appinit > createBiliClient")
     this.biliclient = new BilibiliClient()
   },

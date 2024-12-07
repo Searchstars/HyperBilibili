@@ -78,9 +78,6 @@ export default {
             this.div_style["min-height"] = this.height
         }
 
-        console.log(this.div_style)
-        console.log(this.image_style)
-
         request.download({
             url: this.src,
             success: (data) => {

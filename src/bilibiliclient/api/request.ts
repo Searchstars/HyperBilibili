@@ -24,6 +24,9 @@ export const BilibiliClientAPIRequestMethods = {
         if (this.sessData) {
             cookies += `SESSDATA=${this.sessData}; bili_jct=${this.biliJct}; DedeUserID=${this.dedeUserID}; sid=${this.sid}; `;
         }
+        // 专栏保持旧版
+        cookies += "opus-goback=1"
+
         return cookies;
     },
 

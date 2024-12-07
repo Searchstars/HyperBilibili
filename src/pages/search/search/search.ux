@@ -3,39 +3,21 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute" src="/common/rounddevices_searchbg.png" static></image>
+    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
     <switch-bar title="search.title" static></switch-bar>
     <div class="searchbtn" @click="OpenInput">
       <image src="/common/searchpage_search.png" style="margin-left: 25px" static></image>
       <text class="searchtip" style="margin-left: 15px" static>{{ $t("search.clickToSearch") }}</text>
     </div>
-    <div class="hotwords" style="margin-top: 23px">
-      <div style="flex-direction: row; align-items: center" static>
-        <image src="/common/searchpage_fire.png" style="object-fit: scale-down" static></image>
-        <text class="hottitle" static>{{ $t("search.hotSearch") }}</text>
-      </div>
-      <list style="margin-top: 13px" class="hotwordlist" if="{{showHotwordsList}}">
-        <list-item type="hotwordlist" style="
-            flex-direction: row;
-            align-items: center;
-            margin-top: 13px;
-            width: 100%;
-            height: 30px;
-          " for="{{hotwords}}">
-          <image src="{{$item.icon}}@22w_22h" static></image>
-          <text style="
-              font-size: 22px;
-              font-weight: 500;
-              width: 238px;
-              lines: 1;
-              margin-left: 12px;
-              text-overflow: ellipsis;
-            ">
-            {{ $item.show_name }}
-          </text>
-        </list-item>
-      </list>
+    <div style="flex-direction: row; align-items: center; margin-top: 20px" static>
+      <image src="/common/searchpage_fire.png" style="object-fit: scale-down" static></image>
+      <text class="hottitle" static>{{ $t("search.hotSearch") }}</text>
     </div>
+    <div for="{{hotwords}}" style="margin-top: 15px">
+      <image src="{{$item.icon}}@22w_22h" static></image>
+      <text class="hotword-text">{{ $item.show_name }}</text>
+    </div>
+    <text style="margin-top: 25px"></text>
     <image style="position: absolute; margin-top: 305px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
     <full-screen-input style="position: absolute" if="{{input_mode}}" @send="GoSearch" @exit="ExitInput"></full-screen-input>
   </div>

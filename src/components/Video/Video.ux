@@ -63,7 +63,7 @@ export default {
     }
     
     const deviceInfo = this.$app.$def.DEVICE_INFO;
-    if (deviceInfo.screenWidth <= 450 || this.video.title.length > 25){
+    if (deviceInfo.screenShape == "rect" || this.video.title.length > 25){
       this.useColumnTitle = true;
       // 手环Pro 系列
       if (deviceInfo.screenWidth <= 380){
@@ -71,7 +71,7 @@ export default {
         this.SetOnlineImageLoadSize(100, 75);
       }
       // RW系列
-      else if (deviceInfo.screenWidth <= 450){
+      else if (deviceInfo.screenShape == "rect"){
         this.SetOnlineImageSize(265, 150);
         this.SetOnlineImageLoadSize(265, 150);
       }

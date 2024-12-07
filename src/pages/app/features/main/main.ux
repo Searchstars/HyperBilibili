@@ -3,9 +3,7 @@
 
 <template>
   <div class="page">
-    <image if="{{this.$app.$def.DEVICE_INFO.screenWidth >= 464}}" src="/common/rounddevices_bg.png"
-      style="position: absolute; transform: rotate({{ambientlight.rotatedeg}}); transform-origin: {{ambientlight.transform_origin}}; left: 0px">
-    </image>
+    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
     <scroll scroll-y="true" class="scroll" bounces="true">
       <switch-bar title="main.title"></switch-bar>
       <text class="tip">{{ funnytip }}</text>
@@ -21,9 +19,6 @@
     </div>
     <text style="position: absolute; color: rgba(0, 0, 0, 0); width: 0px; top: 50px">
       {{ anims.refresh_bottom.value }}
-    </text>
-    <text style="position: absolute; color: rgba(0, 0, 0, 0); width: 0px; top: 50px">
-      {{ ambientlight.rotatedeg }}
     </text>
     <image if="{{anims.showRefreshFX}}" style="position: absolute; bottom: {{anims.refresh_bottom.value}}px"
       src="/common/TranslateFX/refreshFX.png"></image>
@@ -46,11 +41,7 @@ export default {
       showRefreshFX: false,
       refresh_bottom: {value: "-350"}
     },
-    ambientlight: {
-      transform_origin: "0px 0px",
-      rotatedeg: "0deg"
-    },
-    ambientlightObj: null
+    bgimg: ""
   },
   async Refresh() {
     if (!this.anims.showRefreshFX) {
@@ -125,16 +116,9 @@ export default {
       450,
       1000
     )
-
-    this.ambientlightObj = new this.$app.$def.ambientlight.AmbientLightRunner(
-      this.ambientlight,
-      this.$app.$def.settings.SETTINGS
-    )
-    this.ambientlightObj.start()
   },
   onDestroy() {
     this.$app.$def.animengine.clearPageAnims("mainPage")
-    this.ambientlightObj?.stop()
   }
 }
 </script>

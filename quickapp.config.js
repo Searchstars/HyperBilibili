@@ -1,4 +1,22 @@
 const path = require('path');
+const childProcess = require('child_process');
+const os = require('os');
+
+// 注入buildinfo
+const gitCommitHash = childProcess.execSync('git rev-parse HEAD').toString().trim();
+const username = os.userInfo().username;
+const buildTime = new Date().toISOString();
+
+const buildInfoContent = `
+  export const GIT_COMMIT_HASH = "${gitCommitHash}";
+  export const BUILD_TIME = "${buildTime}";
+  export const BUILD_USER = "${username}";
+`;
+
+const fs = require('fs');
+const path = require('path');
+const buildInfoPath = path.resolve(__dirname, 'src/buildinfo.ts');
+fs.writeFileSync(buildInfoPath, buildInfoContent, 'utf8');
 
 module.exports = {
     webpack: {
@@ -17,7 +35,8 @@ module.exports = {
         resolve: {
             alias: {
                 '@components': path.resolve(__dirname, 'src/components'),
-                '@less': path.resolve(__dirname, 'src/less')
+                '@less': path.resolve(__dirname, 'src/less'),
+                '@buildInfo': buildInfoPath
             }
         }
     },

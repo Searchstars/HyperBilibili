@@ -5,7 +5,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; opacity: 0.5" src="/common/rounddevices_searchbg.png"></image>
+    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
     <scroll scroll-y="true" class="scroll" bounces="true">
       <switch-bar title="searchresult.title" if="{{!overview_mode}}"></switch-bar>
       <div class="searchbar" if="{{!overview_mode}}" @click="SearchBarClick">

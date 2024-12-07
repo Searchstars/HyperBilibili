@@ -2,20 +2,6 @@ import json
 import subprocess
 from datetime import datetime
 
-def writeBuildInfo():
-    f = open("src/buildinfo.ts", "r")
-    f = f.read()
-
-    print(f)
-    out = f.replace("SCRIPT_REPLACE_GIT_COMMIT", getGitCommitHash())
-    out = out.replace("SCRIPT_REPLACE_BUILD_TIME", getBuildTime())
-    
-    f = open("src/buildinfo.ts", "w+")
-    f.write(out)
-    f.close()
-
-    print("Build info writed.")
-
 def setManifestDesignWidth(width):
     manifest = readFileToJson("src/manifest.json")
     manifest["config"]["designWidth"] = width

@@ -49,7 +49,7 @@ export default {
     }, 2000)
 
     const deviceInfo = this.$app.$def.DEVICE_INFO
-    if (deviceInfo.screenWidth <= 450) {
+    if (deviceInfo.screenShape == "rect") {
       this.compStyle["right"] = "100px"
       this.useRectTime = true
     }

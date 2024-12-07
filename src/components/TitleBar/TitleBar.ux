@@ -32,7 +32,7 @@ export default {
   },
   onInit() {
     const deviceInfo = this.$app.$def.DEVICE_INFO;
-    if (deviceInfo.screenWidth <= 450){
+    if (deviceInfo.screenShape == "rect"){
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
       this.useRowLayout = true
     }
