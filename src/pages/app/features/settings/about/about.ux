@@ -10,7 +10,25 @@
     <text class="text" style="margin-top: 22px">{{ $t("about.projectOwnerShip") }}</text>
     <div class="appbar" style="margin-top: 22px">
       <image class="logo" src="/common/about_projectownership.png"></image>
-      <text class="text" style="margin-left: 20px">AstralSight Studios</text>
+      <div style="margin-left: 20px; flex-direction: column">
+        <text class="text">AstralSight </text>
+        <text class="text">Studios</text>
+      </div>
+    </div>
+    <text class="text" style="margin-top: 22px">{{ $t("about.buildInfo") }}</text>
+    <div class="buildinfobar" style="margin-top: 22px">
+      <div class="buildinfo">
+        <text class="text" style="font-size: 24px">{{ $t("about.commitHash") }}：</text>
+        <text class="text" style="font-size: 20px; max-width: 160px">{{ buildinfo.GIT_COMMIT_HASH }}</text>
+      </div>
+      <div class="buildinfo">
+        <text class="text" style="font-size: 24px">{{ $t("about.buildTime") }}：</text>
+        <text class="text" style="font-size: 20px; max-width: 160px">{{ buildinfo.BUILD_TIME }}</text>
+      </div>
+      <div class="buildinfo">
+        <text class="text" style="font-size: 24px">{{ $t("about.builder") }}：</text>
+        <text class="text" style="font-size: 20px; max-width: 160px">{{ buildinfo.BUILD_USER }}</text>
+      </div>
     </div>
     <text class="text" style="margin-top: 30px">{{ $t("about.developers") }}</text>
     <div class="developers" style="margin-top: 15px">
@@ -47,13 +65,16 @@
 </template>
 
 <script>
+import * as buildinfo from "$buildinfo"
 import router from "@system.router"
 export default {
   private: {
-    version: "NA"
+    version: "NA",
+    buildinfo: buildinfo
   },
   onInit() {
     this.version = "v" + this.$app.$def.biliclient.version
+    console.log(this.buildinfo)
   },
   OpenDisclaimer() {
     router.push({

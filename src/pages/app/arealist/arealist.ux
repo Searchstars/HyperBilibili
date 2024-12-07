@@ -11,7 +11,7 @@
                     </div>
                     <text class="btntext">{{ $t("arealist.home") }}</text>
                 </div>
-                <div class="btn" style="margin-left: 35px;" onclick="GoPage('dynamic')">
+                <div class="btn" style="margin-left: 35px;" onclick="GoPage('app/features/dynamic')">
                     <div class="btnbase" style="background-color: {{colors.dynamic}}">
                         <image src="/common/arealist_updates.png" class="btnimg"></image>
                     </div>
@@ -92,12 +92,6 @@ export default {
         this.colors[this.lastpage] = "#FF7DA8"
     },
     GoPage(pagename){
-        if(pagename == "dynamic"){
-            prompt.showToast({
-                message: "该功能还在开发中"
-            })
-            return
-        }
         router.clear()
         router.replace({
             uri: "pages/" + pagename

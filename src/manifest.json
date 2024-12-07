@@ -115,6 +115,9 @@
             },
             "pages/app/entry/eularead": {
                 "component": "eularead"
+            },
+            "pages/app/features/dynamic": {
+                "component": "dynamic"
             }
         }
     }

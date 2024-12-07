@@ -1,6 +1,7 @@
 const path = require('path');
 const childProcess = require('child_process');
 const os = require('os');
+const fs = require('fs');
 
 // 注入buildinfo
 const gitCommitHash = childProcess.execSync('git rev-parse HEAD').toString().trim();
@@ -13,8 +14,6 @@ const buildInfoContent = `
   export const BUILD_USER = "${username}";
 `;
 
-const fs = require('fs');
-const path = require('path');
 const buildInfoPath = path.resolve(__dirname, 'src/buildinfo.ts');
 fs.writeFileSync(buildInfoPath, buildInfoContent, 'utf8');
 
@@ -36,7 +35,7 @@ module.exports = {
             alias: {
                 '@components': path.resolve(__dirname, 'src/components'),
                 '@less': path.resolve(__dirname, 'src/less'),
-                '@buildInfo': buildInfoPath
+                '$buildinfo': buildInfoPath
             }
         }
     },

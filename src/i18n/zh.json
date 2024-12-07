@@ -2,6 +2,10 @@
     "about": {
         "title": "关于应用",
         "projectOwnerShip": "项目归属",
+        "buildInfo": "构建信息",
+        "commitHash": "提交哈希",
+        "buildTime": "构建时间",
+        "builder": "构建者",
         "developers": "参与开发的人员",
         "moreResources": "更多资源请访问",
         "disclaimer": "免责声明"
