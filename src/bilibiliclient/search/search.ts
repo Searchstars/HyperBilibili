@@ -36,7 +36,7 @@ export const BilibiliClientSearchMethods = {
 
     // 全站搜索，但是按类型细分
     async searchContentWithType(this: any, keyword: string, search_type: string) {
-        console.log("[searchContentWithType] keyword=" + keyword + " type=" + search_type)
+        global.logger.log("[searchContentWithType] keyword=" + keyword + " type=" + search_type)
         const url = "https://api.bilibili.com/x/web-interface/wbi/search/type"
         const response = await this.getRequestWbi(url, {
             keyword,

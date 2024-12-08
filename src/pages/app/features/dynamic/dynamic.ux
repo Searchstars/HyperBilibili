@@ -1,0 +1,60 @@
+<import name="switch-bar" src="@components/SwitchBar/SwitchBar.ux"></import>
+<import name="dynamic-show" src="@components/Dynamic/Dynamic.ux"></import>
+
+<template>
+  <div class="page">
+    <scroll class="scroll">
+      <switch-bar title="动态" static></switch-bar>
+      <div class="waterfall">
+        <div class="waterfall-column">
+          <dynamic-show for="{{dynamic.items}}"></dynamic-show>
+        </div>
+        <div class="waterfall-column">
+
+        </div>
+      </div>
+    </scroll>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    dynamic: {
+      items: [
+        // 带图动态
+        {
+          id_str: "xxx",
+          type: "DYNAMIC_TYPE_DRAW",
+          modules: {
+            module_author: {
+              face: "https://i2.hdslb.com/bfs/face/779056d80a36cbd1ae276067e208007ae0da18f6.jpg",
+              name: "OneMicroSpace"
+            },
+            module_dynamic: {
+              desc: {
+                text: "SpaceX龙飞船下一次发射即将开始"
+              },
+              major: {
+                type: "MAJOR_TYPE_DRAW",
+                draw: {
+                  items: [
+                    {
+                      src: "https://i0.hdslb.com/bfs/new_dyn/3f30beecf4c48a263e658b6a5d92ed2413945088.jpg"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+@import "./dynamic.less";
+</style>

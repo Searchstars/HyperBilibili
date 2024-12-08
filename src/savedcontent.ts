@@ -70,11 +70,11 @@ function fileDelete(uri: string): Promise<void> {
 // 同步 storageIndex 到本地文件
 async function saveStorageIndex(): Promise<void> {
   try {
-    console.log(storageIndex)
+    global.logger.log(storageIndex)
     const indexData = JSON.stringify(storageIndex);
     await fileWrite(indexFileUri, indexData);
   } catch (e) {
-    console.error(`[SavedContentManager] saveStorageIndex Error: ${e.toString()}`);
+    global.logger.error(`[SavedContentManager] saveStorageIndex Error: ${e.toString()}`);
   }
 }
 
@@ -89,7 +89,7 @@ async function loadStorageIndex(): Promise<void> {
       storageIndex = [];
     }
   } catch (e) {
-    console.error(`[SavedContentManager] loadStorageIndex Error: ${e.toString()}`);
+    global.logger.error(`[SavedContentManager] loadStorageIndex Error: ${e.toString()}`);
     storageIndex = [];
   }
 }
@@ -106,7 +106,7 @@ export class SavedContentManager {
   // 初始化时加载 storageIndex
   static async initialize(): Promise<void> {
     await loadStorageIndex()
-    console.log("loaded SavedContent StorageIndex", storageIndex)
+    global.logger.log("loaded SavedContent StorageIndex", storageIndex)
   }
 
   // 存储内容
@@ -124,7 +124,7 @@ export class SavedContentManager {
 
       return id;
     } catch (e) {
-      console.error(`[SavedContentManager] storeContent Error: ${e.toString()}`);
+      global.logger.error(`[SavedContentManager] storeContent Error: ${e.toString()}`);
     }
   }
 
@@ -140,7 +140,7 @@ export class SavedContentManager {
 
       return await fileRead(content.fileUri);
     } catch (e) {
-      console.error(`[SavedContentManager] getContent Error: ${e.toString()}`);
+      global.logger.error(`[SavedContentManager] getContent Error: ${e.toString()}`);
       return null;
     }
   }
@@ -164,7 +164,7 @@ export class SavedContentManager {
       storageIndex.splice(contentIndex, 1);
       await saveStorageIndex();
     } catch (e) {
-      console.error(`[SavedContentManager] deleteContent Error: ${e.toString()}`);
+      global.logger.error(`[SavedContentManager] deleteContent Error: ${e.toString()}`);
     }
   }
 }

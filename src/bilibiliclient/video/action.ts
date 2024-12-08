@@ -34,7 +34,7 @@ export const BilibiliClientVideoActionMethods = {
             const response = await this.postRequest(url, data, "application/x-www-form-urlencoded");
             return response.data.code;
         } catch (error) {
-            console.error("Error starring video: ", error);
+            global.logger.error("Error starring video: ", error);
             return false;
         }
     },

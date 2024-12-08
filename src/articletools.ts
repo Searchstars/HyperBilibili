@@ -12,7 +12,7 @@ export function parseArticlePageHtml(html: string): any | null {
                     // 解析 JSON 并返回结果
                     return JSON.parse(initialStateMatch[1]);
                 } catch (error) {
-                    console.error('Error parsing __INITIAL_STATE__:', error);
+                    global.logger.error('Error parsing __INITIAL_STATE__:', error);
                 }
             }
         }
@@ -24,7 +24,7 @@ export function parseArticlePageHtml(html: string): any | null {
 
 export function PatchArticleContent(doms: any) {
     try{
-        console.log("dom length: ", doms.length);
+        global.logger.log("dom length: ", doms.length);
 
         // 使用显式的栈结构避免递归，防止栈溢出
         const stack = [...doms]; // 将所有dom节点放入栈中
@@ -67,7 +67,7 @@ export function PatchArticleContent(doms: any) {
         }
     }
     catch (e){
-        console.error("[articletools] Patch Error: " + e.toString())
+        global.logger.error("[articletools] Patch Error: " + e.toString())
     }
 }
 

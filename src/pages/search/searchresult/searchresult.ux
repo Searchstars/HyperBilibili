@@ -145,7 +145,7 @@ export default {
   },
   OpenVideo(bvid) {
     global.runGC()
-    console.log("[searchresult -> videodetail] open bvid: " + bvid)
+    global.logger.log("[searchresult -> videodetail] open bvid: " + bvid)
     router.push({
       uri: "pages/video/videodetail",
       params: {bvid}
@@ -180,7 +180,7 @@ export default {
           bvid: video.bvid || ""
         })
       })
-      console.log("[searchresult.PatchSearchResult] 已处理视频")
+      global.logger.log("[searchresult.PatchSearchResult] 已处理视频")
 
       // 处理 comprehensive_videos
       comprehensiveVideosList.forEach((video) => {
@@ -192,7 +192,7 @@ export default {
           bvid: video.bvid || ""
         })
       })
-      console.log("[searchresult.PatchSearchResult] 已处理综合视频")
+      global.logger.log("[searchresult.PatchSearchResult] 已处理综合视频")
 
       // 处理 articles
       articlesList.forEach((article) => {
@@ -204,14 +204,14 @@ export default {
         }
         articles.push(article)
       })
-      console.log("[searchresult.PatchSearchResult] 已处理文章")
+      global.logger.log("[searchresult.PatchSearchResult] 已处理文章")
 
       // 原地更新 videos 数组，如果不是数组则直接赋值新的数组并记录警告
       if (Array.isArray(search.videos)) {
         search.videos.splice(0, search.videos.length, ...videos)
       } else {
         search.videos = videos
-        console.warn("[searchresult.PatchSearchResult] 'videos' 不是数组。已初始化为空数组。")
+        global.logger.warn("[searchresult.PatchSearchResult] 'videos' 不是数组。已初始化为空数组。")
       }
 
       // 原地更新 comprehensive_videos 数组，如果不是数组则直接赋值新的数组并记录警告
@@ -223,7 +223,7 @@ export default {
         )
       } else {
         search.comprehensive_videos = comprehensive_videos
-        console.warn(
+        global.logger.warn(
           "[searchresult.PatchSearchResult] 'comprehensive_videos' 不是数组。已初始化为空数组。"
         )
       }
@@ -233,7 +233,7 @@ export default {
         search.articles.splice(0, search.articles.length, ...articles)
       } else {
         search.articles = articles
-        console.warn("[searchresult.PatchSearchResult] 'articles' 不是数组。已初始化为空数组。")
+        global.logger.warn("[searchresult.PatchSearchResult] 'articles' 不是数组。已初始化为空数组。")
       }
 
       // 确保 comprehensive_status 存在
@@ -243,7 +243,7 @@ export default {
       this.comprehensive_status.has_users_result = usersList.length > 0
       this.comprehensive_status.has_video_result = videos.length > 0
     } catch (e) {
-      console.error("[searchresult.PatchSearchResult] 处理错误:", e)
+      global.logger.error("[searchresult.PatchSearchResult] 处理错误:", e)
     }
   },
   async DoSearch() {

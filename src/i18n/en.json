@@ -2,6 +2,9 @@
     "about": {
         "title": "About the App",
         "developers": "Developers Involved",
+        "commitHash": "Commit Hash",
+        "buildTime": "Build Time",
+        "builder": "Builder",
         "moreResources": "For more resources, visit",
         "disclaimer": "Disclaimer"
     },

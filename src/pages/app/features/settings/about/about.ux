@@ -74,7 +74,7 @@ export default {
   },
   onInit() {
     this.version = "v" + this.$app.$def.biliclient.version
-    console.log(this.buildinfo)
+    global.logger.log(this.buildinfo)
   },
   OpenDisclaimer() {
     router.push({

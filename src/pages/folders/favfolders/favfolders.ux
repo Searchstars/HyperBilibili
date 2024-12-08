@@ -51,7 +51,7 @@ export default {
 
       this.folders = await Promise.all(folderPromises)
     } catch (error) {
-      console.error("加载收藏夹时发生错误:", error)
+      global.logger.error("加载收藏夹时发生错误:", error)
     } finally {
       this.show_loading = false
       this.anims.loading.stop()

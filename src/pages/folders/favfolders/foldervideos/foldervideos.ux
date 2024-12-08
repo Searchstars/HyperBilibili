@@ -90,7 +90,7 @@ export default {
       // 并行获取所有视频信息
       this.foldervid_vids = await Promise.all(videoInfoPromises)
     } catch (error) {
-      console.error("加载视频时发生错误:", error)
+      global.logger.error("加载视频时发生错误:", error)
     } finally {
       this.show_loading = false
       this.anims.loading.stop()
@@ -98,7 +98,7 @@ export default {
   },
   onInit() {
     this.maxpn = Math.ceil(this.vidcount / 5)
-    console.log("maxpn=" + this.maxpn)
+    global.logger.log("maxpn=" + this.maxpn)
 
     this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
       "folderVideosPage",

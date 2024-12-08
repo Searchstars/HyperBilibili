@@ -84,7 +84,7 @@ export default {
         })
       }
     } catch (error) {
-      console.error("发送评论时发生错误:", error)
+      global.logger.error("发送评论时发生错误:", error)
       prompt.showToast({message: "发送失败，请重试。", duration: 4000})
     }
   },
@@ -136,7 +136,7 @@ export default {
 
       this.replies = replyData.replies
     } catch (error) {
-      console.error("加载评论时发生错误:", error)
+      global.logger.error("加载评论时发生错误:", error)
       prompt.showToast({message: "加载评论失败，请重试。", duration: 4000})
     } finally {
       this.anims.loading.stop()
@@ -146,7 +146,7 @@ export default {
   },
   onInit() {
     this.maxpn = Math.ceil(this.replycount / 10)
-    console.log("maxpn=", this.maxpn)
+    global.logger.log("maxpn=", this.maxpn)
 
     this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
       "replysPage",

@@ -19,7 +19,7 @@ export const BilibiliClientLoginMethods = {
 
     // 获取二维码信息
     async loginQR(this: any): Promise<{ url: string, qrcode_key: string }> {
-        console.log("请求登录二维码");
+        global.logger.log("请求登录二维码");
         const response = await this.getRequest('https://passport.bilibili.com/x/passport-login/web/qrcode/generate');
         if (response && response.data) {
             this.qrCodeKey = response.data.data.qrcode_key;
@@ -37,7 +37,7 @@ export const BilibiliClientLoginMethods = {
             this.biliJct = accountData.biliJct;
             this.dedeUserID = accountData.dedeUserID;
             this.sid = accountData.sid;
-            console.log('使用存储的账号数据登录成功');
+            global.logger.log('使用存储的账号数据登录成功');
             await this.updateAccountInfo();
             await this.updateBUVID();
             return { success: true, message: "登录成功" };
@@ -48,7 +48,7 @@ export const BilibiliClientLoginMethods = {
 
                 this.extractCookiesFromResponse(response.headers['Set-Cookie']);
                 await this.storeAccountData();
-                console.log('使用二维码登录并存储账号数据成功');
+                global.logger.log('使用二维码登录并存储账号数据成功');
                 await this.updateAccountInfo();
                 await this.updateBUVID();
                 return { success: true, message: "登录成功" };
@@ -92,7 +92,7 @@ export const BilibiliClientLoginMethods = {
                     resolve(data ? JSON.parse(data) as AccountData : null);
                 },
                 fail: (data: any, code: number) => {
-                    console.log(`获取存储的账号数据失败，错误码 = ${code}`);
+                    global.logger.log(`获取存储的账号数据失败，错误码 = ${code}`);
                     resolve(null);
                 }
             });
@@ -108,11 +108,11 @@ export const BilibiliClientLoginMethods = {
                     key: 'bilibili_account',
                     value: JSON.stringify(accountData),
                     success: () => {
-                        console.log('账号数据存储成功');
+                        global.logger.log('账号数据存储成功');
                         resolve();
                     },
                     fail: (data: any, code: number) => {
-                        console.log(`存储账号数据失败，错误码 = ${code}`);
+                        global.logger.log(`存储账号数据失败，错误码 = ${code}`);
                         reject();
                     }
                 });

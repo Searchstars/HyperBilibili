@@ -1,6 +1,7 @@
 import { crypto } from '../../tsimports';
 import { getMixinKey } from '../utils/utils';
-import * as eula from '../../eula'
+import semver from 'semver';
+import * as eula from '../../eula';
 
 // API请求相关的方法
 export const BilibiliClientAPIRequestMethods = {
@@ -42,14 +43,14 @@ export const BilibiliClientAPIRequestMethods = {
             .join("&");
 
         const wbi_sign = crypto.hashDigest({ data: query + mixin_key, algo: "MD5" });
-        console.log("wbi_sign: " + wbi_sign);
+        global.logger.log("wbi_sign: " + wbi_sign);
 
         return `${query}&w_rid=${wbi_sign}`;
     },
 
     // 发送GET请求
     async getRequest(this: any, url: string, responseType: string = "json"): Promise<any> {
-        console.log("getRequest: " + url);
+        global.logger.log("getRequest: " + url);
         try {
             const response = await this.fetch.fetch({
                 url,
@@ -58,7 +59,7 @@ export const BilibiliClientAPIRequestMethods = {
             });
             return response.data;
         } catch (error) {
-            console.error(`GET请求失败，错误码 = ${error.code}`);
+            global.logger.error(`GET请求失败，错误码 = ${error.code}`);
             throw error;
         }
     },
@@ -73,7 +74,7 @@ export const BilibiliClientAPIRequestMethods = {
 
     // 发送POST请求
     async postRequest(this: any, url: string, data: string, content_type: string, custom_headers: any = null): Promise<any> {
-        console.log(`postRequest: ${url}, body: ${data}, contentType: ${content_type}`);
+        global.logger.log(`postRequest: ${url}, body: ${data}, contentType: ${content_type}`);
         let headers = { ...this.getHeaders(), "Content-Type": content_type }
         if (custom_headers) {
             headers = custom_headers
@@ -88,7 +89,7 @@ export const BilibiliClientAPIRequestMethods = {
             });
             return response.data;
         } catch (error) {
-            console.error(`POST请求失败，错误码 = ${error.code}`);
+            global.logger.error(`POST请求失败，错误码 = ${error.code}`);
             throw error;
         }
     },
@@ -107,9 +108,9 @@ export const BilibiliClientAPIRequestMethods = {
             url: "https://gitee.com/search__stars/hb_ota_info/raw/master/current_ver",
             header: this.getHeaders()
         });
-        console.log(latestVerGet.data);
+        global.logger.log(latestVerGet.data);
         const latestVer = latestVerGet.data.data;
-        if (latestVer != this.version) {
+        if (semver.lt(this.version, latestVer)) {
             return {
                 update: true,
                 msg: `检查到更新v${latestVer}，请前往hyperbili.astralsight.space下载更新`

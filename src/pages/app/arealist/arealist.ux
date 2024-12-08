@@ -70,7 +70,7 @@ export default {
         }
     },
     DoScrollTip(){
-        console.log("scroll bottom!")
+        global.logger.log("scroll bottom!")
         this.showChangePageFX = true
         this.anims.ChangePageFX = new this.$app.$def.animengine.DomAnim(
             "arealist",
@@ -88,7 +88,7 @@ export default {
         },700)
     },
     onInit(){
-        console.log("lastpage=", this.lastpage)
+        global.logger.log("lastpage=", this.lastpage)
         this.colors[this.lastpage] = "#FF7DA8"
     },
     GoPage(pagename){

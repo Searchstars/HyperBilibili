@@ -81,8 +81,8 @@ export default {
         this.article_content = article_full
         this.max_page_num = this.article_content.length
 
-        console.log(article.readInfo.content)
-        console.log(JSON.stringify(this.article_content))
+        global.logger.log(article.readInfo.content)
+        global.logger.log(JSON.stringify(this.article_content))
 
         this.anims.loading.stop()
         this.show_loading = false
@@ -90,7 +90,7 @@ export default {
         this.showarticle = true
       }
       catch(e){
-        console.error(e.toString())
+        global.logger.error(e.toString())
       }
     }, 1000)
   },

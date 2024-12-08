@@ -69,7 +69,7 @@ export default {
       this.show_dmlist = true
     }
     catch(e){
-      console.error(e.toString())
+      global.logger.error(e.toString())
     }
   },
   GoDMPage(targetId){

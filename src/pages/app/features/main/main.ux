@@ -72,7 +72,7 @@ export default {
         home_vid_count
       )
     } catch (error) {
-      console.error("获取推荐视频时出错:", error)
+      global.logger.error("获取推荐视频时出错:", error)
       prompt.showToast({message: "获取推荐视频失败，请重试。"})
     } finally {
       this.anims.loading.stop()
@@ -87,7 +87,7 @@ export default {
         prompt.showToast({message: result.msg, duration: 6000})
       }
     } catch (error) {
-      console.error("检查更新时出错:", error)
+      global.logger.error("检查更新时出错:", error)
     }
   },
   onInit() {

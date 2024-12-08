@@ -77,7 +77,7 @@ export default {
     replymode: false
   },
   onInit() {
-    console.log("[videodetail] load bvid: " + this.bvid);
+    global.logger.log("[videodetail] load bvid: " + this.bvid);
     this.GetVideoDetail()
     this.UpdateVideoToolbarStatus()
   },

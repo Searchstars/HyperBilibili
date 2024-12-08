@@ -13,7 +13,7 @@ import * as jumpcheck from "./jumpcheck"
 import * as htmlparser from "./htmlparser"
 import * as savedcontent from "./savedcontent"
 import * as bgimg from "./bgimg"
-import * as buildinfo from "./buildinfo"
+import logger from "./logger/logger"
 export default {
   dayjs: dayjs,
   animengine: animengine,
@@ -25,11 +25,14 @@ export default {
   articletools: articletools,
   htmlparser: htmlparser,
   savedcontent: savedcontent,
-  buildinfo: buildinfo,
   bgimg: bgimg,
+  logger: logger,
   DEVICE_INFO: null,
   async onCreate() {
     console.log("app created")
+
+    console.log("create global logger")
+    global.logger = this.logger
 
     console.log("appinit > loadSettings")
     settings.loadSettings()

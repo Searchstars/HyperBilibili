@@ -39,7 +39,7 @@ export default {
       )
       this.history = await Promise.all(videoInfoPromises)
     } catch (error) {
-      console.error("加载历史记录时发生错误:", error)
+      global.logger.error("加载历史记录时发生错误:", error)
     } finally {
       this.show_loading = false
       this.anims.loading.stop()

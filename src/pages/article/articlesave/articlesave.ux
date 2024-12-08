@@ -33,9 +33,9 @@ export default {
       message: "开始缓存"
     })
     var articleHtml = await this.$app.$def.biliclient.getArticle(this.cvid, false)
-    console.log("articleHtml=" + articleHtml)
+    global.logger.log("articleHtml=" + articleHtml)
     var id = await this.$app.$def.savedcontent.SavedContentManager.storeContent(this.cvtitle, articleHtml, "article")
-    console.log("id=" + id)
+    global.logger.log("id=" + id)
     prompt.showToast({
       message: "专栏 " + this.cvtitle + " 缓存完毕！存储id=" + id,
       duration: 5000

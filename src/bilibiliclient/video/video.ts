@@ -52,7 +52,7 @@ export const BilibiliClientVideoMethods = {
             platform: "html5"
         });
 
-        console.log(response);
+        global.logger.log(response);
         return response.data.data;
     },
 };

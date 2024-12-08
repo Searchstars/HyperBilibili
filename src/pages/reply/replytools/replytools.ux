@@ -44,7 +44,7 @@ export default {
       this.reply_clone.rpid,
       1
     )
-    console.log(result)
+    global.logger.log(result)
     if (result.code == 0) {
       prompt.showToast({
         message: "点赞成功！"

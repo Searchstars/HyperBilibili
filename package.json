@@ -54,6 +54,7 @@
     "ux-types": "^0.1.1"
   },
   "dependencies": {
-    "dayjs": "^1.11.13"
+    "dayjs": "^1.11.13",
+    "semver": "^7.6.3"
   }
 }

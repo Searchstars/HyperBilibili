@@ -84,7 +84,7 @@ export default {
                 request.onDownloadComplete({
                     token: data.token,
                     success: (data) => {
-                        console.log("[BetterOnlineImage] Image Saved in: " + data.uri)
+                        global.logger.log("[BetterOnlineImage] Image Saved in: " + data.uri)
                         this.localsrc = data.uri
                         this.show_loading = false
                         this.show_image = true
@@ -94,11 +94,11 @@ export default {
         })
     },
     onDestroy(){
-        console.log("[BetterOnlineImage] onDestroy, deleting image in: " + this.localsrc)
+        global.logger.log("[BetterOnlineImage] onDestroy, deleting image in: " + this.localsrc)
         file.delete({
             uri: this.localsrc,
             success: () => {
-                console.log("[BetterOnlineImage] Image deleted.")
+                global.logger.log("[BetterOnlineImage] Image deleted.")
             }
         })
     },

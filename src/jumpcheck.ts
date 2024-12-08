@@ -22,7 +22,7 @@ export async function NetworkCheck(): Promise<boolean> {
         network.getType({
             success: function (data: { type: string }) {
                 if (!data.type) {
-                    console.log('Network type is empty or undefined.');
+                    global.logger.log('Network type is empty or undefined.');
                     resolve(false);
                 } else if (data.type === 'none') {
                     resolve(false);
@@ -31,11 +31,11 @@ export async function NetworkCheck(): Promise<boolean> {
                 }
             },
             fail: function () {
-                console.log('Failed to get network type.');
+                global.logger.log('Failed to get network type.');
                 resolve(false);
             },
             complete: function () {
-                console.log('Network type check completed.');
+                global.logger.log('Network type check completed.');
             }
         });
     });

@@ -24,6 +24,6 @@ export function Init(){
 
 export function GetBackgroundImageSrc(){
     var pageName = router.getState().name
-    console.log("[GetBackgroundImageSrc]", router.getState().name, BGIMG_PAGES_MAP[pageName])
+    global.logger.log("[GetBackgroundImageSrc]", router.getState().name, BGIMG_PAGES_MAP[pageName])
     return BGIMG_PAGES_MAP[pageName]
 }

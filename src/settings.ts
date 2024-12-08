@@ -37,10 +37,10 @@ export function loadSettings(): void {
           ...storedSettings
         };
       }
-      console.log('Settings loaded:', SETTINGS);
+      global.logger.log('Settings loaded:', SETTINGS);
     },
     fail: function (data, code) {
-      console.log(`Failed to load settings, code = ${code}`);
+      global.logger.log(`Failed to load settings, code = ${code}`);
     }
   });
 }
@@ -54,10 +54,10 @@ export function saveSettings(params: Partial<SettingsInterface>): void {
     key: 'settings',
     value: JSON.stringify(SETTINGS),
     success: function () {
-      console.log('Settings saved successfully');
+      global.logger.log('Settings saved successfully');
     },
     fail: function (data, code) {
-      console.log(`Failed to save settings, code = ${code}`);
+      global.logger.log(`Failed to save settings, code = ${code}`);
     }
   });
 }

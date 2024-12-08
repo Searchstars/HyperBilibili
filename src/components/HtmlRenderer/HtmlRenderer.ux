@@ -77,13 +77,13 @@ export default {
   props: ["doms"],
   onInit() {
     if (this.doms) {
-      console.log("[html-renderer] doms存在且有效，开始渲染")
+      global.logger.log("[html-renderer] doms存在且有效，开始渲染")
     } else {
-      console.log("[html-renderer] doms无效，拒绝渲染")
+      global.logger.log("[html-renderer] doms无效，拒绝渲染")
     }
   },
   openImage(evt) {
-    console.log("[html-renderer] image clicked. openImage src=" + evt.detail.src)
+    global.logger.log("[html-renderer] image clicked. openImage src=" + evt.detail.src)
     router.push({
       uri: "pages/tools/picturedetail",
       params: {

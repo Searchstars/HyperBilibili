@@ -85,12 +85,12 @@ export default {
     }
   },
   onScroll(args) {
-    //console.log(args);
+    //global.logger.log(args);
   },
   onReady() {
     this.$element("img").getBoundingClientRect({
       success: (rect) => {
-        console.log("image loaded: ", rect);
+        global.logger.log("image loaded: ", rect);
         this.base_height = rect.height;
         this.base_width = rect.width;
         if(rect.width > 800 && rect.height > 800){
@@ -106,7 +106,7 @@ export default {
     });
     device.getInfo({
       success: (info) => {
-        console.log(info);
+        global.logger.log(info);
         this.deviceInfo = info;
       }
     });
