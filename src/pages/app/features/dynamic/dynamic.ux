@@ -1,55 +1,71 @@
 <import name="switch-bar" src="@components/SwitchBar/SwitchBar.ux"></import>
-<import name="dynamic-show" src="@components/Dynamic/Dynamic.ux"></import>
+<import name="dyn-show" src="@components/DynShow/DynShow.ux"></import>
 
 <template>
   <div class="page">
-    <scroll class="scroll">
+    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
+    <scroll class="scroll" scroll-y="true">
       <switch-bar title="动态" static></switch-bar>
-      <div class="waterfall">
+      <div class="waterfall" if="show_content">
         <div class="waterfall-column">
-          <dynamic-show for="{{dynamic.items}}"></dynamic-show>
+          <dyn-show for="{{dynamic.render_split_1}}" dyn="{{$item}}"></dyn-show>
         </div>
         <div class="waterfall-column">
-
+          <dyn-show for="{{dynamic.render_split_2}}" dyn="{{$item}}"></dyn-show>
         </div>
       </div>
+      <text style="margin-top: 25px"></text>
     </scroll>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
 
 <script>
 export default {
   private: {
+    show_content: false,
+    anims: {
+      show_loading: false
+    },
     dynamic: {
-      items: [
-        // 带图动态
-        {
-          id_str: "xxx",
-          type: "DYNAMIC_TYPE_DRAW",
-          modules: {
-            module_author: {
-              face: "https://i2.hdslb.com/bfs/face/779056d80a36cbd1ae276067e208007ae0da18f6.jpg",
-              name: "OneMicroSpace"
-            },
-            module_dynamic: {
-              desc: {
-                text: "SpaceX龙飞船下一次发射即将开始"
-              },
-              major: {
-                type: "MAJOR_TYPE_DRAW",
-                draw: {
-                  items: [
-                    {
-                      src: "https://i0.hdslb.com/bfs/new_dyn/3f30beecf4c48a263e658b6a5d92ed2413945088.jpg"
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      ]
+      render_split_1: {},
+      render_split_2: {}
     }
+  },
+  SplitWaterfallArea(arr) {
+    const arr1 = [];
+    const arr2 = [];
+
+    arr.forEach((value, index) => {
+        if (index % 2 === 0) {
+            arr1.push(value);
+        } else {
+            arr2.push(value);
+        }
+    });
+
+    return { arr1, arr2 };
+  },
+  async LoadDynamics(){
+    try{
+      this.anims.loading.start()
+
+      var dynamic = await this.$app.$def.biliclient.getDynamicList()
+      var split_result = this.SplitWaterfallArea(dynamic.items)
+      this.dynamic.render_split_1 = split_result.arr1
+      this.dynamic.render_split_2 = split_result.arr2
+
+      this.anims.loading.stop()
+      this.anims.show_loading = false
+      this.show_content = true
+    }
+    catch(e){
+      global.logger.error(e.toString())
+    }
+  },
+  onReady(){
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    this.LoadDynamics()
   }
 }
 </script>

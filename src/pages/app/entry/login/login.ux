@@ -5,7 +5,7 @@
       <text style="font-weight: bold; margin-top: 35px">{{ $t("login.scanToLogin") }}</text>
       <div class="qr_code">
         <qrcode value="{{qr_value}}" show="{{show_qr}}" style="width: 210px; height: 210px"></qrcode>
-        <image style="position: absolute" show="{{show_loading}}" src="{{anims.loading_img_src.value}}"></image>
+        <image style="position: absolute" show="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
       </div>
       <text style="margin-top: 20px; font-size: 26px; font-weight: bold">{{ $t("login.goToOfficialApp") }}</text>
       <text style="font-size: 20px">{{ $t("login.doScan") }}</text>
@@ -21,11 +21,9 @@ export default {
   private: {
     qr_value: "",
     show_qr: false,
-    show_loading: true,
     qrpoll_interval: null,
     anims: {
-      loading_img: null,
-      loading_img_src: {value: "/common/seqanims/loading/icons8-loading-1.png"},
+      show_loading: false,
       pagediv: null,
       pagediv_mgt: {value: "800"}
     }
@@ -51,13 +49,13 @@ export default {
       this.qr_value = get_result.url
       global.logger.log(get_result)
       this.show_qr = true
-      this.show_loading = false
+      this.anims.show_loading = false
 
       this.qrpoll_interval = setInterval(() => this.PollQR(), 1500)
     } catch (error) {
       global.logger.error("获取QR码时出错:", error)
       prompt.showToast({message: "无法获取QR码，请重试", duration: 3000})
-      this.show_loading = false
+      this.anims.show_loading = false
     }
   },
   onReady() {
@@ -73,15 +71,8 @@ export default {
     )
     if (this.anims.pagediv) this.anims.pagediv.start()
 
-    this.anims.loading_img = new this.$app.$def.animengine.SequenceAnim(
-      "loginPage",
-      loading_img_src,
-      28,
-      "/common/seqanims/loading/icons8-loading-*.png",
-      1000,
-      true
-    )
-    if (this.anims.loading_img) this.anims.loading_img.start()
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    this.anims.loading.start()
 
     this.GetQR()
   }

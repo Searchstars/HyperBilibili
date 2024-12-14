@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; margin-top: 233px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 233px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <scroll class="scroll" scroll-y="true" id="mainscroll" bounces="true">
       <div for="{{messages}}">
         <div class="targetmsg-container" if="{{$item.receiver_id == myId}}">
@@ -79,10 +79,8 @@ export default {
       }
     ],
     inputmode: false,
-    show_loading: true,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     },
     input_text: ""
   },
@@ -180,8 +178,8 @@ export default {
         setTimeout(this.ScrollToEnd, 500)
       }
 
-      if (initial && this.show_loading) {
-        this.show_loading = false
+      if (initial && this.anims.show_loading) {
+        this.anims.show_loading = false
         this.anims.loading.stop()
       }
 
@@ -210,14 +208,7 @@ export default {
     clearInterval(this.messageUpdateInterval)
   },
   onInit() {
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "dmPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.anims.loading.start()
   }
 }

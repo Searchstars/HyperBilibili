@@ -25,7 +25,7 @@
         <videoshow video="{{$item}}" for="{{foldervid_vids}}"></videoshow>
     </div>
     <text style="margin-top: 25px"></text>
-    <image style="position: absolute; margin-top: 265px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 265px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
 
@@ -37,10 +37,8 @@ export default {
     foldervid_vids: [],
     current_pn: 1,
     maxpn: 0,
-    show_loading: true,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     }
   },
   public: {
@@ -73,7 +71,7 @@ export default {
     return isLastItem ? "80px" : "0px"
   },
   async LoadVideos() {
-    this.show_loading = true
+    this.anims.show_loading = true
     this.foldervid_vids = [] // Clear Array
     this.anims.loading.start()
 
@@ -92,7 +90,7 @@ export default {
     } catch (error) {
       global.logger.error("加载视频时发生错误:", error)
     } finally {
-      this.show_loading = false
+      this.anims.show_loading = false
       this.anims.loading.stop()
     }
   },
@@ -100,15 +98,7 @@ export default {
     this.maxpn = Math.ceil(this.vidcount / 5)
     global.logger.log("maxpn=" + this.maxpn)
 
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "folderVideosPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.LoadVideos()
   }
 }

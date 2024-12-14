@@ -7,7 +7,7 @@
     <scroll scroll-y="true" class="scroll" bounces="true">
       <switch-bar title="main.title"></switch-bar>
       <text class="tip">{{ funnytip }}</text>
-      <image style="position: absolute; margin-top: 265px" if="{{show_loading}}" src="{{anims.loading_src.value}}">
+      <image style="position: absolute; margin-top: 265px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
       </image>
       <div class="recommend_div" if="{{show_recommend_div}}">
         <videoshow for="{{recommend_vids}}" video="{{$item}}" tid="vids"></videoshow>
@@ -31,12 +31,10 @@ import prompt from "@system.prompt"
 export default {
   private: {
     recommend_vids: [],
-    show_loading: true,
     show_recommend_div: false,
     funnytip: "",
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"},
+      show_loading: false,
       refresh: null,
       showRefreshFX: false,
       refresh_bottom: {value: "-350"}
@@ -46,7 +44,7 @@ export default {
   async Refresh() {
     if (!this.anims.showRefreshFX) {
       this.recommend_vids = []
-      this.show_loading = true
+      this.anims.show_loading = true
       this.show_recommend_div = false
       this.anims.showRefreshFX = true
 
@@ -76,7 +74,7 @@ export default {
       prompt.showToast({message: "获取推荐视频失败，请重试。"})
     } finally {
       this.anims.loading.stop()
-      this.show_loading = false
+      this.anims.show_loading = false
       this.show_recommend_div = true
     }
   },
@@ -98,14 +96,7 @@ export default {
   onReady() {
     const {loading_src, refresh_bottom} = this.anims
 
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "mainPage",
-      loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.anims.loading.start()
 
     this.anims.refresh = new this.$app.$def.animengine.DomAnim(

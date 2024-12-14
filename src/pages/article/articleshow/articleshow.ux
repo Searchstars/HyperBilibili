@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <title-bar title="专栏阅读" static></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <div if="{{showarticle}}" class="articlebox">
       <div class="infobox">
         <text class="title">{{ article.readInfo.title }}</text>
@@ -41,12 +41,11 @@ export default {
     article: {},
     article_content: {},
     showarticle: false,
-    show_loading: false,
+    
     current_page_num: 0,
     max_page_num: 0,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     }
   },
   SplitArticle(arr, split_count) {
@@ -57,7 +56,7 @@ export default {
     return result;
   },
   async LoadArticle() {
-    this.show_loading = true
+    this.anims.show_loading = true
     this.anims.loading.start()
 
     // 预留加载delay以避免页面切换的卡顿
@@ -85,7 +84,7 @@ export default {
         global.logger.log(JSON.stringify(this.article_content))
 
         this.anims.loading.stop()
-        this.show_loading = false
+        this.anims.show_loading = false
         global.runGC()
         this.showarticle = true
       }
@@ -95,15 +94,7 @@ export default {
     }, 1000)
   },
   onInit() {
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "articleShowPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.LoadArticle()
   }
 }

@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; margin-top: 300px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 300px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <text style="font-weight: 600; margin-top: 45px; font-size: 40px">{{ $t("eularead.title") }}</text>
     <text style="font-weight: 600; margin-top: 15px; font-size: 24px; width: 75%">{{ $t("eularead.sectitle") }}</text>
     <div if="{{show_content}}" style="margin-top: 20px; width: 75%; flex-direction: column; align-items: center">
@@ -19,16 +19,14 @@
 import router from "@system.router"
 export default {
   private: {
-    show_loading: false,
     show_content: false,
     content: false,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     }
   },
   async LoadEula(){
-    this.show_loading = true
+    this.anims.show_loading = true
     this.anims.loading.start()
 
     // 预留init时间
@@ -37,7 +35,7 @@ export default {
       this.content = this.$app.$def.htmlparser.parseContentHtml(html)
 
       this.show_content = true
-      this.show_loading = false
+      this.anims.show_loading = false
       this.anims.loading.stop()
     }, 1500);
   },
@@ -56,15 +54,7 @@ export default {
     router.back()
   },
   onInit(){
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "eulaReadPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.LoadEula()
   }
 }

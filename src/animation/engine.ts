@@ -1,3 +1,5 @@
+import * as defaults from "./defaults"
+
 interface GlobalAnimations {
     [key: string]: Array<Anim>;
 }
@@ -133,4 +135,4 @@ function clearPageAnims(pageId: string): void {
     }
 }
 
-export { SequenceAnim, DomAnim, clearPageAnims };
+export { SequenceAnim, DomAnim, clearPageAnims, defaults };

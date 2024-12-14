@@ -92,10 +92,15 @@ export default {
         this.colors[this.lastpage] = "#FF7DA8"
     },
     GoPage(pagename){
-        router.clear()
-        router.replace({
-            uri: "pages/" + pagename
-        })
+        try{
+            router.clear()
+            router.replace({
+                uri: "pages/" + pagename
+            })
+        }
+        catch(e){
+            global.logger.error(e.toString())
+        }
     }
 }
 </script>

@@ -9,7 +9,7 @@
 <template>
   <div class="page">
     <title-bar title="{{titletext}}"></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <list class="replylist">
       <list-item type="replies"
         style="width: 100%; justify-content: center; margin-top: 10px; height: {{PlaceHolderShowCheck($item.rpid)}}"
@@ -41,10 +41,8 @@ export default {
     replies: [],
     maxpn: 1,
     current_pn: 1,
-    show_loading: false,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     },
     replymode: false,
     reply_target: null,
@@ -121,7 +119,7 @@ export default {
   },
   async LoadReplies() {
     this.replies = []
-    this.show_loading = true
+    this.anims.show_loading = true
     this.anims.loading.start()
 
     try {
@@ -140,7 +138,7 @@ export default {
       prompt.showToast({message: "加载评论失败，请重试。", duration: 4000})
     } finally {
       this.anims.loading.stop()
-      this.show_loading = false
+      this.anims.show_loading = false
       global.runGC()
     }
   },
@@ -148,15 +146,7 @@ export default {
     this.maxpn = Math.ceil(this.replycount / 10)
     global.logger.log("maxpn=", this.maxpn)
 
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "replysPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     if (this.secmode) {
       this.titletext = "子评论"
     }

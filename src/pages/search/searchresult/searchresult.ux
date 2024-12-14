@@ -19,7 +19,7 @@
         <text class="typetext" style="color: {{typebar_colors.c4}}; margin-left: 20px;">{{ $t("searchresult.article") }}</text>
       </div>
       <swiper indicator="false" @change="UpdateTypeBarColors" class="swipermain" style="margin-top: 15px"
-        if="{{!show_loading}}" duration="10">
+        if="{{!anims.show_loading}}" duration="10">
         <div class="swiper_box">
           <scroll class="swiper_container" scroll-y="true" if="{{typebar_if.c1}}" @scroll="ScrollOverviewCheck">
             <div class="tiplabel" if="{{comprehensive_status.has_users_result}}">
@@ -70,7 +70,7 @@
         </div>
       </swiper>
     </scroll>
-    <image style="position: absolute; margin-top: 305px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 305px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
 
@@ -80,7 +80,6 @@ export default {
   private: {
     search: {},
     overview_mode: false,
-    show_loading: true,
     comprehensive_status: {
       has_users_result: true,
       has_video_result: true
@@ -98,9 +97,7 @@ export default {
       c4: false
     },
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"},
-      loading_position: "305"
+      show_loading: false
     }
   },
   public: {
@@ -247,7 +244,7 @@ export default {
     }
   },
   async DoSearch() {
-    this.show_loading = true
+    this.anims.show_loading = true
     this.anims.loading.start()
 
     // 搜视频+推荐用户
@@ -261,22 +258,14 @@ export default {
 
     await this.PatchSearchResult()
 
-    this.show_loading = false
+    this.anims.show_loading = false
     this.anims.loading.stop()
   },
   onInit() {
     global.runGC()
     this.UpdateTypeBarColors({index: 0})
 
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "searchresultPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.DoSearch()
   }
 }

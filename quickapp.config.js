@@ -35,6 +35,7 @@ module.exports = {
             alias: {
                 '@components': path.resolve(__dirname, 'src/components'),
                 '@less': path.resolve(__dirname, 'src/less'),
+                '@protobuf': path.resolve(__dirname, 'src/protobuf'),
                 '$buildinfo': buildInfoPath
             }
         }

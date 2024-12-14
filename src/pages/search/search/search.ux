@@ -18,7 +18,7 @@
       <text class="hotword-text">{{ $item.show_name }}</text>
     </div>
     <text style="margin-top: 25px"></text>
-    <image style="position: absolute; margin-top: 305px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 305px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <full-screen-input style="position: absolute" if="{{input_mode}}" @send="GoSearch" @exit="ExitInput"></full-screen-input>
   </div>
 </template>
@@ -29,11 +29,9 @@ export default {
   private: {
     hotwords: {},
     showHotwordsList: false,
-    show_loading: true,
     input_mode: false,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     },
   },
   ExitInput() {
@@ -52,24 +50,17 @@ export default {
     this.input_mode = true
   },
   async GetHotWords() {
-    this.show_loading = true
+    this.anims.show_loading = true
     this.anims.loading.start()
 
     this.hotwords = await this.$app.$def.biliclient.getSearchHotwords()
     this.showHotwordsList = true
 
     this.anims.loading.stop()
-    this.show_loading = false
+    this.anims.show_loading = false
   },
   onInit() {
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "searchPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
   },
   onShow(){
     this.GetHotWords()

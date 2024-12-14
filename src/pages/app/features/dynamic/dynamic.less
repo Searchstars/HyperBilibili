@@ -4,12 +4,14 @@
 // 瀑布流总框架
 .waterfall {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-    width: 340px;
+    width: 400px;
 }
 
 // 竖向瀑布流框架
 .waterfall-column {
-    .flex-column(0, @blankColor);
+    .flex-column(10px, @blankColor);
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 0px;
 }

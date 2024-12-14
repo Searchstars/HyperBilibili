@@ -3,7 +3,7 @@
 <template>
   <div class="page">
     <title-bar title="dmlist.title"></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
       <div class="user" onclick="GoDMPage({{$item.talker_id}})">
         <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
@@ -33,18 +33,17 @@ export default {
   private: {
     sessions: [],
     session_cards: {},
-    show_loading: false,
+    
     show_dmlist: false,
     Show20UserLimit: false,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     }
   },
   async InitSessions(){
     try{
       this.anims.loading.start()
-      this.show_loading = true
+      this.anims.show_loading = true
 
       this.sessions = (await this.$app.$def.biliclient.getDMSessions(1, 2)).session_list
       // 裁切至10个
@@ -64,7 +63,7 @@ export default {
       this.session_cards = await this.$app.$def.biliclient.getMultiUserInfoByUID(session_uids)
 
       this.anims.loading.stop()
-      this.show_loading = false
+      this.anims.show_loading = false
       this.Show20UserLimit = true
       this.show_dmlist = true
     }
@@ -84,15 +83,7 @@ export default {
     })
   },
   onInit(){
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "dmlistPage",
-      this.anims.loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.InitSessions()
   }
 }

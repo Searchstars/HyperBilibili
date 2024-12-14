@@ -114,6 +114,6 @@ export default {
 @import '@less/global.less';
 
 .img {
-    border-radius: 30px;
+    border-radius: 25px;
 }
 </style>

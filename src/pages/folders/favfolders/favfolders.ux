@@ -3,7 +3,7 @@
 <template>
     <div class="page">
         <title-bar title="favfolders.title"></title-bar>
-        <image style="position: absolute; margin-top: 245px" if="{{show_loading}}" src="{{anims.loading_src.value}}">
+        <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
         </image>
         <list style="width: 77%; height: 100%" class="folderlist">
             <list-item type="folders" class="folder" for="{{folders}}"
@@ -27,10 +27,8 @@ import router from "@system.router"
 export default {
   private: {
     folders: [],
-    show_loading: true,
     anims: {
-      loading: null,
-      loading_src: {value: "/common/seqanims/loadingWhite/icons8-loading_颜色反转-1.png"}
+      show_loading: false
     }
   },
   public: {
@@ -53,21 +51,12 @@ export default {
     } catch (error) {
       global.logger.error("加载收藏夹时发生错误:", error)
     } finally {
-      this.show_loading = false
+      this.anims.show_loading = false
       this.anims.loading.stop()
     }
   },
   onInit() {
-    const {loading_src} = this.anims
-    this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
-      "favfoldersPage",
-      loading_src,
-      28,
-      "/common/seqanims/loadingWhite/icons8-loading_颜色反转-*.png",
-      1000,
-      true
-    )
-
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.anims.loading.start()
     this.LoadFolders()
   },

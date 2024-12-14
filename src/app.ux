@@ -26,13 +26,15 @@ export default {
   htmlparser: htmlparser,
   savedcontent: savedcontent,
   bgimg: bgimg,
-  logger: logger,
   DEVICE_INFO: null,
   async onCreate() {
     console.log("app created")
 
     console.log("create global logger")
-    global.logger = this.logger
+    global.logger = logger
+
+    console.log("create global animengine")
+    global.animengine = this.animengine
 
     console.log("appinit > loadSettings")
     settings.loadSettings()
