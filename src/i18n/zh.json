@@ -8,6 +8,7 @@
         "builder": "构建者",
         "developers": "参与开发的人员",
         "moreResources": "更多资源请访问",
+        "osw": "开源项目/软件声明",
         "disclaimer": "免责声明"
     },
     "arealist": {
@@ -119,5 +120,8 @@
         "logOut": "退出登录",
         "donation": "捐赠",
         "about": "关于应用"
+    },
+    "opensoftware": {
+        "title": "开源软件声明"
     }
 }

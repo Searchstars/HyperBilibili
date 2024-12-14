@@ -4,8 +4,8 @@
 <template>
   <div class="page">
     <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
-    <scroll class="scroll" scroll-y="true">
-      <switch-bar title="动态" static></switch-bar>
+    <scroll class="scroll" scroll-y="true" bounces="true">
+      <switch-bar title="dynamic.title"></switch-bar>
       <div class="waterfall" if="show_content">
         <div class="waterfall-column">
           <dyn-show for="{{dynamic.render_split_1}}" dyn="{{$item}}"></dyn-show>

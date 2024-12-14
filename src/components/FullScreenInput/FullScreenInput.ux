@@ -2,7 +2,7 @@
 
 <template>
     <div class="inputpanel">
-        <input-method if="{{global_show}}" style="position: absolute" hide={{keyboardHide}} @complete="InputEvent" @delete="InputDelete" @screentype="{{screentype}}" vibratemode="short"></input-method>
+        <input-method if="{{global_show}}" style="position: absolute" hide={{keyboardHide}} @complete="InputEvent" @delete="InputDelete" screentype="{{screentype}}" vibratemode="short"></input-method>
         <div class="inputactions">
             <div style="margin-left: 35px" @click="ExitInput">
                 <image class="inputaction_img" src="/common/textinput_back.png"></image>

@@ -47,7 +47,8 @@ export default {
     global.DEVICE_INFO = this.DEVICE_INFO
 
     console.log("appinit > initBgImg")
-    bgimg.Init()
+    this.bgimg.Init()
+    global.bgimg = this.bgimg
 
     console.log("appinit > createBiliClient")
     this.biliclient = new BilibiliClient()
