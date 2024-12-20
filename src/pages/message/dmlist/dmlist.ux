@@ -5,7 +5,7 @@
     <title-bar title="dmlist.title"></title-bar>
     <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
     <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
-      <div class="user" onclick="GoDMPage({{$item.talker_id}})">
+      <div class="user" onclick="GoDMPage($item.talker_id)">
         <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
         <div class="infoarea">
           <text class="username">{{ session_cards[$item.talker_id].name }}</text>

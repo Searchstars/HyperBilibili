@@ -7,7 +7,7 @@
         </image>
         <list style="width: 77%; height: 100%" class="folderlist">
             <list-item type="folders" class="folder" for="{{folders}}"
-                onclick="GoFolderVideosPage({{$item.id}}, {{$item.media_count}})">
+                onclick="GoFolderVideosPage($item.id, $item.media_count)">
                 <image src="{{$item.cover}}@121w_68h" alt="/common/fullblack.png" class="folderimg"></image>
                 <div style="flex-direction: column">
                     <div class="foldername">

@@ -4,17 +4,17 @@
   <div class="page">
     <switch-bar title="settings.title"></switch-bar>
     <img src="/common/settings_version.png" @click="GoAbout"></img>
-    <div class="setbase" onclick="ClickCountSet({{countset_name[0]}})">
+    <div class="setbase" onclick="ClickCountSet(countset_name[0])">
       <image class="seticon" src="/common/settings_freshtype.png"></image>
       <text class="setext_small">{{ $t("settings.videoPushRelevance") }}</text>
       <text class="countset_num">{{ fresh_type }}</text>
     </div>
-    <div class="setbase" onclick="ClickCountSet({{countset_name[1]}})">
+    <div class="setbase" onclick="ClickCountSet(countset_name[1])">
       <image class="seticon" src="/common/settings_homevidcount.png"></image>
       <text class="setext_small">{{ $t("settings.videoPushCount") }}</text>
       <text class="countset_num">{{ home_vid_count }}</text>
     </div>
-    <div class="setbase" onclick="SwitchSet({{switchset_name[0]}})">
+    <div class="setbase" onclick="SwitchSet(switchset_name[0])">
       <image class="seticon" src="/common/settings_enablefullanim.png"></image>
       <text class="setext_small">{{ $t("settings.enableFullAnimation") }}</text>
       <text class="countset_num">{{ enableFullAnimation ? "开" : "关" }}</text>

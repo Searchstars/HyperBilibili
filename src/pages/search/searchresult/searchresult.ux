@@ -34,7 +34,7 @@
             </div>
             <div style="width: 100%; height: 170px; justify-content: center"
               if="{{comprehensive_status.has_video_result}}" for="{{search.comprehensive_videos}}">
-              <div style="width: 77%; justify-content: center; margin-top: 5px" onclick="OpenVideo({{$item.bvid}})">
+              <div style="width: 77%; justify-content: center; margin-top: 5px" onclick="OpenVideo($item.bvid)">
                 <videoshow video="{{$item}}"></videoshow>
               </div>
             </div>
@@ -44,7 +44,7 @@
         <div class="swiper_box">
           <scroll if="{{typebar_if.c2}}" class="swiper_container" scroll-y="true" @scroll="ScrollOverviewCheck">
             <div style="width: 100%; height: 170px; justify-content: center" for="{{search.videos}}">
-              <div style="width: 77%; justify-content: center; margin-top: 5px" onclick="OpenVideo({{$item.bvid}})">
+              <div style="width: 77%; justify-content: center; margin-top: 5px" onclick="OpenVideo($item.bvid)">
                 <videoshow video="{{$item}}"></videoshow>
               </div>
             </div>
@@ -62,7 +62,7 @@
         <div class="swiper_box">
           <scroll if="{{typebar_if.c4}}" class="swiper_container" scroll-y="true" @scroll="ScrollOverviewCheck">
             <div style="flex-direction: column; align-items: center; width: 100%" for="{{search.articles}}"
-              onclick="OpenArticle({{$item}})">
+              onclick="OpenArticle($item)">
               <articleshow article="{{$item}}" show-category="true"></articleshow>
             </div>
             <text style="margin-top: 30px"></text>

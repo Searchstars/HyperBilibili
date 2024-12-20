@@ -11,7 +11,7 @@
             style="margin-top: {{MsgBoxStyleCalcMarginTop($item.msg_seqno)}}; margin-bottom: {{MsgBoxStyleCalcMarginBottom($item.msg_seqno)}}">
             <image class="msgprofpic" src="{{targetPic}}@75w_75h" alt="/common/fullgray.png"></image>
             <div class="msgbox" style="margin-left: 5px"
-              onclick="ShowMessageDetail({{$item.content}}, {{$item.msg_type}})">
+              onclick="ShowMessageDetail($item.content, $item.msg_type)">
               <!-- 普通文本消息 -->
               <text class="msgtext" if="{{$item.msg_type == 1}}">
                 {{ JSON.parse($item.content).content }}
@@ -33,7 +33,7 @@
           <div class="mymsg"
             style="margin-top: {{MsgBoxStyleCalcMarginTop($item.msg_seqno)}}; margin-bottom: {{MsgBoxStyleCalcMarginBottom($item.msg_seqno)}}">
             <div style="background-color: #ff7da8" class="msgbox"
-              onclick="ShowMessageDetail({{$item.content}}, {{$item.msg_type}})">
+              onclick="ShowMessageDetail($item.content, $item.msg_type)">
               <!-- 普通文本消息 -->
               <text class="msgtext" if="{{$item.msg_type == 1}}">
                 {{ JSON.parse($item.content).content }}
