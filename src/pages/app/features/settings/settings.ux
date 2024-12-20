@@ -3,7 +3,8 @@
 <template>
   <div class="page">
     <switch-bar title="settings.title"></switch-bar>
-    <div class="setbase" style="margin-top: 30px" onclick="ClickCountSet({{countset_name[0]}})">
+    <img src="/common/settings_version.png" @click="GoAbout"></img>
+    <div class="setbase" onclick="ClickCountSet({{countset_name[0]}})">
       <image class="seticon" src="/common/settings_freshtype.png"></image>
       <text class="setext_small">{{ $t("settings.videoPushRelevance") }}</text>
       <text class="countset_num">{{ fresh_type }}</text>
@@ -31,11 +32,6 @@
     <div class="setbase" @click="GoDonation()">
       <image class="seticon" src="/common/donation.png"></image>
       <text class="setext_small">{{ $t("settings.donation") }}</text>
-      <image src="/common/arrow_right.png"></image>
-    </div>
-    <div class="setbase" @click="GoAbout()">
-      <image class="seticon" src="/common/settings_about.png"></image>
-      <text class="setext_small">{{ $t("settings.about") }}</text>
       <image src="/common/arrow_right.png"></image>
     </div>
     <div class="setbase" @click="GoDebug()">

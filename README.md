@@ -12,6 +12,10 @@
 ## 使用
 对于普通用户而非开发者，你只需要下载本应用的release版本（RPK文件）然后安装到你的设备上就行了。目前，官方版本只会在官网发布，如果你想获得经过测试的稳定版本，请前往[官网](https://hyperbili.astralsight.space)获取。如果你想紧跟代码提交的步伐，在手表上运行本项目最新且未经测试的不稳定开发版代码，请从本仓库的actions中直接下载实时构建的rpk
 
+`next-gen`分支的开发版本和release版本的包名不一样，因此事实上两个版本可以共存，可以分别登录不同的账号。
+- 开发版包名：`com.searchstars.hyperbilibili.dev`
+- release版包名：`com.searchstars.hyperbilibili`
+
 ## 搭建开发环境
 
 克隆此仓库，然后在`Aiot IDE`中打开它
