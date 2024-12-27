@@ -1,4 +1,4 @@
-import { device } from "./tsimports"
+import { device, network } from "./tsimports"
 
 export function formatNumber(num: number): string {
     if (num < 1000) {
@@ -31,6 +31,32 @@ export function getDeviceInformation(): Promise<any> {
         device.getInfo({
             success: (data) => {
                 resolve(data);
+            },
+            fail: (error) => {
+                reject(error);
+            }
+        });
+    });
+}
+
+export function getDeviceSerial(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        device.getSerial({
+            success: (data) => {
+                resolve(data.serial);
+            },
+            fail: (error) => {
+                reject(error);
+            }
+        });
+    });
+}
+
+export function getNetworkType(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        network.getType({
+            success: (data) => {
+                resolve(data.type);
             },
             fail: (error) => {
                 reject(error);

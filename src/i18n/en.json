@@ -118,5 +118,11 @@
         "logOut": "Log Out",
         "donation": "Donate",
         "about": "About the App"
+    },
+    "dynamic": {
+        "title": "Dynamic"
+    },
+    "user": {
+        "title": "User"
     }
 }

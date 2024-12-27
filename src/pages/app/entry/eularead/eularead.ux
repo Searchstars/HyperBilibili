@@ -31,7 +31,7 @@ export default {
 
     // 预留init时间
     setTimeout(async() => {
-      var html = await this.$app.$def.biliclient.getEulaShowContent()
+      var html = await global.biliclient.getEulaShowContent()
       this.content = this.$app.$def.htmlparser.parseContentHtml(html)
 
       this.show_content = true
@@ -40,7 +40,7 @@ export default {
     }, 1500);
   },
   Agree(){
-    this.$app.$def.settings.saveSettings({
+    global.settings.saveSettings({
       agreedAllAgreements: true
     })
 

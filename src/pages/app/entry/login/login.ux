@@ -30,7 +30,7 @@ export default {
   },
   async PollQR() {
     try {
-      const result = await this.$app.$def.biliclient.login(true, this.qrpoll_interval)
+      const result = await global.biliclient.login(true, this.qrpoll_interval)
       if (result.success) {
         global.logger.log("登录成功")
         prompt.showToast({message: "登录成功"})
@@ -45,7 +45,7 @@ export default {
   },
   async GetQR() {
     try {
-      const get_result = await this.$app.$def.biliclient.loginQR()
+      const get_result = await global.biliclient.loginQR()
       this.qr_value = get_result.url
       global.logger.log(get_result)
       this.show_qr = true
@@ -61,7 +61,7 @@ export default {
   onReady() {
     const {pagediv_mgt, loading_img_src} = this.anims
 
-    this.anims.pagediv = new this.$app.$def.animengine.DomAnim(
+    this.anims.pagediv = new global.animengine.DomAnim(
       "loginPage",
       {value: "0"},
       pagediv_mgt,
@@ -71,7 +71,7 @@ export default {
     )
     if (this.anims.pagediv) this.anims.pagediv.start()
 
-    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    global.animengine.defaults.loading.CreateLoadingAnimation(this, false)
     this.anims.loading.start()
 
     this.GetQR()

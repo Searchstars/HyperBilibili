@@ -123,5 +123,11 @@
     },
     "opensoftware": {
         "title": "开源软件声明"
+    },
+    "dynamic": {
+        "title": "动态"
+    },
+    "user": {
+        "title": "用户主页"
     }
 }

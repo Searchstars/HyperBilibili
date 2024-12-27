@@ -12,9 +12,9 @@
     <div if="{{useRowLayout}}" class="comp-root row">
       <div class="titlebar bar-row" style="{{barRowStyle}}" @click="RouterBack()">
         <image src="/common/icons8-back-100.png" style="width: 30px; height: 30px; margin-right: 5px"></image>
-        <text style="font-size: 32px; font-weight: normal; margin-top: 3px">{{ _parentVM.$t(title) }}</text>
+        <text style="font-size: 32px; font-weight: normal">{{ _parentVM.$t(title) }}</text>
+        <time-view style="position: relative;"></time-view>
       </div>
-      <time-view style="position: absolute;"></time-view>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
     router.back()
   },
   onInit() {
-    const deviceInfo = this.$app.$def.DEVICE_INFO;
+    const deviceInfo = global.DEVICE_INFO;
     if (deviceInfo.screenShape == "rect"){
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
       this.useRowLayout = true

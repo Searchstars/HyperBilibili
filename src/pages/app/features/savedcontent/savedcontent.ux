@@ -36,7 +36,7 @@ export default {
     }
   },
   async OpenArticle(id) {
-    var html = await this.$app.$def.savedcontent.SavedContentManager.getContent(id)
+    var html = await global.savedcontent.SavedContentManager.getContent(id)
     router.push({
       uri: "pages/article/articleshow",
       params: {
@@ -47,7 +47,7 @@ export default {
     })
   },
   async LoadContent() {
-    var origin_content = await this.$app.$def.savedcontent.SavedContentManager.listAllContent()
+    var origin_content = await global.savedcontent.SavedContentManager.listAllContent()
     global.logger.log(origin_content)
     this.content = this.PatchContent(origin_content)
     global.logger.log(this.content)

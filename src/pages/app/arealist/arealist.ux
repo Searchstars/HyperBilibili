@@ -72,7 +72,7 @@ export default {
     DoScrollTip(){
         global.logger.log("scroll bottom!")
         this.showChangePageFX = true
-        this.anims.ChangePageFX = new this.$app.$def.animengine.DomAnim(
+        this.anims.ChangePageFX = new global.animengine.DomAnim(
             "arealist",
             {value: ""},
             this.anims.ChangePageFXBTM,

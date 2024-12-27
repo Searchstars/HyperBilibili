@@ -64,8 +64,8 @@ export default {
   },
   async GetVids() {
     try {
-      const {fresh_type, home_vid_count} = this.$app.$def.settings.SETTINGS
-      this.recommend_vids = await this.$app.$def.biliclient.getMainPageRecommendVideos(
+      const {fresh_type, home_vid_count} = global.settings.SETTINGS
+      this.recommend_vids = await global.biliclient.getMainPageRecommendVideos(
         fresh_type,
         home_vid_count
       )
@@ -80,7 +80,7 @@ export default {
   },
   async checkUpdates() {
     try {
-      const result = await this.$app.$def.biliclient.checkHyperbilibiliUpdates()
+      const result = await global.biliclient.checkHyperbilibiliUpdates()
       if (result.update) {
         prompt.showToast({message: result.msg, duration: 6000})
       }
@@ -99,7 +99,7 @@ export default {
     global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.anims.loading.start()
 
-    this.anims.refresh = new this.$app.$def.animengine.DomAnim(
+    this.anims.refresh = new global.animengine.DomAnim(
       "mainPage",
       {value: "0px"},
       refresh_bottom,
@@ -109,7 +109,7 @@ export default {
     )
   },
   onDestroy() {
-    this.$app.$def.animengine.clearPageAnims("mainPage")
+    global.animengine.clearPageAnims("mainPage")
   }
 }
 </script>

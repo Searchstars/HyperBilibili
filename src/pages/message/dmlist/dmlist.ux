@@ -45,7 +45,7 @@ export default {
       this.anims.loading.start()
       this.anims.show_loading = true
 
-      this.sessions = (await this.$app.$def.biliclient.getDMSessions(1, 2)).session_list
+      this.sessions = (await global.biliclient.getDMSessions(1, 2)).session_list
       // 裁切至10个
       this.sessions.length = Math.min(this.sessions.length, 10);
 
@@ -60,7 +60,7 @@ export default {
         }
       })
 
-      this.session_cards = await this.$app.$def.biliclient.getMultiUserInfoByUID(session_uids)
+      this.session_cards = await global.biliclient.getMultiUserInfoByUID(session_uids)
 
       this.anims.loading.stop()
       this.anims.show_loading = false
@@ -75,9 +75,9 @@ export default {
     router.push({
       uri: "pages/message/dmpage",
       params: {
-        myId: this.$app.$def.biliclient.accountInfo.mid,
+        myId: global.biliclient.accountInfo.mid,
         targetId: targetId,
-        myPic: this.$app.$def.biliclient.accountInfo.face,
+        myPic: global.biliclient.accountInfo.face,
         targetPic: this.session_cards[`${targetId}`].face
       }
     })

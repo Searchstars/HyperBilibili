@@ -50,7 +50,7 @@ export default {
     try{
       this.anims.loading.start()
 
-      var dynamic = await this.$app.$def.biliclient.getDynamicList()
+      var dynamic = await global.biliclient.getDynamicList()
       var split_result = this.SplitWaterfallArea(dynamic.items)
       this.dynamic.render_split_1 = split_result.arr1
       this.dynamic.render_split_2 = split_result.arr2
