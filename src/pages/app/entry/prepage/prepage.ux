@@ -19,20 +19,20 @@ export default {
     }
   },
   async PreLogin() {
-    await this.$app.$def.biliclient.login(false, null)
+    await global.biliclient.login(false, null)
     router.replace({
       uri: "pages/app/features/main"
     })
   },
   ReLogin(){
-    this.$app.$def.biliclient.logOut()
+    global.biliclient.logOut()
     router.clear()
     router.replace({
         uri: "pages/app/entry/splash"
     })
   },
   onInit() {
-    this.anims.login = new this.$app.$def.animengine.SequenceAnim(
+    this.anims.login = new global.animengine.SequenceAnim(
       "prePage",
       this.anims.loginsrc,
       28,

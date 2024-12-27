@@ -59,14 +59,14 @@ export default {
     let result
     try {
       result = this.secmode
-        ? await this.$app.$def.biliclient.GiveTreeReply(
+        ? await global.biliclient.GiveTreeReply(
             this.type,
             this.oid,
             this.reply_target,
             this.rootrpid,
             content
           )
-        : await this.$app.$def.biliclient.GiveSecReply(
+        : await global.biliclient.GiveSecReply(
             this.type,
             this.oid,
             this.reply_target,
@@ -124,13 +124,13 @@ export default {
 
     try {
       const replyData = this.secmode
-        ? await this.$app.$def.biliclient.getSecReplies(
+        ? await global.biliclient.getSecReplies(
             this.type,
             this.oid,
             this.rootrpid,
             this.current_pn
           )
-        : await this.$app.$def.biliclient.getReplies(this.type, this.oid, this.current_pn)
+        : await global.biliclient.getReplies(this.type, this.oid, this.current_pn)
 
       this.replies = replyData.replies
     } catch (error) {

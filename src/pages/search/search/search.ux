@@ -53,7 +53,7 @@ export default {
     this.anims.show_loading = true
     this.anims.loading.start()
 
-    this.hotwords = await this.$app.$def.biliclient.getSearchHotwords()
+    this.hotwords = await global.biliclient.getSearchHotwords()
     this.showHotwordsList = true
 
     this.anims.loading.stop()
@@ -66,7 +66,7 @@ export default {
     this.GetHotWords()
   },
   onDestroy(){
-    this.$app.$def.animengine.clearPageAnims("searchPage")
+    global.animengine.clearPageAnims("searchPage")
   }
 }
 </script>

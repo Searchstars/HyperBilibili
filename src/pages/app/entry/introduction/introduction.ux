@@ -46,7 +46,7 @@ export default {
     }
   },
   async UpdateImage() {
-    const deviceinfo = this.$app.$def.DEVICE_INFO
+    const deviceinfo = global.DEVICE_INFO
     const shape = deviceinfo.screenShape
 
     this.steps = this.steps_map[shape] || []

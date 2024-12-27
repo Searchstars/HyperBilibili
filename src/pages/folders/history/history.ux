@@ -28,12 +28,12 @@ export default {
     this.anims.loading.start()
 
     try {
-      const medialist = await this.$app.$def.biliclient.getWatchHistory(
+      const medialist = await global.biliclient.getWatchHistory(
         1,
         15
       )
       const videoInfoPromises = medialist.map((media) =>
-        this.$app.$def.biliclient.getVideoInfoByBVID(media.bvid)
+        global.biliclient.getVideoInfoByBVID(media.bvid)
       )
       this.history = await Promise.all(videoInfoPromises)
     } catch (error) {

@@ -48,8 +48,9 @@ export default {
       this.UpdateTime()
     }, 2000)
 
-    const deviceInfo = this.$app.$def.DEVICE_INFO
+    const deviceInfo = global.DEVICE_INFO
     if (deviceInfo.screenShape == "rect") {
+      this.compStyle["top"] = "0px"
       this.compStyle["right"] = "100px"
       this.useRectTime = true
     }
@@ -81,6 +82,6 @@ export default {
 
 .rect-txt {
   font-size: 30px;
-  padding-bottom: 8.5px;
+  padding: 0px;
 }
 </style>

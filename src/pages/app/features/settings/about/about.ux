@@ -76,7 +76,7 @@ export default {
     buildinfo: buildinfo
   },
   onInit() {
-    this.version = "v" + this.$app.$def.biliclient.version
+    this.version = "v" + global.biliclient.version
     global.logger.log(this.buildinfo)
   },
   OpenDisclaimer() {

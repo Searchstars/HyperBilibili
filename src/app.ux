@@ -16,17 +16,12 @@ import * as bgimg from "./bgimg"
 import logger from "./logger/logger"
 export default {
   dayjs: dayjs,
-  animengine: animengine,
-  biliclient: null,
   tools: tools,
   funnytips: funnytips,
-  settings: settings,
   jumpcheck: jumpcheck,
   articletools: articletools,
   htmlparser: htmlparser,
-  savedcontent: savedcontent,
   bgimg: bgimg,
-  DEVICE_INFO: null,
   async onCreate() {
     console.log("app created")
 
@@ -34,24 +29,27 @@ export default {
     global.logger = logger
 
     console.log("create global animengine")
-    global.animengine = this.animengine
+    global.animengine = animengine
 
     console.log("appinit > loadSettings")
     settings.loadSettings()
+    global.settings = settings
 
     console.log("appinit > initSavedContentManager")
-    await this.savedcontent.SavedContentManager.initialize()
+    await savedcontent.SavedContentManager.initialize()
+    global.savedcontent = savedcontent
 
     console.log("appinit > initDeviceInfo")
-    this.DEVICE_INFO = await this.tools.getDeviceInformation()
-    global.DEVICE_INFO = this.DEVICE_INFO
+    global.DEVICE_INFO = await tools.getDeviceInformation()
+    global.DEVICE_SERIAL = await tools.getDeviceSerial()
+    global.DEVICE_NETWORK_TYPE = await tools.getNetworkType()
 
     console.log("appinit > initBgImg")
     this.bgimg.Init()
     global.bgimg = this.bgimg
 
     console.log("appinit > createBiliClient")
-    this.biliclient = new BilibiliClient()
+    global.biliclient = new BilibiliClient()
   },
   onDestroy() {
     console.log("app destroyed")

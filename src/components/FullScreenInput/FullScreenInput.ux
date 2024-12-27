@@ -44,7 +44,7 @@ export default {
         })
     },
     async InitScreenType(){
-        this.screentype = this.$app.$def.DEVICE_INFO.screenShape
+        this.screentype = global.DEVICE_INFO.screenShape
         this.global_show = true
     },
     onInit(){

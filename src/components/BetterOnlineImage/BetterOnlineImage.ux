@@ -50,7 +50,7 @@ export default {
         }
     },
     onInit(){
-        this.anims.loading = new this.$app.$def.animengine.SequenceAnim(
+        this.anims.loading = new global.animengine.SequenceAnim(
             "onlineImageComponent",
             this.anims.loading_src,
             28,

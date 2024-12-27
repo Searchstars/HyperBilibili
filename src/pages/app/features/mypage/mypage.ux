@@ -58,7 +58,7 @@ export default {
     router.push({
       uri: "pages/folders/favfolders",
       params: {
-        user_mid: this.$app.$def.biliclient.accountInfo.mid
+        user_mid: global.biliclient.accountInfo.mid
       }
     })
   },
@@ -82,7 +82,7 @@ export default {
     }
   },
   onInit() {
-    this.accountInfo = this.$app.$def.biliclient.accountInfo
+    this.accountInfo = global.biliclient.accountInfo
     this.UpdateShow()
   }
 }

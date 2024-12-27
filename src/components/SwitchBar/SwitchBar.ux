@@ -13,12 +13,14 @@
     </div>
     <div if="{{useRowLayout}}" class="comp-root row">
       <div class="bar bar-row" style="{{barRowStyle}}" @click="SwitchPage()">
-        <image src="/common/switch.png" style="object-fit: scale-down; width: 32px; height: 32px"></image>
-        <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
-          {{ _parentVM.$t(title) }}
-        </text>
+        <div style="align-items: center; justify-content: center">
+          <image src="/common/switch.png" style="object-fit: scale-down; width: 32px; height: 32px"></image>
+          <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
+            {{ _parentVM.$t(title) }}
+          </text>
+        </div>
+        <time-view style="position: absolute"></time-view>
       </div>
-      <time-view style="position: absolute"></time-view>
     </div>
   </div>
 </template>
@@ -42,7 +44,7 @@ export default {
     })
   },
   onInit() {
-    const deviceInfo = this.$app.$def.DEVICE_INFO
+    const deviceInfo = global.DEVICE_INFO
     if (deviceInfo.screenShape == "rect") {
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`
       this.useRowLayout = true

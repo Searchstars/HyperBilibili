@@ -38,7 +38,7 @@ export default {
     reply_clone: null
   },
   async LikeReply() {
-    var result = await this.$app.$def.biliclient.LikeReply(
+    var result = await global.biliclient.LikeReply(
       this.type,
       this.oid,
       this.reply_clone.rpid,

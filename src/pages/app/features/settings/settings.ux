@@ -86,12 +86,12 @@ export default {
       case "enable_full_anim":
         if (this.enableFullAnimation) {
           this.enableFullAnimation = false
-          this.$app.$def.settings.saveSettings({
+          global.settings.saveSettings({
             enableFullAnimation: this.enableFullAnimation
           })
         } else {
           this.enableFullAnimation = true
-          this.$app.$def.settings.saveSettings({
+          global.settings.saveSettings({
             enableFullAnimation: this.enableFullAnimation
           })
           prompt.showToast({
@@ -111,7 +111,7 @@ export default {
         } else {
           new_fresh_type = this.countset.fresh_type_min
         }
-        this.$app.$def.settings.saveSettings({
+        global.settings.saveSettings({
           fresh_type: new_fresh_type
         })
         setTimeout(() => {
@@ -125,7 +125,7 @@ export default {
         } else {
           new_home_vid_count = this.countset.home_vid_count_min
         }
-        this.$app.$def.settings.saveSettings({
+        global.settings.saveSettings({
           home_vid_count: new_home_vid_count
         })
         setTimeout(() => {
@@ -135,16 +135,16 @@ export default {
     }
   },
   logout() {
-    this.$app.$def.biliclient.logOut()
+    global.biliclient.logOut()
     router.clear()
     router.replace({
       uri: "pages/app/entry/splash"
     })
   },
   UpdateNumView() {
-    this.fresh_type = this.$app.$def.settings.SETTINGS.fresh_type
-    this.home_vid_count = this.$app.$def.settings.SETTINGS.home_vid_count
-    this.enableFullAnimation = this.$app.$def.settings.SETTINGS.enableFullAnimation
+    this.fresh_type = global.settings.SETTINGS.fresh_type
+    this.home_vid_count = global.settings.SETTINGS.home_vid_count
+    this.enableFullAnimation = global.settings.SETTINGS.enableFullAnimation
   },
   onInit() {
     this.UpdateNumView()

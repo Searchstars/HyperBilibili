@@ -62,7 +62,7 @@ export default {
       this.video.pic = "https:" + this.video.pic
     }
     
-    const deviceInfo = this.$app.$def.DEVICE_INFO;
+    const deviceInfo = global.DEVICE_INFO;
     if (deviceInfo.screenShape == "rect" || this.video.title.length > 25){
       this.useColumnTitle = true;
       // 手环Pro 系列

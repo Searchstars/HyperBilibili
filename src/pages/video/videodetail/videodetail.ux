@@ -87,12 +87,12 @@ export default {
     })
   },
   async GetVideoDetail() {
-    this.vid = await this.$app.$def.biliclient.getVideoInfoByBVID(this.bvid)
+    this.vid = await global.biliclient.getVideoInfoByBVID(this.bvid)
   },
   async UpdateVideoToolbarStatus() {
-    this.stared = await this.$app.$def.biliclient.isVideoStaredByBVID(this.bvid)
-    this.liked = await this.$app.$def.biliclient.isVideoLikedByBVID(this.bvid)
-    this.coined = await this.$app.$def.biliclient.isVideoCoinedByBVID(this.bvid)
+    this.stared = await global.biliclient.isVideoStaredByBVID(this.bvid)
+    this.liked = await global.biliclient.isVideoLikedByBVID(this.bvid)
+    this.coined = await global.biliclient.isVideoCoinedByBVID(this.bvid)
     this.UpdateToolBarIconSrc()
   },
   UpdateToolBarIconSrc() {
@@ -107,7 +107,7 @@ export default {
     this.AddToFav()
   },
   async LikeClick() {
-    var result = await this.$app.$def.biliclient.LikeVideo(this.vid.bvid, 1)
+    var result = await global.biliclient.LikeVideo(this.vid.bvid, 1)
     const message =
       result.code === 0 ? "点赞成功" : `点赞失败，错误代码：${result.code} 原因：${result.message}`
     prompt.showToast({
@@ -117,7 +117,7 @@ export default {
     this.UpdateVideoToolbarStatus()
   },
   async CoinClick() {
-    var result = await this.$app.$def.biliclient.CoinVideo(this.vid.bvid, 1)
+    var result = await global.biliclient.CoinVideo(this.vid.bvid, 1)
     const message =
       result.code === 0 ? "投币成功" : `投币失败，错误代码：${result.code} 原因：${result.message}`
     prompt.showToast({
@@ -135,7 +135,7 @@ export default {
       })
     }
 
-    const result = await this.$app.$def.biliclient.GiveReply(
+    const result = await global.biliclient.GiveReply(
       1,
       this.vid.aid,
       evt.detail.content
@@ -160,7 +160,7 @@ export default {
   },
   async AISummary() {
     const summary =
-      (await this.$app.$def.biliclient.getVideoAISummaryByBVID(
+      (await global.biliclient.getVideoAISummaryByBVID(
         this.vid.bvid,
         this.vid.cid,
         this.vid.owner.mid
@@ -171,7 +171,7 @@ export default {
     })
   },
   async AddToFav() {
-    const result = await this.$app.$def.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
+    const result = await global.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
     const message = result ? "收藏失败，请重试，或重新登录后再试" : "收藏成功"
     prompt.showToast({message})
     this.UpdateVideoToolbarStatus()

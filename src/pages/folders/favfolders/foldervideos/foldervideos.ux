@@ -76,13 +76,13 @@ export default {
     this.anims.loading.start()
 
     try {
-      const medialist = await this.$app.$def.biliclient.getFavouriteFolderContent(
+      const medialist = await global.biliclient.getFavouriteFolderContent(
         this.mlid,
         this.current_pn,
         5
       )
       const videoInfoPromises = medialist.medias.map((media) =>
-        this.$app.$def.biliclient.getVideoInfoByBVID(media.bvid)
+        global.biliclient.getVideoInfoByBVID(media.bvid)
       )
 
       // 并行获取所有视频信息

@@ -30,7 +30,7 @@
     "@aiot-toolkit/jsc": "^1.0.7",
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
-    "aiot-toolkit": "1.1.5-beta.1",
+    "aiot-toolkit": "1.1.5-beta.2",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",

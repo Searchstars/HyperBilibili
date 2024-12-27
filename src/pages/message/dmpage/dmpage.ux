@@ -87,7 +87,7 @@ export default {
   async SendMsg() {
     // 发送消息
     try {
-      const result = await this.$app.$def.biliclient.SendDMSessionMessage(
+      const result = await global.biliclient.SendDMSessionMessage(
         this.targetId,
         1,
         this.input_text
@@ -166,7 +166,7 @@ export default {
   async UpdateMessages(initial = false) {
     // 更新消息
     try {
-      let response = await this.$app.$def.biliclient.getDMSessionMessage(1, this.targetId, 30)
+      let response = await global.biliclient.getDMSessionMessage(1, this.targetId, 30)
       let newMessages = response.messages.reverse()
 
       if (

@@ -67,7 +67,7 @@ export default {
           article_html = this.article_html
         }
         else{
-          article_html = await this.$app.$def.biliclient.getArticle(this.cvid)
+          article_html = await global.biliclient.getArticle(this.cvid)
         }
 
         const article = this.$app.$def.articletools.parseArticlePageHtml(article_html)
@@ -76,7 +76,7 @@ export default {
         let article_full = this.$app.$def.htmlparser.parseContentHtml(article.readInfo.content, false)
         this.$app.$def.articletools.PatchArticleContent(article_full)
 
-        //this.article_content = this.SplitArticle(article_full, this.$app.$def.settings.SETTINGS.article_split_dom_count)
+        //this.article_content = this.SplitArticle(article_full, global.settings.SETTINGS.article_split_dom_count)
         this.article_content = article_full
         this.max_page_num = this.article_content.length
 
