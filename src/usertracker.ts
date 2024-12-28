@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { fetch } from "./tsimports"
 
 const TRACKER_URL: string = "https://tracker.hyperbili.astralsight.space/trackreport"
@@ -36,7 +37,7 @@ interface TIUPStartupPayload {
 interface TIUPRouterPayload {
     currentPage: string,
     nextPage: string,
-    routerStack: string
+    routerStack: Array<String>
 }
 
 interface TIUPLoginPayload {
@@ -81,3 +82,7 @@ function uploadTrack(event: TIUPEvents, payload) {
         })
     }
 }
+
+uploadTrack(TIUPEvents.ON_STARTUP, {
+    startTime: dayjs().format()
+})

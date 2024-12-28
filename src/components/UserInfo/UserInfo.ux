@@ -1,0 +1,55 @@
+<template>
+    <div style="flex-direction: column; align-items: center">
+        <div class="profdiv">
+            <image src="{{accountInfo.face}}@106w_106h" alt="/common/fullgray.png" class="profimg"></image>
+            <image src="{{accountInfo.pendant.image}}@176w_176h" alt="/common/alphaimg.png" class="profpendantimg"></image>
+        </div>
+        <text class="{{name_text_class}}">{{ name }}</text>
+        <div class="tagbar" style="margin-top: 5px">
+            <image class="tagimg" src="/common/bililevel/lv{{level}}.png" style="height: 20px"></image>
+            <image class="tagimg" if="{{is_vip}}" style="margin-left: 10px"
+                src="/common/bilivip/{{accountInfo.vip_label.label_theme}}.png"></image>
+            <image class="tagimg" if="{{is_senior_member}}" style="margin-left: 10px" src="/common/senior_member.png">
+            </image>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  props: ["accountInfo"],
+  data: {
+    name_text_class: "name",
+    is_vip: false,
+    is_senior_member: false,
+    name: "",
+    level: ""
+  },
+  UpdateShow() {
+    try{
+      this.is_vip = !!this.accountInfo.vip_pay_type
+      this.name_text_class = this.is_vip ? "vipname" : this.name_text_class
+
+      this.is_senior_member = !!this.accountInfo.is_senior_member
+
+
+      console.log(this.accountInfo.level_info?.current_level)
+      console.log(this.accountInfo.level)
+      this.level = this.accountInfo.level_info?.current_level || this.accountInfo.level
+
+      this.name = this.accountInfo.uname || this.accountInfo.name
+    }
+    catch(error){
+      global.logger.error("Error when updating show:", error.toString())
+    }
+  },
+  onInit() {
+    this.UpdateShow()
+  }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+@import "./UserInfo.less";
+</style>

@@ -1,20 +1,10 @@
 <import name="switch-bar" src="@components/SwitchBar/SwitchBar.ux"></import>
+<import name="user-info" src="@components/UserInfo/UserInfo.ux"></import>
 
 <template>
   <div class="page">
     <switch-bar title="mypage.title"></switch-bar>
-    <div class="profdiv">
-      <image src="{{accountInfo.face}}@106w_106h" alt="/common/fullgray.png" class="profimg"></image>
-      <image src="{{accountInfo.pendant.image}}@176w_176h" alt="/common/alphaimg.png" class="profpendantimg"></image>
-    </div>
-    <text class="{{name_text_class}}">{{ accountInfo.uname }}</text>
-    <div class="tagbar" style="margin-top: 5px">
-      <image class="tagimg" src="/common/bililevel/lv{{accountInfo.level_info.current_level}}.png" style="height: 20px">
-      </image>
-      <image class="tagimg" if="{{is_vip}}" style="margin-left: 10px"
-        src="/common/bilivip/{{accountInfo.vip_label.label_theme}}.png"></image>
-      <image class="tagimg" if="{{is_senior_member}}" style="margin-left: 10px" src="/common/senior_member.png"></image>
-    </div>
+    <user-info account-info="{{accountInfo}}"></user-info>
     <div class="btnbase" style="margin-top: 40px" @click="GoMyFavFolders()">
       <image class="btnimg" src="/common/mypage_star.png"></image>
       <text class="btntext">{{ $t("mypage.favourite") }}</text>
@@ -44,9 +34,6 @@ import router from "@system.router"
 import prompt from "@system.prompt"
 export default {
   private: {
-    name_text_class: "name",
-    is_vip: false,
-    is_senior_member: false,
     accountInfo: {}
   },
   GoHistory(){
@@ -72,18 +59,8 @@ export default {
       message: "该功能还在开发中"
     })
   },
-  UpdateShow() {
-    if (this.accountInfo.vip_pay_type) {
-      this.is_vip = true
-      this.name_text_class = "vipname"
-    }
-    if (this.accountInfo.is_senior_member) {
-      this.is_senior_member = true
-    }
-  },
   onInit() {
     this.accountInfo = global.biliclient.accountInfo
-    this.UpdateShow()
   }
 }
 </script>

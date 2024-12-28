@@ -121,6 +121,9 @@
             },
             "pages/app/features/settings/opensoftware": {
                 "component": "opensoftware"
+            },
+            "pages/user": {
+                "component": "user"
             }
         }
     }
