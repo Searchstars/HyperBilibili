@@ -1,0 +1,41 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="user-info" src="@components/UserInfo/UserInfo.ux"></import>
+
+<template>
+  <div class="page">
+    <title-bar title="user.title"></title-bar>
+    <user-info account-info="{{user}}" if="{{loaded}}"></user-info>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
+  </div>
+</template>
+
+<script>
+export default {
+  public: {
+    uid: 1
+  },
+  private: {
+    user: {},
+    anims: {
+      show_loading: false
+    },
+    loaded: false
+  },
+  async LoadUserInfo(){
+    this.anims.loading.start()
+    this.user = await global.biliclient.getUserInfoByUID(this.uid)
+    this.anims.loading.stop()
+    this.anims.show_loading = false
+    this.loaded = true
+  },
+  onInit(){
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    this.LoadUserInfo()
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+@import './user.less';
+</style>

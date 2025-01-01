@@ -13,6 +13,7 @@ import * as jumpcheck from "./jumpcheck"
 import * as htmlparser from "./htmlparser"
 import * as savedcontent from "./savedcontent"
 import * as bgimg from "./bgimg"
+import * as usertracker from "./usertracker"
 import logger from "./logger/logger"
 export default {
   dayjs: dayjs,

@@ -1,8 +1,8 @@
 <template>
   <div class="reply">
-    <div class="userinfo" onclick="ShowTools(reply)">
-      <image class="userimg" style="lines: 1" src="{{reply.member.avatar}}@44w_44h" alt="/common/fullgray.png"></image>
-      <div style="flex-direction: column; justify-content: center">
+    <div class="userinfo">
+      <image class="userimg" onclick="OpenUser(reply.member.mid)" style="lines: 1" src="{{reply.member.avatar}}@44w_44h" alt="/common/fullgray.png"></image>
+      <div style="flex-direction: column; justify-content: center" onclick="ShowTools(reply)">
         <div class="rowbar">
           <text class="username" style="margin-left: 10px">{{ reply.member.uname }}</text>
           <image style="width: 24px; height: 14px; object-fit: contain; margin-left: 6px"
@@ -34,8 +34,17 @@
 </template>
 
 <script>
+import router from "@system.router"
 export default {
   props: ["reply", "secmode"],
+  OpenUser(id) {
+    router.push({
+      uri: "pages/user",
+      params: {
+        uid: id
+      }
+    })
+  },
   ShowTools(reply) {
     this.$emit("showTools", {
       reply: reply

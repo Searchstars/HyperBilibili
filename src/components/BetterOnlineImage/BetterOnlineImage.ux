@@ -85,6 +85,9 @@ export default {
                     token: data.token,
                     success: (data) => {
                         global.logger.log("[BetterOnlineImage] Image Saved in: " + data.uri)
+                        this.$emit('loaded', {
+                            uri: data.uri
+                        })
                         this.localsrc = data.uri
                         this.show_loading = false
                         this.show_image = true

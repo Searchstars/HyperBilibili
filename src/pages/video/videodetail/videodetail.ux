@@ -1,12 +1,13 @@
 <import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
 <import name="full-screen-input" src="@components/FullScreenInput/FullScreenInput.ux"></import>
 <import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+<import name="online-image" src="@components/BetterOnlineImage/BetterOnlineImage.ux"></import>
 
 <template>
   <div class="page">
     <scroll scroll-y="true" class="scroll" bounces="true">
       <title-bar title="video.title"></title-bar>
-      <image src="{{vid.pic}}@319w_150h" alt="/common/grayloading_cn.png" class="vidpic"></image>
+      <online-image if="{{renderingCover}}" src="{{vid.pic}}@319w_150h" margin-top="30px" lock-size="true" width="320px" height="150px" loading-anim="true" @loaded="GenBlur"></online-image>
       <text class="vidtitle">{{ vid.title }}</text>
       <div class="statbar">
         <div class="stat">
@@ -62,6 +63,8 @@
 import router from "@system.router"
 import prompt from "@system.prompt"
 
+import { kmeansCircleGradientImage } from "@src/image/jpegkmeans.ts"
+
 export default {
   public: {
     bvid: 1 // 视频BVID
@@ -74,7 +77,8 @@ export default {
     likesrc: "/common/vidtool_like.png",
     coinsrc: "/common/vidtool_coin.png",
     starsrc: "/common/vidtool_star.png",
-    replymode: false
+    replymode: false,
+    renderingCover: false
   },
   onInit() {
     global.logger.log("[videodetail] load bvid: " + this.bvid);
@@ -88,6 +92,7 @@ export default {
   },
   async GetVideoDetail() {
     this.vid = await global.biliclient.getVideoInfoByBVID(this.bvid)
+    this.renderingCover = true
   },
   async UpdateVideoToolbarStatus() {
     this.stared = await global.biliclient.isVideoStaredByBVID(this.bvid)
@@ -175,6 +180,13 @@ export default {
     const message = result ? "收藏失败，请重试，或重新登录后再试" : "收藏成功"
     prompt.showToast({message})
     this.UpdateVideoToolbarStatus()
+  },
+  async GenBlur(evt){
+    // 该Feature在现在任何设备上运行都会卡死，故注释
+    /*
+      global.logger.log(`\n[GenBlur] 开始处理封面取色模糊`);
+      await kmeansCircleGradientImage(evt.detail.uri)
+    */
   },
   GoReplyArea() {
     router.push({
