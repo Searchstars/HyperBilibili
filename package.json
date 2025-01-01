@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
+    "jpeg-js": "^0.4.4",
     "semver": "^7.6.3"
   }
 }

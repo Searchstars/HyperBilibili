@@ -33,6 +33,7 @@ module.exports = {
         },
         resolve: {
             alias: {
+                '@src': path.resolve(__dirname, 'src'),
                 '@components': path.resolve(__dirname, 'src/components'),
                 '@less': path.resolve(__dirname, 'src/less'),
                 '@protobuf': path.resolve(__dirname, 'src/protobuf'),

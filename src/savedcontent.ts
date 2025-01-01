@@ -1,4 +1,4 @@
-import { file } from "./tsimports";
+import { asyncFile } from "./asyncapi/file";
 
 // 定义文件存储的基本结构
 interface StoredContent {
@@ -15,64 +15,15 @@ let storageIndex: StoredContent[] = [];
 const baseUri = 'internal://files/bilisavedcontent/';
 const indexFileUri = `${baseUri}index.json`; // 存储 storageIndex 的文件
 
-// 封装 file 接口的 Promise 方法
-function fileWrite(uri: string, data: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    file.writeText({
-      uri,
-      text: data,
-      success: () => resolve(),
-      fail: (data, code) => reject(`Failed to write to ${uri}: ${code}`)
-    });
-  });
-}
-
-function fileRead(uri: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    file.readText({
-      uri,
-      success: (data) => resolve(data.text),
-      fail: (data, code) => reject(`Failed to read from ${uri}: ${code}`)
-    });
-  });
-}
-
-function fileList(dirUri: string): Promise<any[]> {
-  return new Promise((resolve, reject) => {
-    file.list({
-      uri: dirUri,
-      success: (data) => resolve(data.fileList),
-      fail: (data, code) => reject(`Failed to list files in ${dirUri}: ${code}`)
-    });
-  });
-}
-
-function fileAccess(uri: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    file.access({
-      uri,
-      success: () => resolve(true),
-      fail: () => resolve(false)
-    });
-  });
-}
-
-function fileDelete(uri: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    file.delete({
-      uri,
-      success: () => resolve(),
-      fail: (data, code) => reject(`Failed to delete ${uri}: ${code}`)
-    });
-  });
-}
-
 // 同步 storageIndex 到本地文件
 async function saveStorageIndex(): Promise<void> {
   try {
     global.logger.log(storageIndex)
     const indexData = JSON.stringify(storageIndex);
-    await fileWrite(indexFileUri, indexData);
+    await asyncFile.writeText({
+      uri: indexFileUri,
+      text: indexData
+    });
   } catch (e) {
     global.logger.error(`[SavedContentManager] saveStorageIndex Error: ${e.toString()}`);
   }
@@ -81,9 +32,9 @@ async function saveStorageIndex(): Promise<void> {
 // 从本地文件加载 storageIndex
 async function loadStorageIndex(): Promise<void> {
   try {
-    const fileExists = await fileAccess(indexFileUri);
+    const fileExists = await asyncFile.access({ uri: indexFileUri });
     if (fileExists) {
-      const indexData = await fileRead(indexFileUri);
+      const indexData = await asyncFile.readText({ uri: indexFileUri });
       storageIndex = JSON.parse(indexData);
     } else {
       storageIndex = [];
@@ -116,7 +67,7 @@ export class SavedContentManager {
       const fileUri = `${baseUri}${id}.txt`;
 
       // 写入文件
-      await fileWrite(fileUri, data);
+      await asyncFile.writeText({ uri: fileUri, text: data });
 
       // 更新 storageIndex 并保存
       storageIndex.push({ id, title, type, fileUri });
@@ -135,10 +86,10 @@ export class SavedContentManager {
       if (!content) return null;
 
       // 读取文件内容
-      const fileExists = await fileAccess(content.fileUri);
+      const fileExists = await asyncFile.access({ uri: content.fileUri });
       if (!fileExists) throw new Error(`File does not exist: ${content.fileUri}`);
 
-      return await fileRead(content.fileUri);
+      return await asyncFile.readText({ uri: content.fileUri });
     } catch (e) {
       global.logger.error(`[SavedContentManager] getContent Error: ${e.toString()}`);
       return null;
@@ -158,7 +109,7 @@ export class SavedContentManager {
 
       // 删除文件
       const fileUri = storageIndex[contentIndex].fileUri;
-      await fileDelete(fileUri);
+      await asyncFile.delete({ uri: fileUri });
 
       // 从 storageIndex 中删除记录并保存
       storageIndex.splice(contentIndex, 1);

@@ -1,7 +1,8 @@
 import dayjs from "dayjs"
 import { fetch } from "./tsimports"
 
-const TRACKER_URL: string = "https://tracker.hyperbili.astralsight.space/trackreport"
+//const TRACKER_URL: string = "https://tracker.hyperbili.astralsight.space/trackreport"
+const TRACKER_URL: string = "http://192.168.1.247:4080/trackreport"
 const TRACKER_SERVER_PROTOCOL_VERSION = "v1"
 
 interface TrackedInfoUploadPacket {
@@ -78,11 +79,17 @@ function uploadTrack(event: TIUPEvents, payload) {
     if (canUploadTrack()) {
         fetch.fetch({
             url: `${TRACKER_URL}/${TRACKER_SERVER_PROTOCOL_VERSION}/fetch`,
-            data
+            method: "POST",
+            data: JSON.stringify(data),
+            header: {
+                "Content-Type": "application/json"
+            }
         })
     }
 }
 
-uploadTrack(TIUPEvents.ON_STARTUP, {
-    startTime: dayjs().format()
-})
+setTimeout(() => {
+    uploadTrack(TIUPEvents.ON_STARTUP, {
+        startTime: dayjs().format()
+    })
+}, 3000)
