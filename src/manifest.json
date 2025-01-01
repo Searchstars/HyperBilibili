@@ -11,6 +11,39 @@
     "features": [
         {
             "name": "system.router"
+        },
+        {
+            "name": "system.request"
+        },
+        {
+            "name": "system.file"
+        },
+        {
+            "name": "system.vibrator"
+        },
+        {
+            "name": "system.prompt"
+        },
+        {
+            "name": "system.device"
+        },
+        {
+            "name": "system.fetch"
+        },
+        {
+            "name": "system.storage"
+        },
+        {
+            "name": "system.crypto"
+        },
+        {
+            "name": "system.folme"
+        },
+        {
+            "name": "system.interconnect"
+        },
+        {
+            "name": "system.network"
         }
     ],
     "config": {
