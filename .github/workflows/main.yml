@@ -27,11 +27,20 @@ jobs:
     - name: Install dependencies
       run: yarn
 
-    - name: Build project
-      run: npx aiot build --enable-custom-component --enable-jsc --enable-protobuf --enable-image-png8
+    - name: Build project (s3/s4)
+      run: python scripts/build_s3s4.py
 
-    - name: Upload rpk files
+    - name: Upload rpk file (s3/s4)
       uses: actions/upload-artifact@v4.3.6
       with:
-        name: RPK
+        name: RPK (Design Width 466) (S3/S4)
+        path: dist/**/*.rpk
+
+    - name: Build project (rw5)
+      run: python scripts/build_rw5.py
+
+    - name: Upload rpk file (rw5)
+      uses: actions/upload-artifact@v4.3.6
+      with:
+        name: RPK (Design Width 432) (RW5)
         path: dist/**/*.rpk
