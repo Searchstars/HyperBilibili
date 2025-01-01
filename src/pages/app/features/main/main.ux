@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
+    <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
     <scroll scroll-y="true" class="scroll" bounces="true">
       <switch-bar title="main.title"></switch-bar>
       <text class="tip">{{ funnytip }}</text>
@@ -40,6 +40,11 @@ export default {
       refresh_bottom: {value: "-350"}
     },
     bgimg: ""
+  },
+  computed: {
+    getBgImg(){
+      return this.$app.$def.bgimg.GetBackgroundImageSrc()
+    }
   },
   async Refresh() {
     if (!this.anims.showRefreshFX) {

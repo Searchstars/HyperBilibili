@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
+    <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
     <switch-bar title="search.title" static></switch-bar>
     <div class="searchbtn" @click="OpenInput">
       <image src="/common/searchpage_search.png" style="margin-left: 25px" static></image>
@@ -33,6 +33,11 @@ export default {
     anims: {
       show_loading: false
     },
+  },
+  computed: {
+    getBgImg(){
+      return this.$app.$def.bgimg.GetBackgroundImageSrc()
+    }
   },
   ExitInput() {
     this.input_mode = false

@@ -3,7 +3,7 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; left: 0px" src="{{this.$app.$def.bgimg.GetBackgroundImageSrc()}}"></image>
+    <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
     <scroll class="scroll" scroll-y="true" bounces="true">
       <switch-bar title="dynamic.title"></switch-bar>
       <div class="waterfall" if="show_content">
@@ -30,6 +30,11 @@ export default {
     dynamic: {
       render_split_1: {},
       render_split_2: {}
+    }
+  },
+  computed: {
+    getBgImg(){
+      return this.$app.$def.bgimg.GetBackgroundImageSrc()
     }
   },
   SplitWaterfallArea(arr) {
