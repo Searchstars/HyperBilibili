@@ -13,7 +13,7 @@
         <div class="stat">
           <image class="statimg" src="/common/playcounticon.png" style="width: 23px; height: 25px; margin-top: 2px">
           </image>
-          <text class="statext">{{ this.$app.$def.tools.formatNumber(vid.stat.view) }}</text>
+          <text class="statext">{{ stat_view }}</text>
         </div>
         <div class="stat" style="margin-left: 10px">
           <image class="statimg" src="/common/uploadericon.png" style="width: 27px; height: 29px"></image>
@@ -23,16 +23,16 @@
       <scroll scroll-x="true" class="vidtoolbar" style="margin-top: 25px" bounces="true">
         <div class="vidtool" style="margin-left: 0px" @click="LikeClick()" @longpress="PowerIt()">
           <image class="vidtoolimg" src="{{likesrc}}"></image>
-          <text class="vidtooltext">{{ this.$app.$def.tools.formatNumber(vid.stat.like) }}</text>
+          <text class="vidtooltext">{{ stat_like }}</text>
         </div>
         <div class="vidtool" @click="CoinClick()">
           <image class="vidtoolimg" src="{{coinsrc}}"></image>
-          <text class="vidtooltext">{{ this.$app.$def.tools.formatNumber(vid.stat.coin) }}</text>
+          <text class="vidtooltext">{{ stat_coin }}</text>
         </div>
         <div class="vidtool" @click="AddToFav()">
           <image class="vidtoolimg" src="{{starsrc}}"></image>
           <text class="vidtooltext">
-            {{ this.$app.$def.tools.formatNumber(vid.stat.favorite) }}
+            {{ stat_favorite }}
           </text>
         </div>
         <div class="vidtool" @click="AISummary()">
@@ -79,6 +79,20 @@ export default {
     starsrc: "/common/vidtool_star.png",
     replymode: false,
     renderingCover: false
+  },
+  computed: {
+    stat_view(){
+      return this.$app.$def.tools.formatNumber(this.vid.stat.view)
+    },
+    stat_like(){
+      return this.$app.$def.tools.formatNumber(this.vid.stat.like)
+    },
+    stat_coin(){
+      return this.$app.$def.tools.formatNumber(this.vid.stat.coin)
+    },
+    stat_favorite(){
+      return this.$app.$def.tools.formatNumber(this.vid.stat.favorite)
+    }
   },
   onInit() {
     global.logger.log("[videodetail] load bvid: " + this.bvid);

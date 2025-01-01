@@ -16,7 +16,7 @@
           <image src="/common/article_clock.png" static></image>
           <text class="infofield_text" static>预计阅读用时</text>
           <text class="pinknum" style="margin-left: 5px">
-            {{ this.$app.$def.articletools.estimateReadingTime(article.readInfo.content) }}
+            {{ readingTime }}
           </text>
           <text class="infofield_text" style="margin-left: 5px" static>分钟</text>
         </div>
@@ -46,6 +46,11 @@ export default {
     max_page_num: 0,
     anims: {
       show_loading: false
+    }
+  },
+  computed: {
+    readingTime(){
+      return this.$app.$def.articletools.estimateReadingTime(this.article.readInfo.content)
     }
   },
   SplitArticle(arr, split_count) {

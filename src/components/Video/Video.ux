@@ -14,7 +14,7 @@
             <div class="stat_view">
                 <image class="stat_view_img" src="/common/playcounticon.png"></image>
                 <text class="stat_view_text">
-                    {{ this.$app.$def.tools.formatNumber(video.stat.view) }}
+                    {{ stat_view }}
                 </text>
             </div>
         </div>
@@ -36,6 +36,11 @@ export default {
     },
     onlineimg_width: "160",
     onlineimg_height: "100"
+  },
+  computed: {
+    stat_view(){
+      return this.$app.$def.tools.formatNumber(this.video.stat.view)
+    }
   },
   OpenVideo(bvid) {
     router.push({
