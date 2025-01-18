@@ -1,7 +1,7 @@
 <template>
     <div class="sendbox">
         <div class="textbox" @click="GoInput">
-            <text class="textbox_text">{{this.input_text || "点此输入文字"}}</text>
+            <text class="textbox_text">{{input_text || "点此输入文字"}}</text>
         </div>
         <image @click="GoSend" src="/common/dmpage_sendbtn.png" style="margin-left: 215px; margin-top: 12px"></image>
     </div>
@@ -10,11 +10,17 @@
 <script>
 export default {
   props: ["input_text"],
+  onInit(){
+    this.$watch("input_text","onInputTextChanged")
+  },
   GoInput(){
     this.$emit("clickinput")
   },
   GoSend(){
     this.$emit("clicksend")
+  },
+  onInputTextChanged(newV, oldV){
+    this.input_text = newV
   }
 }
 </script>

@@ -2,17 +2,11 @@
   <div class="time-comp" style="{{compStyle}}">
     <div if="{{!useRectTime}}">
       <div class="circle-time">
-        <text class="timetxt" style="transform: rotate(-12.8deg)">{{ hourHigh }}</text>
-        <text class="timetxt" style="transform: rotate(-6.4deg); margin-bottom: 6px">
-          {{ hourLow }}
-        </text>
-        <text class="timetxt" style="padding: 0px; min-width: 10px; margin-bottom: 10px; justify-content: center">:</text>
-        <text class="timetxt" style="transform: rotate(6.4deg); margin-bottom: 7px">
-          {{ minuteHigh }}
-        </text>
-        <text class="timetxt" style="transform: rotate(12.8deg); margin-bottom: 6px">
-          {{ minuteLow }}
-        </text>
+        <text class="timetxt">{{ hourHigh }}</text>
+        <text class="timetxt">{{ hourLow }}</text>
+        <text class="timetxt">:</text>
+        <text class="timetxt">{{ minuteHigh }}</text>
+        <text class="timetxt">{{ minuteLow }}</text>
       </div>
     </div>
     <div if="{{useRectTime}}" class="rect">
@@ -75,9 +69,8 @@ export default {
 
 .timetxt {
   font-size: 25px;
-  font-weight: 900;
+  font-weight: 600;
   top: 2px;
-  padding: 2px;
 }
 
 .rect-txt {

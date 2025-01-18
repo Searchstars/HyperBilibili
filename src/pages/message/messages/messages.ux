@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <image src="/common/dm_icon.png" style="margin-top: 8px" @click="GoDM()"></image>
+        <image src="/common/dm_icon.png" style="position: absolute; bottom: 0px" @click="GoDM()"></image>
     </div>
 </template>
 

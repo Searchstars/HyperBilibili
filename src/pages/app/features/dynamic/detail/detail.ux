@@ -1,0 +1,18 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+
+<template>
+  <div class="page">
+    <title-bar title="dynamic.detail.title"></title-bar>
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+@import "./detail.less";
+</style>

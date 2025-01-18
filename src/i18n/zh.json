@@ -125,7 +125,10 @@
         "title": "开源软件声明"
     },
     "dynamic": {
-        "title": "动态"
+        "title": "动态",
+        "detail": {
+            "title": "动态详情"
+        }
     },
     "user": {
         "title": "用户主页"

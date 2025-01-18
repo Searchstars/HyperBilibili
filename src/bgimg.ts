@@ -16,6 +16,7 @@ export function Init(){
 
     BGIMG_PAGES_MAP = {
         "pages/app/features/main": BGIMG_STYLES.Pink,
+        "pages/app/features/dynamic": BGIMG_STYLES.Pink,
         "pages/app/features/savedcontent": BGIMG_STYLES.Yellow,
         "pages/search/search": BGIMG_STYLES.Blue,
         "pages/search/searchresult": BGIMG_STYLES.Blue
