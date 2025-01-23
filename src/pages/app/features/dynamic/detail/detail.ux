@@ -1,14 +1,51 @@
 <import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="online-image" src="@components//BetterOnlineImage/BetterOnlineImage.ux"></import>
+<import name="videoshow" src="@components/Video/Video.ux"></import>
 
 <template>
   <div class="page">
     <title-bar title="dynamic.detail.title"></title-bar>
+    <div class="user">
+      <image class="userface" src="{{dyn.modules.module_author.face}}@75w_75h"></image>
+      <div class="userinfo">
+        <text class="username">{{ dyn.modules.module_author.name }}</text>
+        <text style="font-size: 18px; color: #5e5e5e; margin-top: 3px">
+          {{ dyn.modules.module_author.pub_time }}
+        </text>
+        <text style="font-size: 18px; color: #5e5e5e">
+          {{ pubAction }}
+        </text>
+      </div>
+    </div>
+    <div class="ctx">
+      <!-- 动态文本desc 不为空时渲染 -->
+      <text class="dyn-content-text" if="{{dyn.modules.module_dynamic.desc.text}}">{{ dyn.modules.module_dynamic.desc.text }}</text>
+
+      <!-- 图文动态 直接列表图片渲染 -->
+      <online-image if="{{dyn.type == 'DYNAMIC_TYPE_DRAW'}}" for="{{dyn.modules.module_dynamic.major.draw.items}}" src="{{$item.src}}@350w" loading-anim="true"></online-image>
+      <!-- 视频投稿动态 展示视频跳转 -->
+      <videoshow if="{{dyn.type == 'DYNAMIC_TYPE_AV'}}" bvid="{{dyn.modules.module_dynamic.major.archive.bvid}}"></videoshow>
+
+      <text else>该类型动态暂不支持展示</text>
+    </div>
+    <text style="margin-top: 30px"></text>
   </div>
 </template>
 
 <script>
 export default {
-
+  public: {
+    dyn: null,
+    pubAction: "N/A"
+  },
+  onInit(){
+    // 来自子组件push的object传递会变成字符串
+    // 因此需要进行类型检查和手动parse
+    if(typeof(this.dyn) != Object){
+      this.dyn = JSON.parse(this.dyn)
+      console.log(this.dyn)
+    }
+  }
 }
 </script>
 

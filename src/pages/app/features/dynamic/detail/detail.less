@@ -1,0 +1,45 @@
+@import '@less/defs.less';
+@import '@less/color.less';
+
+.user {
+    align-items: center;
+    width: 76%;
+    .flex-row(10px, #00000000);
+}
+
+.userinfo {
+    margin-left: 20px;
+    .flex-column(0px, #00000000);
+}
+
+.userface {
+    .radius(50%);
+    min-width: 65px;
+    min-height: 65px;
+    max-width: 65px;
+    max-height: 65px;
+}
+
+.decorate {
+    position: absolute;
+    right: 0px;
+}
+
+.username {
+    font-size: 24px;
+    font-weight: 600;
+    lines: 1;
+    max-width: 260px;
+    text-overflow: ellipsis;
+}
+
+.ctx {
+    width: 76%;
+    .flex-column(10px, #00000000);
+}
+
+.dyn-content-text {
+    font-size: 22px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+}

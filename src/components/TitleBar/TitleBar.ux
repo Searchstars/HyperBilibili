@@ -1,4 +1,4 @@
-<import name="time-view" src="../TimeView/TimeView.ux"></import>
+<import name="time-view" src="@components/TimeView/TimeView.ux"></import>
 
 <template>
   <div>

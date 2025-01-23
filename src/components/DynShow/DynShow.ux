@@ -1,34 +1,102 @@
-<import name="online-image" src="../BetterOnlineImage/BetterOnlineImage.ux"></import>
+<import name="online-image" src="@components/BetterOnlineImage/BetterOnlineImage.ux"></import>
 
 <template>
-    <div class="comp-root">
-        <div class="user">
-            <image class="userface" src="{{dyn.modules.module_author.face}}@65w_65h"></image>
-            <div class="userinfo">
-                <text class="username">{{ dyn.modules.module_author.name }}</text>
-                <text style="font-size: 18px; color: #5e5e5e; margin-top: 3px">
-                    {{ dyn.modules.module_author.pub_time }}
-                </text>
-                <text style="font-size: 18px; color: #5e5e5e">
-                    {{ dyn.modules.module_author.pub_action }}
-                </text>
-            </div>
-        </div>
-        <div class="content" if="{{dyn.type == 'DYNAMIC_TYPE_DRAW'}}">
-            <text class="dyn-content-text">{{ dyn.modules.module_dynamic.desc.text }}</text>
-            <online-image class="dyn-content-draw-preview" width="180px" height="100px" margin-top="5px"
-                lock-size="true" loading-anim="true" src="{{ dyn.modules.module_dynamic.major.draw.items[0].src }}@180w_100h"></online-image>
-        </div>
+  <div class="comp-root" @click="GoDetail">
+    <div class="user">
+      <image class="userface" src="{{dyn.modules.module_author.face}}@65w_65h"></image>
+      <div class="userinfo">
+        <text class="username">{{ dyn.modules.module_author.name }}</text>
+        <text style="font-size: 18px; color: #5e5e5e; margin-top: 3px">
+          {{ dyn.modules.module_author.pub_time }}
+        </text>
+        <text style="font-size: 18px; color: #5e5e5e">
+          {{ pubAction }}
+        </text>
+      </div>
     </div>
+    <div class="content" if="{{dyn.type == 'DYNAMIC_TYPE_DRAW'}}">
+      <text class="dyn-content-text">{{ dyn.modules.module_dynamic.desc.text }}</text>
+      <online-image class="dyn-content-draw-preview" width="180px" height="100px" margin-top="5px" lock-size="true"
+        loading-anim="true" src="{{ dyn.modules.module_dynamic.major.draw.items[0].src }}@180w_100h"></online-image>
+    </div>
+  </div>
 </template>
 
 <script>
+import router from "@system.router"
 export default {
   props: {
     dyn: {
       type: Object,
       default: {}
     }
+  },
+  data: {
+    pubAction: "未知"
+  },
+  generatePubAction() {
+    if (this.dyn.modules.module_author.pub_action) return this.dyn.modules.module_author.pub_action
+
+    switch (this.dyn.type) {
+      case "DYNAMIC_TYPE_NONE":
+        return "<无效动态>"
+      case "DYNAMIC_TYPE_FORWARD":
+        return "转发了动态"
+      case "DYNAMIC_TYPE_AV":
+        return "投稿了视频"
+      case "DYNAMIC_TYPE_PGC":
+        return "发布了剧集"
+      case "DYNAMIC_TYPE_COURSES":
+        return "发布了课程动态"
+      case "DYNAMIC_TYPE_WORD":
+        return "发布了文本动态"
+      case "DYNAMIC_TYPE_DRAW":
+        return "发布了图文动态"
+      case "DYNAMIC_TYPE_ARTICLE":
+        return "投稿了专栏"
+      case "DYNAMIC_TYPE_MUSIC":
+        return "投稿了音频"
+      case "DYNAMIC_TYPE_COMMON_SQUARE":
+        return "分享了内容"
+      case "DYNAMIC_TYPE_COMMON_VERTICAL":
+        return "发布了竖屏动态"
+      case "DYNAMIC_TYPE_LIVE":
+        return "分享了直播间"
+      case "DYNAMIC_TYPE_MEDIALIST":
+        return "分享了收藏夹"
+      case "DYNAMIC_TYPE_COURSES_SEASON":
+        return "发布了课程内容"
+      case "DYNAMIC_TYPE_COURSES_BATCH":
+        return "<批量课程动态>"
+      case "DYNAMIC_TYPE_AD":
+        return "<广告动态>"
+      case "DYNAMIC_TYPE_APPLET":
+        return "<小程序动态>"
+      case "DYNAMIC_TYPE_SUBSCRIPTION":
+        return "<订阅动态>"
+      case "DYNAMIC_TYPE_LIVE_RCMD":
+        return "分享了直播开播"
+      case "DYNAMIC_TYPE_BANNER":
+        return "发布了横幅动态"
+      case "DYNAMIC_TYPE_UGC_SEASON":
+        return "更新了合集内容"
+      case "DYNAMIC_TYPE_SUBSCRIPTION_NEW":
+        return "<新订阅动态>"
+      default:
+        return "<未知动态类型>"
+    }
+  },
+  GoDetail() {
+    router.push({
+      uri: "pages/app/features/dynamic/detail",
+      params: {
+        dyn: this.dyn,
+        pubAction: this.generatePubAction()
+      }
+    })
+  },
+  onInit(){
+    this.pubAction = this.generatePubAction()
   }
 }
 </script>
@@ -78,5 +146,7 @@ export default {
   font-size: 20px;
   font-weight: 600;
   max-width: 100%;
+  max-height: 100px;
+  text-overflow: ellipsis;
 }
 </style>

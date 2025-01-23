@@ -152,6 +152,9 @@
             "pages/app/features/dynamic": {
                 "component": "dynamic"
             },
+            "pages/app/features/dynamic/detail": {
+                "component": "detail"
+            },
             "pages/app/features/settings/opensoftware": {
                 "component": "opensoftware"
             },

@@ -1,4 +1,4 @@
-<import name="input-method" src="../InputMethod/InputMethod.ux"></import>
+<import name="input-method" src="@components/InputMethod/InputMethod.ux"></import>
 
 <template>
     <div class="inputpanel">

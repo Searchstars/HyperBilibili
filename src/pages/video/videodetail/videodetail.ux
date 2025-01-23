@@ -40,16 +40,8 @@
           <text class="vidtooltext">{{ $t("video.aisummary") }}</text>
         </div>
         <div class="vidtool" @click="WIPTips">
-          <image class="vidtoolimg" src="/common/vidtool_generatemanifest.png"></image>
-          <text class="vidtooltext">{{ $t("video.manifest") }}</text>
-        </div>
-        <div class="vidtool" @click="WIPTips">
           <image class="vidtoolimg" src="/common/vidtool_watchlater.png"></image>
           <text class="vidtooltext">{{ $t("video.showLater") }}</text>
-        </div>
-        <div class="vidtool" @click="WIPTips">
-          <image class="vidtoolimg" src="/common/vidtool_watchonphone.png"></image>
-          <text class="vidtooltext">{{ $t("video.showOnPhone") }}</text>
         </div>
       </scroll>
       <default-button text="video.sendReply" margin-top="20px" @click="Reply"></default-button>
