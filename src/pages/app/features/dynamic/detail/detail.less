@@ -3,7 +3,7 @@
 
 .user {
     align-items: center;
-    width: 76%;
+    .w(76%);
     .flex-row(10px, #00000000);
 }
 
@@ -34,7 +34,7 @@
 }
 
 .ctx {
-    width: 76%;
+    .w(76%);
     .flex-column(10px, #00000000);
 }
 
@@ -42,4 +42,22 @@
     font-size: 22px;
     font-weight: 600;
     text-overflow: ellipsis;
+}
+
+.ctx-forwarded-box {
+    .w(100%);
+    .radius(25px);
+    .flex-column(10px);
+    margin-top: 5px;
+}
+
+.txt-at {
+    color: #2886f8;
+    max-width: 200px;
+    text-overflow: ellipsis;
+}
+
+.ctx-forwarded-txt {
+    .font-semibold();
+    font-size: 18px;
 }
