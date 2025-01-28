@@ -1,0 +1,33 @@
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+
+<template>
+  <div class="page">
+    <image style="margin-top: 44px; width: 63px; height: 54px; object-fit: scale-down" src="/common/warning_icon.png"></image>
+    <text style="font-weight: 600; font-size: 28px; margin-top: 15px;">{{ $t("sessionood.title") }}</text>
+    <text style="font-weight: 600; font-size: 28px; margin-top: 18px; width: 75%">{{ $t("sessionood.sectitle") }}</text>
+    <default-button primary="true" margin-top="35px" text="sessionood.relogin" @click="Relogin"></default-button>
+    <default-button margin-top="15px" text="sessionood.exit" @click="Exit"></default-button>
+    <text style="margin-top: 25px;"></text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  Relogin(){
+    global.biliclient.logOut()
+    router.clear()
+    router.replace({
+      uri: "pages/app/entry/splash"
+    })
+  },
+  Exit(){
+    router.clear()
+    router.back()
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+</style>

@@ -6,7 +6,7 @@
   <div class="page">
     <title-bar title="dynamic.detail.title"></title-bar>
     <div class="user">
-      <image class="userface" src="{{dyn.modules.module_author.face}}@75w_75h"></image>
+      <image class="userface" src="{{dyn.modules.module_author.face}}@75w_75h" alt="/common/fullgray.png"></image>
       <div class="userinfo">
         <text class="username" style="margin-bottom: 3px">{{ dyn.modules.module_author.name }}</text>
         <text style="font-size: 18px; color: #5e5e5e;" if="{{ dyn.modules.module_author.pub_time }}">

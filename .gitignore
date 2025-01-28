@@ -7,3 +7,4 @@
 .husky/
 */__pycache__
 src/buildinfo.ts
+**/.DS_Store

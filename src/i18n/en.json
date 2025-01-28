@@ -127,5 +127,11 @@
     },
     "user": {
         "title": "User"
+    },
+    "sessionood": {
+        "title": "Some problems have occurred",
+        "sectitle": "Your account login seems to have expired, please try to log in again!",
+        "relogin": "Login again",
+        "exit": "Exit"
     }
 }

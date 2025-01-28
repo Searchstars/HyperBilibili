@@ -59,9 +59,10 @@ export const BilibiliClientAPIRequestMethods = {
             });
             return response.data;
         } catch (error) {
-            global.logger.error(`GET请求失败，错误码 = ${error.code}`);
-            throw error;
+            global.logger.error(`GET请求失败，详细数据：`, error);
         }
+
+        return void 0;
     },
 
     // 发送带Wbi签名的GET请求
@@ -89,9 +90,10 @@ export const BilibiliClientAPIRequestMethods = {
             });
             return response.data;
         } catch (error) {
-            global.logger.error(`POST请求失败，错误码 = ${error.code}`);
-            throw error;
+            global.logger.error(`POST请求失败，详细数据：`, error);
         }
+
+        return void 0;
     },
 
     // 发送带Wbi签名的POST请求

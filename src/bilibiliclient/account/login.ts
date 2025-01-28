@@ -1,4 +1,4 @@
-import { storage } from '../../tsimports';
+import { storage, router } from '../../tsimports';
 import { AccountData } from './accountData';
 
 // 登录相关的方法
@@ -6,6 +6,14 @@ export const BilibiliClientLoginMethods = {
     // 更新账号信息
     async updateAccountInfo(this: any): Promise<boolean> {
         const accountInfoResponse = await this.getRequest("https://api.bilibili.com/x/web-interface/nav");
+
+        if(!accountInfoResponse.data.data.isLogin){
+            router.clear();
+            router.replace({
+                uri: "pages/error/sessionood"
+            })
+        }
+
         this.accountInfo = accountInfoResponse.data.data;
         return !!this.accountInfo;
     },
@@ -38,8 +46,11 @@ export const BilibiliClientLoginMethods = {
             this.dedeUserID = accountData.dedeUserID;
             this.sid = accountData.sid;
             global.logger.log('使用存储的账号数据登录成功');
+            global.logger.log('拉账号信息')
             await this.updateAccountInfo();
+            global.logger.log('拉buvid')
             await this.updateBUVID();
+
             return { success: true, message: "登录成功" };
         } else if (send_req) {
             const response = await this.getRequest(`https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=${this.qrCodeKey}`);

@@ -22,22 +22,27 @@
     <div class="setbase" @click="ClearTmp()">
       <image class="seticon" src="/common/settings_removetmp.png"></image>
       <text class="setext_small">{{ $t("settings.clearTemp") }}</text>
-      <image src="/common/arrow_right.png"></image>
+      <image class="arrow" src="/common/arrow_right.png"></image>
     </div>
     <div class="setbase" @click="logout()">
       <image class="seticon" src="/common/settings_logout.png"></image>
       <text class="setext_small">{{ $t("settings.logOut") }}</text>
-      <image src="/common/arrow_right.png"></image>
+      <image class="arrow" src="/common/arrow_right.png"></image>
     </div>
     <div class="setbase" @click="GoDonation()">
       <image class="seticon" src="/common/donation.png"></image>
       <text class="setext_small">{{ $t("settings.donation") }}</text>
-      <image src="/common/arrow_right.png"></image>
+      <image class="arrow" src="/common/arrow_right.png"></image>
+    </div>
+    <div class="setbase" @click="GoAbout()">
+      <image class="seticon" src="/common/settings_about.png"></image>
+      <text class="setext_small">{{ $t("settings.about") }}</text>
+      <image class="arrow" src="/common/arrow_right.png"></image>
     </div>
     <div class="setbase" @click="GoDebug()">
       <div class="seticon"></div>
       <text class="setext_small">{{ $t("settings.debug") }}</text>
-      <image src="/common/arrow_right.png"></image>
+      <image class="arrow" src="/common/arrow_right.png"></image>
     </div>
     <image style="margin-top: 30px" src="/common/opensource_warning.png"></image>
     <text style="margin-top: 25px"></text>

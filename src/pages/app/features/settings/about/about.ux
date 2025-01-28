@@ -1,8 +1,9 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+
 <template>
   <div class="page">
-    <image src="/common/settings_about.png" style="margin-top: 22px"></image>
-    <text class="text" style="margin-top: 5px">{{ $t("about.title") }}</text>
-    <div class="appbar" style="margin-top: 22px">
+    <title-bar title="about.title"></title-bar>
+    <div class="appbar">
       <image class="logo" src="/common/logo.png"></image>
       <text class="text" style="margin-left: 20px">HyperBili</text>
       <text class="text ver">{{ version }}</text>

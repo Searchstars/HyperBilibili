@@ -5,6 +5,16 @@
   <div class="page">
     <title-bar title="user.title"></title-bar>
     <user-info account-info="{{user}}" if="{{loaded}}"></user-info>
+    <div class="ctxcard" if="{{loaded}}">
+      <div class="ctxdesc">
+        <div style="width: 280px;">
+          <text class="desctxt">TA的视频</text>
+          <text class="desctxt gs" style="margin-left: 15px">{{navnum.video}}</text>
+        </div>
+        <text class="desctxt gs">></text>
+      </div>
+
+    </div>
     <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
@@ -16,6 +26,8 @@ export default {
   },
   private: {
     user: {},
+    stat: {},
+    navnum: {},
     anims: {
       show_loading: false
     },
@@ -23,7 +35,11 @@ export default {
   },
   async LoadUserInfo(){
     this.anims.loading.start()
+
     this.user = await global.biliclient.getUserInfoByUID(this.uid)
+    this.stat = await global.biliclient.getUserStatByUID(this.uid)
+    this.navnum = await global.biliclient.getUserNavnumByUID(this.uid)
+
     this.anims.loading.stop()
     this.anims.show_loading = false
     this.loaded = true

@@ -160,6 +160,9 @@
             },
             "pages/user": {
                 "component": "user"
+            },
+            "pages/error/sessionood": {
+                "component": "sessionood"
             }
         }
     }

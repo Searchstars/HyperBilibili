@@ -4,7 +4,23 @@ export const BilibiliClientUserMethods = {
         const url = `https://api.bilibili.com/x/space/wbi/acc/info`;
         const response = await this.getRequestWbi(url, {
             mid: uid
-        })
+        });
+
+        return response.data.data
+    },
+
+    // 获取单个用户的状态数
+    async getUserStatByUID(this: any, uid: String) {
+        const url = `https://api.bilibili.com/x/relation/stat`;
+        const response = await this.getRequest(`${url}?vmid=${uid}`);
+
+        return response.data.data
+    },
+
+    // 获取单个用户的导航栏状态数
+    async getUserNavnumByUID(this: any, uid: String) {
+        const url = `https://api.bilibili.com/x/space/navnum`;
+        const response = await this.getRequest(`${url}?mid=${uid}`);
 
         return response.data.data
     },
