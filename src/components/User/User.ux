@@ -1,5 +1,5 @@
 <template>
-    <div class="user">
+    <div class="user" onclick="OpenUser(user.mid)">
         <div class="userinfo">
             <image src="{{user.upic}}@46w_46h" alt="/common/fullgray.png"
                 style="border-radius: 50%; width: 46px; height: 46px; object-fit: scale-down"></image>
@@ -34,12 +34,22 @@
 </template>
 
 <script>
+import router from "@system.router"
+
 export default {
     props: ["user"],
     computed: {
         fans(){
             return this.$app.$def.tools.formatNumber(this.user.fans)
         }
+    },
+    OpenUser(id) {
+        router.push({
+            uri: "pages/user",
+            params: {
+                uid: id
+            }
+        })
     },
     onInit(){
         if(!(this.user.upic.includes("http://") || this.user.upic.includes("https://"))){

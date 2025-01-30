@@ -126,7 +126,10 @@
         }
     },
     "user": {
-        "title": "User"
+        "title": "User",
+        "videos": "Videos",
+        "dynamices": "Dynamic",
+        "nocontent": "There is no content to show at present."
     },
     "sessionood": {
         "title": "Some problems have occurred",

@@ -1,0 +1,71 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="videoshow" src="@components/Video/Video.ux"></import>
+<import
+  name="floating-page-changer"
+  src="@components/FloatingPageChanger/FloatingPageChanger.ux"
+></import>
+
+<template>
+  <div class="page">
+    <scroll class="scroll" scroll-y="true">
+      <title-bar title="user.uservideos.title"></title-bar>
+      <div style="flex-direction: column; width: 77%">
+        <videoshow if="{{!anims.show_loading}}" for="{{vids.list.vlist}}" bvid="{{$item.bvid}}"></videoshow>
+      </div>
+      <text style="margin-top: 30px"></text>
+    </scroll>
+    <floating-page-changer style="position: absolute" current_pn="{{current_pn}}" @backpn="BackPN"
+      @nextpn="NextPN"></floating-page-changer>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
+    </image>
+  </div>
+</template>
+
+<script>
+export default {
+  public: {
+    uid: 1
+  },
+  private: {
+    vids: null,
+    current_pn: 1,
+    maxpn: 1,
+    anims: {
+      show_loading: false
+    }
+  },
+  BackPN() {
+    if (this.current_pn > 1) {
+      this.current_pn--
+      this.LoadVideos(false)
+    }
+  },
+  NextPN() {
+    if (this.current_pn < this.maxpn) {
+      this.current_pn++
+      this.LoadVideos(false)
+    }
+  },
+  async LoadVideos(init) {
+    this.anims.show_loading = true
+    this.anims.loading.start()
+
+    this.vids = null
+    this.vids = await global.biliclient.getUserVideosByUID(this.uid, this.current_pn, 5)
+    if (init) {
+      this.maxpn = Math.ceil(this.vids.page.count / 5)
+    }
+
+    this.anims.show_loading = false
+    this.anims.loading.stop()
+  },
+  onInit() {
+    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    this.LoadVideos(true)
+  }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+</style>

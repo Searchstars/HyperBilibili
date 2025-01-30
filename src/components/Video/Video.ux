@@ -1,25 +1,28 @@
 <import name="online-image" src="@components/BetterOnlineImage/BetterOnlineImage.ux"></import>
 
 <template>
-  <div>
-    <div class="vid" @click="OpenVideo(video.bvid)" if="{{loadComp}}">
-        <div style="{{vidinfo_style}}" class="vidinfo">
-            <div class="vidpicture" style="{{vidpicture_style}}">
-              <online-image width="{{vidpicture_style['max-width']}}" height="{{vidpicture_style['max-height']}}" lock-size="true" border-radius="30px" object-fit="cover" loading-anim="true" src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></online-image>
-            </div>
-            <text class="vidtitle" if="{{!useColumnTitle}}">{{ video.title }}</text>
+  <div class="vid">
+    <div class="loadedbox" @click="OpenVideo(video.bvid)" if="{{loadComp}}">
+      <div style="{{vidinfo_style}}" class="vidinfo">
+        <div class="vidpicture" style="{{vidpicture_style}}">
+          <online-image width="{{vidpicture_style['max-width']}}" height="{{vidpicture_style['max-height']}}"
+            lock-size="true" border-radius="30px" object-fit="cover" loading-anim="true"
+            src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></online-image>
         </div>
-        <text class="vidtitle_column" if="{{useColumnTitle}}">{{ video.title }}</text>
-        <div class="vidstat">
-            <text class="upinfo">UP：{{ video.owner.name }}</text>
-            <div class="stat_view">
-                <image class="stat_view_img" src="/common/playcounticon.png"></image>
-                <text class="stat_view_text">
-                    {{ stat_view }}
-                </text>
-            </div>
+        <text class="vidtitle" if="{{!useColumnTitle}}">{{ video.title }}</text>
+      </div>
+      <text class="vidtitle_column" if="{{useColumnTitle}}">{{ video.title }}</text>
+      <div class="vidstat">
+        <text class="upinfo">UP：{{ video.owner.name }}</text>
+        <div class="stat_view">
+          <image class="stat_view_img" src="/common/playcounticon.png"></image>
+          <text class="stat_view_text">
+            {{ stat_view }}
+          </text>
         </div>
+      </div>
     </div>
+    <text else class="compLoadingTip">视频加载中...</text>
   </div>
 </template>
 
@@ -41,7 +44,7 @@ export default {
     loadComp: false
   },
   computed: {
-    stat_view(){
+    stat_view() {
       return this.$app.$def.tools.formatNumber(this.video.stat.view)
     }
   },
@@ -52,47 +55,47 @@ export default {
     })
   },
   // 在线图片展示大小（UI层）
-  SetOnlineImageSize(width, height){
-    this.vidpicture_style["min-width"] = width + "px";
-    this.vidpicture_style["max-width"] = width + "px";
-    this.vidpicture_style["min-height"] = height + "px";
-    this.vidpicture_style["max-height"] = height + "px";
+  SetOnlineImageSize(width, height) {
+    this.vidpicture_style["min-width"] = width + "px"
+    this.vidpicture_style["max-width"] = width + "px"
+    this.vidpicture_style["min-height"] = height + "px"
+    this.vidpicture_style["max-height"] = height + "px"
   },
   // 在线图片加载大小（组件层）
   // 使用比展示大小更小的加载大小可以节省设备RAM、降低渲染压力、节省流量等
   // 推荐是展示大小的等比例缩放
-  SetOnlineImageLoadSize(width, height){
-    this.onlineimg_width = width;
-    this.onlineimg_height = height;
+  SetOnlineImageLoadSize(width, height) {
+    this.onlineimg_width = width
+    this.onlineimg_height = height
   },
-  doStyleAdjustTask(){
-    const deviceInfo = global.DEVICE_INFO;
-    if (deviceInfo.screenShape == "rect" || this.video.title.length > 25){
-      this.useColumnTitle = true;
+  doStyleAdjustTask() {
+    const deviceInfo = global.DEVICE_INFO
+    if (deviceInfo.screenShape == "rect" || this.video.title.length > 25) {
+      this.useColumnTitle = true
       // 手环Pro 系列
-      if (deviceInfo.screenWidth <= 380){
-        this.SetOnlineImageSize(200, 150);
-        this.SetOnlineImageLoadSize(100, 75);
+      if (deviceInfo.screenWidth <= 380) {
+        this.SetOnlineImageSize(200, 150)
+        this.SetOnlineImageLoadSize(100, 75)
       }
       // RW系列
-      else if (deviceInfo.screenShape == "rect"){
-        this.SetOnlineImageSize(265, 150);
-        this.SetOnlineImageLoadSize(265, 150);
+      else if (deviceInfo.screenShape == "rect") {
+        this.SetOnlineImageSize(265, 150)
+        this.SetOnlineImageLoadSize(265, 150)
       }
       // 圆屏系列
-      else{
-        this.SetOnlineImageSize(300, 150);
-        this.SetOnlineImageLoadSize(300, 150);
+      else {
+        this.SetOnlineImageSize(300, 150)
+        this.SetOnlineImageLoadSize(300, 150)
       }
     }
   },
-  doVidObjectPatch(){
-    if(!(this.video.pic.includes("http://") || this.video.pic.includes("https://"))){
+  doVidObjectPatch() {
+    if (!(this.video.pic.includes("http://") || this.video.pic.includes("https://"))) {
       this.video.pic = "https:" + this.video.pic
     }
   },
-  async asyncInit(){
-    if(!this.video){
+  async asyncInit() {
+    if (!this.video) {
       this.video = await global.biliclient.getVideoInfoByBVID(this.bvid)
     }
 
@@ -101,20 +104,26 @@ export default {
     this.doVidObjectPatch()
     this.doStyleAdjustTask()
   },
-  onInit(){
+  onInit() {
     this.asyncInit()
   }
 }
 </script>
 
 <style lang="less">
-@import '@less/global.less';
+@import "@less/global.less";
 
 .vid {
   margin-top: 10px;
   padding: 15px 15px;
   border-radius: 25px;
   background-color: #262626af;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loadedbox {
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -179,5 +188,10 @@ export default {
   font-size: 14px;
   font-weight: 600;
   margin-left: 5px;
+}
+
+.compLoadingTip {
+  font-weight: 600;
+  font-size: 18px;
 }
 </style>

@@ -163,6 +163,12 @@
             },
             "pages/error/sessionood": {
                 "component": "sessionood"
+            },
+            "pages/user/userdynamic": {
+                "component": "userdynamic"
+            },
+            "pages/user/uservideos": {
+                "component": "uservideos"
             }
         }
     }

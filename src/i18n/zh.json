@@ -131,7 +131,13 @@
         }
     },
     "user": {
-        "title": "用户主页"
+        "title": "用户主页",
+        "videos": "TA的视频",
+        "dynamices": "TA的动态",
+        "nocontent": "暂无可展示内容",
+        "uservideos": {
+            "title": "用户投稿"
+        }
     },
     "sessionood": {
         "title": "遇到了一些问题",
