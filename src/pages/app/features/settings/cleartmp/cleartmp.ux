@@ -1,0 +1,220 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+
+<template>
+  <div class="page">
+    <title-bar title="cleartmp.title"></title-bar>
+    <text class="cleartip" style="margin-top: 10px">请先选择类别</text>
+    <text class="cleartip">随后点击按钮以进行清理</text>
+    <div class="typebox" style="margin-top: 25px">
+      <div style="padding: 5px; width: 77%" for="{{tmps}}">
+        <div class="tmptype" onclick="SelectHandler($item.alias)" style="background-color: {{typeColors[$item.alias]}}">
+          <text class="typetxt">{{ $item.name }}</text>
+          <text class="typesize">{{ $item.size }}</text>
+        </div>
+      </div>
+    </div>
+    <default-button @click="ClearClick" primary="true" margin-top="25px" text="cleartmp.clear" disabled="{{cantClear}}"></default-button>
+    <text style="margin-top: 30px"></text>
+  </div>
+</template>
+
+<script>
+import prompt from "@system.prompt"
+import { asyncFile } from "../../../../../asyncapi/file"
+
+export default {
+  private: {
+    tmps: [],
+    cantClear: true,
+    clearControl: {
+      imgs: false,
+      logs: false,
+      sc: false,
+    },
+    typeColors: {
+      imgs: "#434343",
+      logs: "#434343",
+      sc: "#434343",
+      others: "#222222"
+    }
+  },
+  RefreshPage(){
+    this.cantClear = true
+    this.clearControl = {
+      imgs: false,
+      logs: false,
+      sc: false,
+    }
+    this.typeColors = {
+      imgs: "#434343",
+      logs: "#434343",
+      sc: "#434343",
+      others: "#222222"
+    }
+  },
+  async ClearClick() {
+    const tasks = []
+
+    if (this.clearControl.imgs) {
+      const imgTemp = this.tmps.find(t => t.alias === "imgs")
+      if (imgTemp) {
+        imgTemp.list.forEach(uri => {
+          tasks.push(asyncFile.delete({ uri }))
+        })
+      }
+    }
+
+    if (this.clearControl.logs) {
+      const logTemp = this.tmps.find(t => t.alias === "logs")
+      if (logTemp) {
+        logTemp.list.forEach(uri => {
+          tasks.push(asyncFile.delete({ uri }))
+        })
+      }
+    }
+
+    if (this.clearControl.sc) {
+      const contents = await global.savedcontent.SavedContentManager.listAllContent()
+      contents.forEach(ct => {
+        tasks.push(global.savedcontent.SavedContentManager.deleteContent(ct.id))
+      })
+    }
+
+    await Promise.all(tasks)
+
+    prompt.showToast({
+      message: "清理完毕"
+    })
+
+    this.ScanTemps()
+    this.RefreshPage()
+  },
+  SelectHandler(name) {
+    switch (name) {
+      case "imgs":
+        this.clearControl.imgs = !this.clearControl.imgs
+        this.typeColors.imgs = this.clearControl.imgs ? "#FF7DA8" : "#434343"
+        break
+      case "logs":
+        this.clearControl.logs = !this.clearControl.logs
+        this.typeColors.logs = this.clearControl.logs ? "#FF7DA8" : "#434343"
+        break
+      case "sc":
+        if(!this.clearControl.sc){
+          prompt.showDialog({
+            message: "清除缓存内容即意味着清除您之前缓存的专栏、音频等内容，且该操作不可逆。确定要继续吗？",
+            success: (data) => {
+              this.clearControl.sc = true
+              this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343";
+            }
+          })
+        }
+        else{
+          this.clearControl.sc = false
+          this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343";
+        }
+        break
+    }
+
+    this.cantClear = !(this.clearControl.imgs || this.clearControl.logs || this.clearControl.sc)
+    global.logger.log("[ClearTmp.SelectHandler] cantClear: ", this.cantClear)
+  },
+  BytesToMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2)
+  },
+  async getSavedContentList() {
+    try {
+      const contents = await global.savedcontent.SavedContentManager.listAllContent()
+      const ret = await Promise.all(
+        contents.map(async content => {
+          const data = await asyncFile.get({ uri: content.fileUri })
+          return {
+            uri: content.fileUri,
+            length: data.length,
+            _labelIsSavedContent: true,
+          }
+        })
+      )
+      return ret
+    } catch (e) {
+      global.logger.error("在扫描临时文件（统计缓存内容）时出错：", e.toString())
+    }
+  },
+  async ScanTemps() {
+    try {
+      // 准备统计对象
+      const totalStats = {
+        images: { count: 0, size: 0, list: [] },
+        logs: { count: 0, size: 0, list: [] },
+        savedContent: { count: 0, size: 0 },
+        others: { count: 0, size: 0 },
+      }
+
+      // 并行获取文件列表
+      const [rootFiles, logFiles, savedContentFiles] = await Promise.all([
+        asyncFile.list({ uri: "internal://files/" }),
+        asyncFile.list({ uri: "internal://files/logs" }),
+        this.getSavedContentList(),
+      ])
+
+      const fileList = [...rootFiles.fileList, ...logFiles.fileList, ...savedContentFiles]
+
+      for (const file of fileList) {
+        const { uri, length, _labelIsSavedContent } = file
+
+        if (/\.(jpg|png|avif|gif)/i.test(uri)) {
+          totalStats.images.count++
+          totalStats.images.size += length
+          totalStats.images.list.push(uri)
+        } else if (/\.log$/i.test(uri)) {
+          totalStats.logs.count++
+          totalStats.logs.size += length
+          totalStats.logs.list.push(uri)
+        } else if (_labelIsSavedContent) {
+          totalStats.savedContent.count++
+          totalStats.savedContent.size += length
+        } else {
+          totalStats.others.count++
+          totalStats.others.size += length
+        }
+      }
+
+      this.tmps = [
+        {
+          name: "临时图片",
+          alias: "imgs",
+          size: `${this.BytesToMB(totalStats.images.size)} MB`,
+          list: totalStats.images.list,
+        },
+        {
+          name: "日志文件",
+          alias: "logs",
+          size: `${this.BytesToMB(totalStats.logs.size)} MB`,
+          list: totalStats.logs.list,
+        },
+        {
+          name: "缓存内容",
+          alias: "sc",
+          size: `${this.BytesToMB(totalStats.savedContent.size)} MB`,
+        },
+        {
+          name: "其它",
+          alias: "others",
+          size: `${this.BytesToMB(totalStats.others.size)} MB`
+        }
+      ]
+    } catch (e) {
+      global.logger.error("在扫描临时文件时出错：", e.toString())
+    }
+  },
+  onInit() {
+    this.ScanTemps()
+  },
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+@import "./cleartmp.less";
+</style>

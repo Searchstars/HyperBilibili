@@ -6,44 +6,62 @@
 
 <script>
 export default {
-    props: {
-        text: {
-            default: ""
-        },
-        marginTop: {
-            default: ""
-        },
-        primary: {
-            default: "" //默认false 即空字符串
-        },
-        disabled: {
-            default: ""
-        },
-        color_bg: {
-            default: "#262626"
-        },
-        color_text: {
-            default: "#ffffff"
-        }
+  props: {
+    text: {
+      default: ""
     },
-    Click(){
-        if(!this.disabled){
-            this.$emit('click')
-        }
+    marginTop: {
+      default: ""
     },
-    onInit(){
-        if(this.primary){
-            this.color_bg = "#FF7DA8"
-        }
-        if(this.disabled){
-            this.color_text = "#5F5F5F"
-        }
+    primary: {
+      default: "" //默认false 即空字符串
+    },
+    disabled: {
+      default: false,
+      type: Boolean
     }
+  },
+  data: {
+    disabledReal: false,
+    color_bg: "#262626",
+    color_text: "#ffffff"
+  },
+  Click() {
+    if (!this.disabledReal) {
+      this.$emit("click")
+    }
+  },
+  watchDisabledChange(newV, oldV) {
+    global.logger.log("[DefaultButton.watchDisabledChange] newV=", newV)
+
+    if (newV) {
+      this.color_bg = "#262626"
+      this.color_text = "#5F5F5F"
+    } else {
+      this.color_text = "#ffffff"
+      if (this.primary) {
+        this.color_bg = "#FF7DA8"
+      }
+    }
+
+    this.disabledReal = newV
+
+    global.logger.log("[DefaultButton.watchDisabledChange] disabledReal=", this.disabledReal)
+  },
+  onInit() {
+    if (this.primary) {
+      this.color_bg = "#FF7DA8"
+    }
+    // 初始化调用
+    this.watchDisabledChange(this.disabled, null)
+
+    this.$watch("disabled", "watchDisabledChange")
+  }
 }
 </script>
 
 <style lang="less">
-@import '@less/global.less';
+@import "@less/global.less";
 
 .featurebtn {
   width: 322px;

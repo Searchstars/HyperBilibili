@@ -7,11 +7,13 @@ const fs = require('fs');
 const gitCommitHash = childProcess.execSync('git rev-parse HEAD').toString().trim();
 const username = os.userInfo().username;
 const buildTime = new Date().toISOString();
+const designWidth = JSON.parse(fs.readFileSync("src/manifest.json")).config.designWidth
 
 const buildInfoContent = `
   export const GIT_COMMIT_HASH = "${gitCommitHash}";
   export const BUILD_TIME = "${buildTime}";
   export const BUILD_USER = "${username}";
+  export const DESIGN_WIDTH = ${designWidth};
 `;
 
 const buildInfoPath = path.resolve(__dirname, 'src/buildinfo.ts');

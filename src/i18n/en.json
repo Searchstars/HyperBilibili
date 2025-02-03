@@ -129,12 +129,30 @@
         "title": "User",
         "videos": "Videos",
         "dynamices": "Dynamic",
-        "nocontent": "There is no content to show at present."
+        "nocontent": "There is no content to show at present.",
+        "senddm": "Send DM",
+        "uservideos": {
+            "title": "User contributions"
+        }
     },
     "sessionood": {
         "title": "Some problems have occurred",
         "sectitle": "Your account login seems to have expired, please try to log in again!",
         "relogin": "Login again",
         "exit": "Exit"
+    },
+    "permissionerror": {
+        "title": "Permission Error",
+        "sectitle": "You have not granted the necessary permissions to run HyperBili. Please restart the app and make sure that all permissions requested by the app have been granted.",
+        "exit": "Exit"
+    },
+    "screenwidtherror": {
+        "title": "Screen width does not match",
+        "sectitle": "The target design screen width of this version of HyperBili is not equal to the screen width of the device you are currently using. Please make sure that you download the correct version for your device from the official website, otherwise this may mean that HyperBili does not currently support your device.",
+        "exit": "Exit"
+    },
+    "cleartmp": {
+        "title": "Clear cache",
+        "clear": "Clear now"
     }
 }

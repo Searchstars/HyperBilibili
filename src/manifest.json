@@ -164,11 +164,20 @@
             "pages/error/sessionood": {
                 "component": "sessionood"
             },
+            "pages/error/permissionerror": {
+                "component": "permissionerror"
+            },
+            "pages/error/screenwidtherror": {
+                "component": "screenwidtherror"
+            },
             "pages/user/userdynamic": {
                 "component": "userdynamic"
             },
             "pages/user/uservideos": {
                 "component": "uservideos"
+            },
+            "pages/app/features/settings/cleartmp": {
+                "component": "cleartmp"
             }
         }
     }

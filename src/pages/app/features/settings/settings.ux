@@ -82,8 +82,8 @@ export default {
     })
   },
   ClearTmp() {
-    prompt.showToast({
-      message: "当前不可用"
+    router.push({
+      uri: "pages/app/features/settings/cleartmp"
     })
   },
   SwitchSet(name) {

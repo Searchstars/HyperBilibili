@@ -1,0 +1,25 @@
+<import name="default-button" src="@components/DefaultButton/DefaultButton.ux"></import>
+
+<template>
+  <div class="page">
+    <image style="margin-top: 44px; width: 63px; height: 54px; object-fit: scale-down" src="/common/warning_icon.png"></image>
+    <text style="font-weight: 600; font-size: 28px; margin-top: 15px;">{{ $t("screenwidtherror.title") }}</text>
+    <text style="font-weight: 600; font-size: 28px; margin-top: 18px; width: 75%">{{ $t("screenwidtherror.sectitle") }}</text>
+    <default-button margin-top="15px" text="screenwidtherror.exit" @click="Exit"></default-button>
+    <text style="margin-top: 25px;"></text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+export default {
+  Exit(){
+    router.clear()
+    router.back()
+  }
+}
+</script>
+
+<style lang="less">
+@import '@less/global.less';
+</style>
