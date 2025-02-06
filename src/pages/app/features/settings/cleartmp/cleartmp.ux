@@ -7,6 +7,7 @@
     <text class="cleartip" style="margin-top: 10px">请先选择类别</text>
     <text class="cleartip">随后点击按钮以进行清理</text>
     <div class="typebox" style="margin-top: 25px">
+      <text if="{{tmps.length < 1}}" style="font-weight: 600; font-size: 24px; color: #9E9E9E">缓存文件扫描中...</text>
       <div style="padding: 5px; width: 77%" for="{{tmps}}">
         <div class="tmptype" onclick="SelectHandler($item.alias)" style="background-color: {{typeColors[$item.alias]}}">
           <text class="typetxt">{{ $item.name }}</text>
@@ -107,6 +108,8 @@ export default {
             success: (data) => {
               this.clearControl.sc = true
               this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343";
+              // 由于这是异步函数，因此需要重新做cantClear检测
+              this.cantClear = !(this.clearControl.imgs || this.clearControl.logs || this.clearControl.sc)
             }
           })
         }

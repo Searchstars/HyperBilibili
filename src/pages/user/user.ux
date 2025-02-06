@@ -30,7 +30,7 @@
         <text class="desctxt gs">></text>
       </div>
     </div>
-    <default-button @click="GoDMPage" if="{loaded}" margin-top="25px" primary="true" text="user.senddm"></default-button>
+    <default-button @click="GoDMPage" if="{{loaded}}" margin-top="25px" primary="true" text="user.senddm"></default-button>
     <text style="margin-top: 30px"></text>
     <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>

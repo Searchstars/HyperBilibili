@@ -3,15 +3,15 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; margin-top: 233px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 233px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
+    </image>
     <scroll class="scroll" scroll-y="true" id="mainscroll" bounces="true">
       <div for="{{messages}}">
         <div class="targetmsg-container" if="{{$item.receiver_id == myId}}">
           <div class="targetmsg"
             style="margin-top: {{MsgBoxStyleCalcMarginTop($item.msg_seqno)}}; margin-bottom: {{MsgBoxStyleCalcMarginBottom($item.msg_seqno)}}">
             <image class="msgprofpic" src="{{targetPic}}@75w_75h" alt="/common/fullgray.png"></image>
-            <div class="msgbox" style="margin-left: 5px"
-              onclick="ShowMessageDetail($item.content, $item.msg_type)">
+            <div class="msgbox" style="margin-left: 5px" onclick="ShowMessageDetail($item.content, $item.msg_type)">
               <!-- 普通文本消息 -->
               <text class="msgtext" if="{{$item.msg_type == 1}}">
                 {{ JSON.parse($item.content).content }}
@@ -21,7 +21,8 @@
                 {{ $t("dmpage.withdrawn") }} {{ JSON.parse($item.content).content }}
               </text>
               <!-- 图片消息 -->
-              <image class="imgmsg" if="{{$item.msg_type == 2}}" src="{{JSON.parse($item.content).url}}@156w_125h" alt="/common/fullgray.png"></image>
+              <image class="imgmsg" if="{{$item.msg_type == 2}}" src="{{JSON.parse($item.content).url}}@156w_125h"
+                alt="/common/fullgray.png"></image>
               <!-- 不支持显示的消息 -->
               <text class="msgtext" if="{{($item.msg_type != 5) && ($item.msg_type != 2) && ($item.msg_type != 1)}}">
                 {{ $t("dmpage.withdrawn") }}
@@ -43,7 +44,8 @@
                 {{ $t("dmpage.withdrawn") }} {{ JSON.parse($item.content).content }}
               </text>
               <!-- 图片消息 -->
-              <image class="imgmsg" if="{{$item.msg_type == 2}}" src="{{JSON.parse($item.content).url}}@156w_125h" alt="/common/fullgray.png"></image>
+              <image class="imgmsg" if="{{$item.msg_type == 2}}" src="{{JSON.parse($item.content).url}}@156w_125h"
+                alt="/common/fullgray.png"></image>
               <!-- 不支持显示的消息 -->
               <text class="msgtext" if="{{($item.msg_type != 5) && ($item.msg_type != 2) && ($item.msg_type != 1)}}">
                 {{ $t("dmpage.withdrawn") }}
@@ -54,8 +56,10 @@
         </div>
       </div>
     </scroll>
-    <sendbox input_text="{{input_text}}" @clickinput="OpenInput" @clicksend="SendMsg" style="position: absolute"></sendbox>
-    <full-screen-input style="position: absolute" if="{{inputmode}}" @send="FinishInput" @exit="ExitInput"></full-screen-input>
+    <sendbox input_text="{{input_text}}" @clickinput="OpenInput" @clicksend="SendMsg" style="position: absolute">
+    </sendbox>
+    <full-screen-input style="position: absolute" if="{{inputmode}}" @send="FinishInput"
+      @exit="ExitInput"></full-screen-input>
   </div>
 </template>
 
@@ -87,11 +91,7 @@ export default {
   async SendMsg() {
     // 发送消息
     try {
-      const result = await global.biliclient.SendDMSessionMessage(
-        this.targetId,
-        1,
-        this.input_text
-      )
+      const result = await global.biliclient.SendDMSessionMessage(this.targetId, 1, this.input_text)
       if (result.code !== 0) {
         prompt.showToast({
           message: `发送失败！错误代码：${result.code} 原因：${result.message}`
@@ -167,17 +167,20 @@ export default {
     // 更新消息
     try {
       let response = await global.biliclient.getDMSessionMessage(1, this.targetId, 30)
-      let newMessages = response.messages.reverse()
+      if (response.messages) {
+        let newMessages = response.messages.reverse()
 
-      if (
-        newMessages.length > 0 &&
-        newMessages[newMessages.length - 1].msg_seqno !==
-          this.messages[this.messages.length - 1].msg_seqno
-      ) {
-        this.messages = newMessages
-        setTimeout(this.ScrollToEnd, 500)
+        if (
+          newMessages.length > 0 &&
+          newMessages[newMessages.length - 1].msg_seqno !==
+            this.messages[this.messages.length - 1].msg_seqno
+        ) {
+          this.messages = newMessages
+          setTimeout(this.ScrollToEnd, 500)
+        }
+        newMessages = null
       }
-
+      
       if (initial && this.anims.show_loading) {
         this.anims.show_loading = false
         this.anims.loading.stop()
@@ -185,7 +188,6 @@ export default {
 
       // 释放内存，防止挂机OOM崩溃
       response = null
-      newMessages = null
     } catch (error) {
       prompt.showToast({
         message: `更新消息失败！${error.message}`
@@ -215,6 +217,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '@less/global.less';
-@import './dmpage.less';
+@import "@less/global.less";
+@import "./dmpage.less";
 </style>

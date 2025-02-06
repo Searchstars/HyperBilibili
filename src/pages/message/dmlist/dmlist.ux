@@ -3,9 +3,10 @@
 <template>
   <div class="page">
     <title-bar title="dmlist.title"></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
+    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
+    </image>
     <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
-      <div class="user" onclick="GoDMPage($item.talker_id)">
+      <div class="user" onclick="GoDMPage($item.talker_id)" onlongpress="LongPressHandle($item.talker_id)">
         <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
         <div class="infoarea">
           <text class="username">{{ session_cards[$item.talker_id].name }}</text>
@@ -18,6 +19,8 @@
             }}
           </text>
         </div>
+        <image if="{{$item.pinned}}" src="/common/dmlist_pinned_mask.png"
+          style="position: absolute; top: 0px; right: 0px"></image>
       </div>
     </div>
     <text style="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
@@ -29,36 +32,75 @@
 
 <script>
 import router from "@system.router"
+import prompt from "@system.prompt"
 export default {
   private: {
     sessions: [],
     session_cards: {},
-    
+
     show_dmlist: false,
     Show20UserLimit: false,
     anims: {
       show_loading: false
     }
   },
-  async InitSessions(){
-    try{
+  LongPressHandle(id) {
+    if (global.settings.SETTINGS.pinnedDMUsers.includes(id)) {
+      global.settings.saveSettings({
+        pinnedDMUsers: global.settings.SETTINGS.pinnedDMUsers.filter((item) => item !== id)
+      })
+      prompt.showToast({
+        message: "已取消固定"
+      })
+    } else {
+      var pinnedDMUsers = global.settings.SETTINGS.pinnedDMUsers
+      pinnedDMUsers.push(id)
+      global.settings.saveSettings({
+        pinnedDMUsers
+      })
+      prompt.showToast({
+        message: "成功固定该用户"
+      })
+    }
+
+    this.InitSessions()
+  },
+  async InitSessions() {
+    try {
       this.anims.loading.start()
       this.anims.show_loading = true
 
       this.sessions = (await global.biliclient.getDMSessions(1, 2)).session_list
       // 裁切至10个
-      this.sessions.length = Math.min(this.sessions.length, 10);
+      this.sessions.length = Math.min(this.sessions.length, 10)
 
       var session_uids = []
       this.sessions.forEach((session) => {
-        if(session.talker_id){
+        if (session.talker_id) {
           session_uids.push(session.talker_id)
-        }
-        else{
+        } else {
           // Pass掉非法UID
-          this.sessions = this.sessions.filter(item => item !== session)
+          this.sessions = this.sessions.filter((item) => item !== session)
+          global.logger.log("[InitSessions > if (session.talker_id)]  非法UID已剔除：", session.talker_id)
         }
+
+        // Pinned去重
+        global.settings.SETTINGS.pinnedDMUsers.forEach((pinnedUid) => {
+          if (session.talker_id == pinnedUid) {
+            this.sessions = this.sessions.filter((item) => item !== session)
+            session_uids.pop()
+            global.logger.log("[InitSessions > if (session.talker_id == pinnedUid)]  重复UID已剔除：", session.talker_id)
+          }
+        })
       })
+
+      // pinned处理
+      var objectsArray = global.settings.SETTINGS.pinnedDMUsers.map((num) => {
+        return {talker_id: num, pinned: true}
+      })
+      this.sessions = objectsArray.concat(this.sessions)
+
+      session_uids = session_uids.concat(global.settings.SETTINGS.pinnedDMUsers)
 
       this.session_cards = await global.biliclient.getMultiUserInfoByUID(session_uids)
 
@@ -66,12 +108,11 @@ export default {
       this.anims.show_loading = false
       this.Show20UserLimit = true
       this.show_dmlist = true
-    }
-    catch(e){
+    } catch (e) {
       global.logger.error(e.toString())
     }
   },
-  GoDMPage(targetId){
+  GoDMPage(targetId) {
     router.push({
       uri: "pages/message/dmpage",
       params: {
@@ -82,7 +123,7 @@ export default {
       }
     })
   },
-  onInit(){
+  onInit() {
     global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.InitSessions()
   }

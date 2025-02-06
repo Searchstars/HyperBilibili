@@ -10,6 +10,8 @@ interface SettingsInterface {
   // 下面的设置项将不在设置页面中展示
   agreedAllAgreements: boolean;
   enableUserTracker: boolean;
+  
+  pinnedDMUsers: Array<string>;
 }
 
 // 初始设置
@@ -20,7 +22,9 @@ export let SETTINGS: SettingsInterface = {
   enableFullAnimation: false,
 
   agreedAllAgreements: false, // 是否已同意所有协议（用户协议 隐私协议 etc.）
-  enableUserTracker: true
+  enableUserTracker: true,
+
+  pinnedDMUsers: []
 };
 
 export function loadSettings(): void {

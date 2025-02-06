@@ -7,7 +7,8 @@
   <div class="page">
     <scroll scroll-y="true" class="scroll" bounces="true">
       <title-bar title="video.title"></title-bar>
-      <online-image if="{{renderingCover}}" src="{{vid.pic}}@319w_150h" margin-top="30px" lock-size="true" width="320px" height="150px" loading-anim="true" @loaded="GenBlur"></online-image>
+      <online-image if="{{renderingCover}}" src="{{vid.pic}}@319w_150h" margin-top="30px" lock-size="true" width="320px"
+        height="150px" loading-anim="true" @loaded="GenBlur"></online-image>
       <text class="vidtitle">{{ vid.title }}</text>
       <div class="statbar">
         <div class="stat">
@@ -15,7 +16,7 @@
           </image>
           <text class="statext">{{ stat_view }}</text>
         </div>
-        <div class="stat" style="margin-left: 10px">
+        <div class="stat" style="margin-left: 10px" @click="OpenOwnerHome">
           <image class="statimg" src="/common/uploadericon.png" style="width: 27px; height: 29px"></image>
           <text class="statext">{{ vid.owner.name }}</text>
         </div>
@@ -47,7 +48,8 @@
       <default-button text="video.sendReply" margin-top="20px" @click="Reply"></default-button>
       <image src="/common/featurebtn_replyarea.png" style="margin-top: 15px" @click="GoReplyArea()"></image>
     </scroll>
-    <full-screen-input style="position: absolute" if="{{replymode}}" @send="SendReply" @exit="ExitInput"></full-screen-input>
+    <full-screen-input style="position: absolute" if="{{replymode}}" @send="SendReply"
+      @exit="ExitInput"></full-screen-input>
   </div>
 </template>
 
@@ -55,7 +57,7 @@
 import router from "@system.router"
 import prompt from "@system.prompt"
 
-import { kmeansCircleGradientImage } from "@src/image/jpegkmeans.ts"
+import {kmeansCircleGradientImage} from "@src/image/jpegkmeans.ts"
 
 export default {
   public: {
@@ -73,27 +75,35 @@ export default {
     renderingCover: false
   },
   computed: {
-    stat_view(){
+    stat_view() {
       return this.$app.$def.tools.formatNumber(this.vid.stat.view)
     },
-    stat_like(){
+    stat_like() {
       return this.$app.$def.tools.formatNumber(this.vid.stat.like)
     },
-    stat_coin(){
+    stat_coin() {
       return this.$app.$def.tools.formatNumber(this.vid.stat.coin)
     },
-    stat_favorite(){
+    stat_favorite() {
       return this.$app.$def.tools.formatNumber(this.vid.stat.favorite)
     }
   },
   onInit() {
-    global.logger.log("[videodetail] load bvid: " + this.bvid);
+    global.logger.log("[videodetail] load bvid: " + this.bvid)
     this.GetVideoDetail()
     this.UpdateVideoToolbarStatus()
   },
-  WIPTips(){
+  WIPTips() {
     prompt.showToast({
       message: "该功能仍在开发中"
+    })
+  },
+  OpenOwnerHome() {
+    router.push({
+      uri: "pages/user",
+      params: {
+        uid: this.vid.owner.mid
+      }
     })
   },
   async GetVideoDetail() {
@@ -111,7 +121,7 @@ export default {
     this.coinsrc = this.coined ? "/common/vidtool_coined.png" : "/common/vidtool_coin.png"
     this.starsrc = this.stared ? "/common/vidtool_stared.png" : "/common/vidtool_star.png"
   },
-  async PowerIt(){
+  async PowerIt() {
     prompt.showToast({message: "一键三连中！"})
     this.LikeClick()
     this.CoinClick()
@@ -146,11 +156,7 @@ export default {
       })
     }
 
-    const result = await global.biliclient.GiveReply(
-      1,
-      this.vid.aid,
-      evt.detail.content
-    )
+    const result = await global.biliclient.GiveReply(1, this.vid.aid, evt.detail.content)
     const message =
       result.code === 0 ? "发送成功" : `发送失败，错误代码：${result.code} 原因：${result.message}`
     prompt.showToast({
@@ -187,7 +193,7 @@ export default {
     prompt.showToast({message})
     this.UpdateVideoToolbarStatus()
   },
-  async GenBlur(evt){
+  async GenBlur(evt) {
     // 该Feature在现在任何设备上运行都会卡死，故注释
     /*
       global.logger.log(`\n[GenBlur] 开始处理封面取色模糊`);
@@ -208,6 +214,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '@less/global.less';
-@import './videodetail.less';
+@import "@less/global.less";
+@import "./videodetail.less";
 </style>

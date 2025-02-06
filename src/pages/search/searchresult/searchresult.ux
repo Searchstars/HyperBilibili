@@ -10,7 +10,7 @@
       <switch-bar title="searchresult.title" if="{{!overview_mode}}"></switch-bar>
       <div class="searchbar" if="{{!overview_mode}}" @click="SearchBarClick">
         <image src="/common/searchpage_search.png" style="margin-left: 16px"></image>
-        <text style="margin-left: 12px; font-weight: 600; font-size: 25px">{{ keyword }}</text>
+        <text style="margin-left: 12px; font-weight: 600; font-size: 25px; lines: 1; text-overflow: ellipsis">{{ keyword }}</text>
       </div>
       <div class="typebar" style="margin-top: 13px" if="{{!overview_mode}}">
         <text class="typetext" style="color: {{typebar_colors.c1}};">{{ $t("searchresult.all") }}</text>

@@ -14,7 +14,7 @@
         <image src="/common/searchpage_fire.png" style="object-fit: scale-down" static></image>
         <text class="hottitle" static>{{ $t("search.hotSearch") }}</text>
       </div>
-      <div for="{{hotwords}}" style="margin-top: 15px">
+      <div for="{{hotwords}}" style="margin-top: 15px" onclick="GoSearchHotWord($item.show_name)">
         <image src="{{$item.icon}}@22w_22h" static></image>
         <text class="hotword-text">{{ $item.show_name }}</text>
       </div>
@@ -50,6 +50,15 @@ export default {
       uri: "pages/search/searchresult",
       params: {
         keyword: evt.detail.content
+      }
+    })
+  },
+  GoSearchHotWord(name){
+    this.hotwords = null
+    router.push({
+      uri: "pages/search/searchresult",
+      params: {
+        keyword: name
       }
     })
   },
