@@ -2,7 +2,7 @@
 
 <template>
     <div class="page">
-        <scroll class="scroll" scroll-y="true" @scrollbottom="DoScrollTip" bounces="true">
+        <scroll class="scroll {{scrclass}}" scroll-y="true" @scrollbottom="DoScrollTip" bounces="true">
             <title-bar title="arealist.title"></title-bar>
             <div class="btnline" style="margin-top: 15px;">
                 <div class="btn" onclick="GoPage('app/features/main')">
@@ -54,6 +54,7 @@ export default {
         lastpage: ""
     },
     private: {
+        scrclass: "",
         showChangePageFX: false,
         colors: {
             main: "#222222",

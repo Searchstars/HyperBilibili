@@ -2,31 +2,33 @@
 
 <template>
   <div class="page">
-    <title-bar title="dmlist.title"></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
-    </image>
-    <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
-      <div class="user" onclick="GoDMPage($item.talker_id)" onlongpress="LongPressHandle($item.talker_id)">
-        <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
-        <div class="infoarea">
-          <text class="username">{{ session_cards[$item.talker_id].name }}</text>
-          <text class="lastmsg">
-            {{
-            JSON.parse($item.last_msg.content).content ||
-            JSON.parse($item.last_msg.content).reply_content ||
-            JSON.parse($item.last_msg.content).text ||
-            $t("dmlist.currentNoMessage")
-            }}
-          </text>
+    <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
+      <title-bar title="dmlist.title"></title-bar>
+      <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
+      </image>
+      <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
+        <div class="user" onclick="GoDMPage($item.talker_id)" onlongpress="LongPressHandle($item.talker_id)">
+          <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
+          <div class="infoarea">
+            <text class="username">{{ session_cards[$item.talker_id].name }}</text>
+            <text class="lastmsg">
+              {{
+              JSON.parse($item.last_msg.content).content ||
+              JSON.parse($item.last_msg.content).reply_content ||
+              JSON.parse($item.last_msg.content).text ||
+              $t("dmlist.currentNoMessage")
+              }}
+            </text>
+          </div>
+          <image if="{{$item.pinned}}" src="/common/dmlist_pinned_mask.png"
+            style="position: absolute; top: 0px; right: 0px"></image>
         </div>
-        <image if="{{$item.pinned}}" src="/common/dmlist_pinned_mask.png"
-          style="position: absolute; top: 0px; right: 0px"></image>
       </div>
-    </div>
-    <text style="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
-      {{ $t("dmlist.userCountLimit") }}
-    </text>
-    <text style="margin-top: 25px"></text>
+      <text style="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
+        {{ $t("dmlist.userCountLimit") }}
+      </text>
+      <text style="margin-top: 25px"></text>
+    </scroll>
   </div>
 </template>
 
@@ -37,12 +39,12 @@ export default {
   private: {
     sessions: [],
     session_cards: {},
-
     show_dmlist: false,
     Show20UserLimit: false,
     anims: {
       show_loading: false
-    }
+    },
+    scrclass: ""
   },
   LongPressHandle(id) {
     if (global.settings.SETTINGS.pinnedDMUsers.includes(id)) {

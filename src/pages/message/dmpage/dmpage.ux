@@ -5,7 +5,7 @@
   <div class="page">
     <image style="position: absolute; margin-top: 233px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
     </image>
-    <scroll class="scroll" scroll-y="true" id="mainscroll" bounces="true">
+    <scroll class="scroll {{scrclass}}" scroll-y="true" id="mainscroll" bounces="true">
       <div for="{{messages}}">
         <div class="targetmsg-container" if="{{$item.receiver_id == myId}}">
           <div class="targetmsg"
@@ -86,7 +86,8 @@ export default {
     anims: {
       show_loading: false
     },
-    input_text: ""
+    input_text: "",
+    scrclass: ""
   },
   async SendMsg() {
     // 发送消息

@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
-    <scroll scroll-y="true" class="scroll" bounces="true">
+    <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
       <switch-bar title="main.title"></switch-bar>
       <text class="tip">{{ funnytip }}</text>
       <image style="position: absolute; margin-top: 265px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
@@ -30,6 +30,7 @@ import prompt from "@system.prompt"
 
 export default {
   private: {
+    scrclass: "",
     recommend_vids: [],
     show_recommend_div: false,
     funnytip: "",

@@ -7,7 +7,7 @@
 
 <template>
   <div class="page">
-    <scroll class="scroll" scroll-y="true">
+    <scroll class="scroll {{scrclass}}" scroll-y="true">
       <title-bar title="user.uservideos.title"></title-bar>
       <div style="flex-direction: column; width: 77%">
         <videoshow if="{{!anims.show_loading}}" for="{{vids.list.vlist}}" bvid="{{$item.bvid}}"></videoshow>
@@ -32,7 +32,8 @@ export default {
     maxpn: 1,
     anims: {
       show_loading: false
-    }
+    },
+    scrclass: ""
   },
   BackPN() {
     if (this.current_pn > 1) {

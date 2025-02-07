@@ -3,29 +3,31 @@
 
 <template>
   <div class="page">
-    <switch-bar title="mypage.title"></switch-bar>
-    <user-info account-info="{{accountInfo}}"></user-info>
-    <div class="btnbase" style="margin-top: 40px" @click="GoMyFavFolders()">
-      <image class="btnimg" src="/common/mypage_star.png"></image>
-      <text class="btntext">{{ $t("mypage.favourite") }}</text>
-      <image src="/common/arrow_right.png"></image>
-    </div>
-    <div class="btnbase" style="margin-top: 10px" @click="GoHistory()">
-      <image class="btnimg" src="/common/mypage_history.png"></image>
-      <text class="btntext">{{ $t("mypage.history") }}</text>
-      <image src="/common/arrow_right.png"></image>
-    </div>
-    <div class="btnbase" style="margin-top: 10px" @click="WIPTips()">
-      <image class="btnimg" src="/common/mypage_watchlater.png"></image>
-      <text class="btntext">{{ $t("mypage.showLater") }}</text>
-      <image src="/common/arrow_right.png"></image>
-    </div>
-    <div class="btnbase" style="margin-top: 10px" @click="GoMessages()">
-      <image class="btnimg" src="/common/mypage_messager.png"></image>
-      <text class="btntext">{{ $t("mypage.messages") }}</text>
-      <image src="/common/arrow_right.png"></image>
-    </div>
-    <text style="margin-top: 25px"></text>
+    <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
+      <switch-bar title="mypage.title"></switch-bar>
+      <user-info account-info="{{accountInfo}}"></user-info>
+      <div class="btnbase" style="margin-top: 40px" @click="GoMyFavFolders()">
+        <image class="btnimg" src="/common/mypage_star.png"></image>
+        <text class="btntext">{{ $t("mypage.favourite") }}</text>
+        <image src="/common/arrow_right.png"></image>
+      </div>
+      <div class="btnbase" style="margin-top: 10px" @click="GoHistory()">
+        <image class="btnimg" src="/common/mypage_history.png"></image>
+        <text class="btntext">{{ $t("mypage.history") }}</text>
+        <image src="/common/arrow_right.png"></image>
+      </div>
+      <div class="btnbase" style="margin-top: 10px" @click="WIPTips()">
+        <image class="btnimg" src="/common/mypage_watchlater.png"></image>
+        <text class="btntext">{{ $t("mypage.showLater") }}</text>
+        <image src="/common/arrow_right.png"></image>
+      </div>
+      <div class="btnbase" style="margin-top: 10px" @click="GoMessages()">
+        <image class="btnimg" src="/common/mypage_messager.png"></image>
+        <text class="btntext">{{ $t("mypage.messages") }}</text>
+        <image src="/common/arrow_right.png"></image>
+      </div>
+      <text style="margin-top: 25px"></text>
+    </scroll>
   </div>
 </template>
 
@@ -34,7 +36,8 @@ import router from "@system.router"
 import prompt from "@system.prompt"
 export default {
   private: {
-    accountInfo: {}
+    accountInfo: {},
+    scrclass: ""
   },
   GoHistory(){
     router.push({

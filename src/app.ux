@@ -15,6 +15,7 @@ import * as savedcontent from "./savedcontent"
 import * as bgimg from "./bgimg"
 import * as usertracker from "./usertracker"
 import logger from "./logger/logger"
+import * as ui from "./ui/ui"
 export default {
   dayjs: dayjs,
   tools: tools,
@@ -28,6 +29,10 @@ export default {
 
     console.log("create global logger")
     global.logger = logger
+
+    console.log("create custom ui engine")
+    global.ui = ui
+    global.ui.Init()
 
     console.log("create global animengine")
     global.animengine = animengine

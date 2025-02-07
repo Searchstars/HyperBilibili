@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
-    <scroll class="scroll" scroll-y="true">
+    <scroll class="scroll {{scrclass}}" scroll-y="true">
       <switch-bar title="search.title" static></switch-bar>
       <div class="searchbtn" @click="OpenInput">
         <image src="/common/searchpage_search.png" style="margin-left: 25px" static></image>
@@ -35,6 +35,7 @@ export default {
     anims: {
       show_loading: false
     },
+    scrclass: ""
   },
   computed: {
     getBgImg(){

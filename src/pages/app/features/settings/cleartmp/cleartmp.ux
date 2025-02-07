@@ -3,26 +3,31 @@
 
 <template>
   <div class="page">
-    <title-bar title="cleartmp.title"></title-bar>
-    <text class="cleartip" style="margin-top: 10px">请先选择类别</text>
-    <text class="cleartip">随后点击按钮以进行清理</text>
-    <div class="typebox" style="margin-top: 25px">
-      <text if="{{tmps.length < 1}}" style="font-weight: 600; font-size: 24px; color: #9E9E9E">缓存文件扫描中...</text>
-      <div style="padding: 5px; width: 77%" for="{{tmps}}">
-        <div class="tmptype" onclick="SelectHandler($item.alias)" style="background-color: {{typeColors[$item.alias]}}">
-          <text class="typetxt">{{ $item.name }}</text>
-          <text class="typesize">{{ $item.size }}</text>
+    <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
+      <title-bar title="cleartmp.title"></title-bar>
+      <text class="cleartip" style="margin-top: 10px">请先选择类别</text>
+      <text class="cleartip">随后点击按钮以进行清理</text>
+      <div class="typebox" style="margin-top: 25px">
+        <text if="{{tmps.length < 1}}" style="font-weight: 600; font-size: 24px; color: #9e9e9e">
+          缓存文件扫描中...
+        </text>
+        <div style="padding: 5px; width: 77%" for="{{tmps}}">
+          <div class="tmptype" onclick="SelectHandler($item.alias)" style="background-color: {{typeColors[$item.alias]}}">
+            <text class="typetxt">{{ $item.name }}</text>
+            <text class="typesize">{{ $item.size }}</text>
+          </div>
         </div>
       </div>
-    </div>
-    <default-button @click="ClearClick" primary="true" margin-top="25px" text="cleartmp.clear" disabled="{{cantClear}}"></default-button>
-    <text style="margin-top: 30px"></text>
+      <default-button @click="ClearClick" primary="true" margin-top="25px" text="cleartmp.clear"
+        disabled="{{cantClear}}"></default-button>
+      <text style="margin-top: 30px"></text>
+    </scroll>
   </div>
 </template>
 
 <script>
 import prompt from "@system.prompt"
-import { asyncFile } from "../../../../../asyncapi/file"
+import {asyncFile} from "../../../../../asyncapi/file"
 
 export default {
   private: {
@@ -31,21 +36,22 @@ export default {
     clearControl: {
       imgs: false,
       logs: false,
-      sc: false,
+      sc: false
     },
     typeColors: {
       imgs: "#434343",
       logs: "#434343",
       sc: "#434343",
       others: "#222222"
-    }
+    },
+    scrclass: ""
   },
-  RefreshPage(){
+  RefreshPage() {
     this.cantClear = true
     this.clearControl = {
       imgs: false,
       logs: false,
-      sc: false,
+      sc: false
     }
     this.typeColors = {
       imgs: "#434343",
@@ -58,26 +64,26 @@ export default {
     const tasks = []
 
     if (this.clearControl.imgs) {
-      const imgTemp = this.tmps.find(t => t.alias === "imgs")
+      const imgTemp = this.tmps.find((t) => t.alias === "imgs")
       if (imgTemp) {
-        imgTemp.list.forEach(uri => {
-          tasks.push(asyncFile.delete({ uri }))
+        imgTemp.list.forEach((uri) => {
+          tasks.push(asyncFile.delete({uri}))
         })
       }
     }
 
     if (this.clearControl.logs) {
-      const logTemp = this.tmps.find(t => t.alias === "logs")
+      const logTemp = this.tmps.find((t) => t.alias === "logs")
       if (logTemp) {
-        logTemp.list.forEach(uri => {
-          tasks.push(asyncFile.delete({ uri }))
+        logTemp.list.forEach((uri) => {
+          tasks.push(asyncFile.delete({uri}))
         })
       }
     }
 
     if (this.clearControl.sc) {
       const contents = await global.savedcontent.SavedContentManager.listAllContent()
-      contents.forEach(ct => {
+      contents.forEach((ct) => {
         tasks.push(global.savedcontent.SavedContentManager.deleteContent(ct.id))
       })
     }
@@ -102,20 +108,24 @@ export default {
         this.typeColors.logs = this.clearControl.logs ? "#FF7DA8" : "#434343"
         break
       case "sc":
-        if(!this.clearControl.sc){
+        if (!this.clearControl.sc) {
           prompt.showDialog({
-            message: "清除缓存内容即意味着清除您之前缓存的专栏、音频等内容，且该操作不可逆。确定要继续吗？",
+            message:
+              "清除缓存内容即意味着清除您之前缓存的专栏、音频等内容，且该操作不可逆。确定要继续吗？",
             success: (data) => {
               this.clearControl.sc = true
-              this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343";
+              this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343"
               // 由于这是异步函数，因此需要重新做cantClear检测
-              this.cantClear = !(this.clearControl.imgs || this.clearControl.logs || this.clearControl.sc)
+              this.cantClear = !(
+                this.clearControl.imgs ||
+                this.clearControl.logs ||
+                this.clearControl.sc
+              )
             }
           })
-        }
-        else{
+        } else {
           this.clearControl.sc = false
-          this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343";
+          this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343"
         }
         break
     }
@@ -130,12 +140,12 @@ export default {
     try {
       const contents = await global.savedcontent.SavedContentManager.listAllContent()
       const ret = await Promise.all(
-        contents.map(async content => {
-          const data = await asyncFile.get({ uri: content.fileUri })
+        contents.map(async (content) => {
+          const data = await asyncFile.get({uri: content.fileUri})
           return {
             uri: content.fileUri,
             length: data.length,
-            _labelIsSavedContent: true,
+            _labelIsSavedContent: true
           }
         })
       )
@@ -148,23 +158,23 @@ export default {
     try {
       // 准备统计对象
       const totalStats = {
-        images: { count: 0, size: 0, list: [] },
-        logs: { count: 0, size: 0, list: [] },
-        savedContent: { count: 0, size: 0 },
-        others: { count: 0, size: 0 },
+        images: {count: 0, size: 0, list: []},
+        logs: {count: 0, size: 0, list: []},
+        savedContent: {count: 0, size: 0},
+        others: {count: 0, size: 0}
       }
 
       // 并行获取文件列表
       const [rootFiles, logFiles, savedContentFiles] = await Promise.all([
-        asyncFile.list({ uri: "internal://files/" }),
-        asyncFile.list({ uri: "internal://files/logs" }),
-        this.getSavedContentList(),
+        asyncFile.list({uri: "internal://files/"}),
+        asyncFile.list({uri: "internal://files/logs"}),
+        this.getSavedContentList()
       ])
 
       const fileList = [...rootFiles.fileList, ...logFiles.fileList, ...savedContentFiles]
 
       for (const file of fileList) {
-        const { uri, length, _labelIsSavedContent } = file
+        const {uri, length, _labelIsSavedContent} = file
 
         if (/\.(jpg|png|avif|gif)/i.test(uri)) {
           totalStats.images.count++
@@ -188,18 +198,18 @@ export default {
           name: "临时图片",
           alias: "imgs",
           size: `${this.BytesToMB(totalStats.images.size)} MB`,
-          list: totalStats.images.list,
+          list: totalStats.images.list
         },
         {
           name: "日志文件",
           alias: "logs",
           size: `${this.BytesToMB(totalStats.logs.size)} MB`,
-          list: totalStats.logs.list,
+          list: totalStats.logs.list
         },
         {
           name: "缓存内容",
           alias: "sc",
-          size: `${this.BytesToMB(totalStats.savedContent.size)} MB`,
+          size: `${this.BytesToMB(totalStats.savedContent.size)} MB`
         },
         {
           name: "其它",
@@ -213,7 +223,7 @@ export default {
   },
   onInit() {
     this.ScanTemps()
-  },
+  }
 }
 </script>
 

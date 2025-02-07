@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
-    <scroll class="scroll" scroll-y="true" bounces="true">
+    <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
       <switch-bar title="dynamic.title"></switch-bar>
       <div class="waterfall" if="show_content">
         <div class="waterfall-column">
@@ -23,6 +23,7 @@
 <script>
 export default {
   private: {
+    scrclass: "",
     show_content: false,
     anims: {
       show_loading: false

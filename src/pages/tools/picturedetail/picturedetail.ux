@@ -3,7 +3,7 @@
 <template>
     <div class="page">
       <text style="margin-top: 233px" if="ShowBigPictureTips">{{ $t("picturedetail.bigImageTip") }}</text>
-      <scroll class="scroll" scroll-x="true" scroll-y="true" @scroll="onScroll" bounces="true" id="scroll">
+      <scroll class="scroll {{scrclass}}" scroll-x="true" scroll-y="true" @scroll="onScroll" bounces="true" id="scroll">
           <div style="{{container_style}}">
             <image style="{{img_style}}" src="{{img_uri}}" id="img"></image>
           </div>
@@ -38,7 +38,8 @@ export default {
     },
     show_toolbar: false,
     initialSliderValue: 100,
-    deviceInfo: null
+    deviceInfo: null,
+    scrclass: ""
   },
   calculateImagePosition(imageWidth, imageHeight) {
     const x = (this.deviceInfo.screenWidth - imageWidth) / 2;

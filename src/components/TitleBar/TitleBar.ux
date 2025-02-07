@@ -28,9 +28,15 @@ export default {
     useRowLayout: false
   },
   RouterBack() {
-    router.back()
+    global.ui.OnBackPressTriggered()
   },
   onInit() {
+    global.ui.InitPage(this._parentVM)
+    this._parentVM.$options.onBackPress = () => {
+      global.ui.OnBackPressTriggered()
+      return true
+    }
+
     const deviceInfo = global.DEVICE_INFO;
     if (deviceInfo.screenShape == "rect"){
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`

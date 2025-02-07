@@ -44,6 +44,8 @@ export default {
     })
   },
   onInit() {
+    global.ui.InitPage(this._parentVM)
+
     const deviceInfo = global.DEVICE_INFO
     if (deviceInfo.screenShape == "rect") {
       this.barRowStyle["width"] = `${deviceInfo.screenWidth}px`

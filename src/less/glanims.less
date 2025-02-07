@@ -1,0 +1,33 @@
+// 以下任何涉及到负移动的动画（例如openpage-scroll）
+// 都需要使用animation-direction: reverse进行播放
+// 这是由于傻逼vela快应用框架不支持keyframes数值自减导致的
+
+// 需要reverse
+@keyframes openpage-scroll {
+    0% {
+        transform: translateX(0px) scale(1);
+    }
+    100% {
+        transform: translateX(500px) scale(0.75);
+    }
+}
+
+// 需要reverse
+@keyframes fromback-scroll {
+    0% {
+        transform: translateY(232px) scale(1);
+    }
+    100% {
+        transform: translateY(0px) scale(0.75);
+    }
+}
+
+// 无需reverse
+@keyframes backpage-scroll {
+    0% {
+        transform: translateX(0px) scale(1);
+    }
+    100% {
+        transform: translateX(500px) scale(0.75);
+    }
+}

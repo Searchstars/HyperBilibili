@@ -1,3 +1,5 @@
+@import './glanims.less';
+
 @screenWidth: 100%;
 @screenHeight: 100%;
 
@@ -15,6 +17,25 @@
     align-items: center;
     width: @screenWidth;
     height: @screenHeight;
+
+    animation-name: openpage-scroll;
+    animation-timing-function: ease;
+    animation-duration: 500ms;
+    animation-direction: reverse;
+}
+
+.scroll-backanim {
+    animation-name: backpage-scroll;
+    animation-timing-function: ease;
+    animation-duration: 500ms;
+    animation-direction: normal;
+}
+
+.scroll-frombackanim {
+    animation-name: fromback-scroll;
+    animation-timing-function: ease;
+    animation-duration: 500ms;
+    animation-direction: reverse;
 }
 
 text {

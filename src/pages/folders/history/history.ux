@@ -3,6 +3,7 @@
 
 <template>
     <div class="page">
+      <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
         <title-bar title="history.title"></title-bar>
         <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
         </image>
@@ -10,6 +11,7 @@
           <videoshow for="{{history}}" video="{{$item}}"></videoshow>
         </div>
         <text style="margin-top: 25px"></text>
+      </scroll>
     </div>
 </template>
 
@@ -20,7 +22,8 @@ export default {
     history: null,
     anims: {
       show_loading: false
-    }
+    },
+    scrclass: ""
   },
   async LoadHistory(){
     this.anims.show_loading = true

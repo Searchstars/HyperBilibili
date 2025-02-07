@@ -8,15 +8,17 @@
 
 <template>
   <div class="page">
-    <title-bar title="{{titletext}}"></title-bar>
-    <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
-    <list class="replylist">
-      <list-item type="replies"
-        style="width: 100%; justify-content: center; margin-top: 10px; height: {{PlaceHolderShowCheck($item.rpid)}}"
-        for="{{replies}}">
-        <reply secmode={{secmode}} reply="{{$item}}" @show-tools="ShowTools" @reply="Reply"></reply>
-      </list-item>
-    </list>
+    <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
+      <title-bar title="{{titletext}}"></title-bar>
+      <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
+      <list class="replylist">
+        <list-item type="replies"
+          style="width: 100%; justify-content: center; margin-top: 10px; height: {{PlaceHolderShowCheck($item.rpid)}}"
+          for="{{replies}}">
+          <reply secmode={{secmode}} reply="{{$item}}" @show-tools="ShowTools" @reply="Reply"></reply>
+        </list-item>
+      </list>
+    </scroll>
     <floating-page-changer current_pn="{{current_pn}}" @backpn="BackPN" @nextpn="NextPN"></floating-page-changer>
     <full-screen-input if="{{replymode}}" @send="SendReply" @exit="ExitInput"></full-screen-input>
   </div>
@@ -46,6 +48,7 @@ export default {
     },
     replymode: false,
     reply_target: null,
+    scrclass: ""
   },
   async SendReply(evt) {
     this.replymode = false

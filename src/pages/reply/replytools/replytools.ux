@@ -2,25 +2,27 @@
 
 <template>
   <div class="page">
-    <title-bar title="replytools.title"></title-bar>
-    <div class="toolbtn" style="margin-top: 30px" @click="LikeReply()">
-      <div class="dataicon" style="margin-left: 25px">
-        <image class="toolicon" src="/common/replytools_like.png"></image>
+    <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
+      <title-bar title="replytools.title"></title-bar>
+      <div class="toolbtn" style="margin-top: 30px" @click="LikeReply()">
+        <div class="dataicon" style="margin-left: 25px">
+          <image class="toolicon" src="/common/replytools_like.png"></image>
+        </div>
+        <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.like") }}</text>
       </div>
-      <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.like") }}</text>
-    </div>
-    <div class="toolbtn" style="margin-top: 10px" @click="ShowSecReplies()">
-      <div class="dataicon" style="margin-left: 25px">
-        <image class="toolicon" src="/common/replytools_showreplies.png"></image>
+      <div class="toolbtn" style="margin-top: 10px" @click="ShowSecReplies()">
+        <div class="dataicon" style="margin-left: 25px">
+          <image class="toolicon" src="/common/replytools_showreplies.png"></image>
+        </div>
+        <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.showReply") }}</text>
       </div>
-      <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.showReply") }}</text>
-    </div>
-    <div class="toolbtn" style="margin-top: 10px" @click="ShowDetail()">
-      <div class="dataicon" style="margin-left: 25px">
-        <image class="toolicon" src="/common/replytools_showdetail.png"></image>
+      <div class="toolbtn" style="margin-top: 10px" @click="ShowDetail()">
+        <div class="dataicon" style="margin-left: 25px">
+          <image class="toolicon" src="/common/replytools_showdetail.png"></image>
+        </div>
+        <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.showDetail") }}</text>
       </div>
-      <text class="toolname" style="margin-left: 92px; position: absolute">{{ $t("replytools.showDetail") }}</text>
-    </div>
+    </scroll>
   </div>
 </template>
 
@@ -35,7 +37,8 @@ export default {
   },
   private: {
     replymessage: "",
-    reply_clone: null
+    reply_clone: null,
+    scrclass: ""
   },
   async LikeReply() {
     var result = await global.biliclient.LikeReply(

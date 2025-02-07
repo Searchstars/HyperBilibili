@@ -4,7 +4,7 @@
 <template>
   <div class="page">
     <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
-    <scroll class="scroll" scroll-y="true" bounces="true">
+    <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
       <switch-bar title="savedcontent.title" static></switch-bar>
       <div style="flex-direction: column; align-items: center; width: 100%" for="{{content}}">
         <div if="{{$item.type == 'article' ? true : false}}"
@@ -21,6 +21,7 @@
 import router from "@system.router"
 export default {
   private: {
+    scrclass: "",
     content: []
   },
   computed: {
