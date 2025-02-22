@@ -1,0 +1,21 @@
+<import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
+
+<template>
+  <div class="page">
+    <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
+        <title-bar title="检查更新"></title-bar>
+    </scroll>
+  </div>
+</template>
+
+<script>
+export default {
+    private: {
+        scrclass: ""
+    }
+}
+</script>
+
+<style lang="less">
+@import "@less/global.less";
+</style>

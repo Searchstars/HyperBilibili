@@ -3,9 +3,9 @@
 
 <template>
   <div class="page">
-    <image style="position: absolute; left: 0px" src="{{getBgImg}}"></image>
+    <image style="position: absolute; left: 0px" src="{{getBgImg}}" static></image>
     <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
-      <switch-bar title="dynamic.title"></switch-bar>
+      <switch-bar title="dynamic.title" static></switch-bar>
       <div class="waterfall" if="show_content">
         <div class="waterfall-column">
           <dyn-show for="{{dynamic.render_split_1}}" dyn="{{$item}}"></dyn-show>
@@ -14,7 +14,8 @@
           <dyn-show for="{{dynamic.render_split_2}}" dyn="{{$item}}"></dyn-show>
         </div>
       </div>
-      <text style="margin-top: 25px"></text>
+      <!-- 此处无数据绑定，添加static属性 -->
+      <text style="margin-top: 25px" static></text>
     </scroll>
     <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
@@ -29,13 +30,13 @@ export default {
       show_loading: false
     },
     dynamic: {
-      render_split_1: {},
-      render_split_2: {}
+      render_split_1: [],
+      render_split_2: []
     }
   },
   computed: {
-    getBgImg(){
-      return this.$app.$def.bgimg.GetBackgroundImageSrc()
+    getBgImg() {
+      return this.$app.$def.bgimg.GetBackgroundImageSrc();
     }
   },
   SplitWaterfallArea(arr) {
@@ -43,35 +44,35 @@ export default {
     const arr2 = [];
 
     arr.forEach((value, index) => {
-        if (index % 2 === 0) {
-            arr1.push(value);
-        } else {
-            arr2.push(value);
-        }
+      if (index % 2 === 0) {
+        arr1.push(value);
+      } else {
+        arr2.push(value);
+      }
     });
 
     return { arr1, arr2 };
   },
-  async LoadDynamics(){
-    try{
-      this.anims.loading.start()
+  async LoadDynamics() {
+    try {
+      this.anims.loading.start();
 
-      var dynamic = await global.biliclient.getDynamicList()
-      var split_result = this.SplitWaterfallArea(dynamic.items)
-      this.dynamic.render_split_1 = split_result.arr1
-      this.dynamic.render_split_2 = split_result.arr2
+      var dynamic = await global.biliclient.getDynamicList();
+      var split_result = this.SplitWaterfallArea(dynamic.items);
+      
+      this.dynamic.render_split_1.splice(0, this.dynamic.render_split_1.length, ...split_result.arr1);
+      this.dynamic.render_split_2.splice(0, this.dynamic.render_split_2.length, ...split_result.arr2);
 
-      this.anims.loading.stop()
-      this.anims.show_loading = false
-      this.show_content = true
-    }
-    catch(e){
-      global.logger.error(e.toString())
+      this.anims.loading.stop();
+      this.anims.show_loading = false;
+      this.show_content = true;
+    } catch (e) {
+      global.logger.error(e.toString());
     }
   },
-  onReady(){
-    global.animengine.defaults.loading.CreateLoadingAnimation(this)
-    this.LoadDynamics()
+  onReady() {
+    global.animengine.defaults.loading.CreateLoadingAnimation(this);
+    this.LoadDynamics();
   }
 }
 </script>

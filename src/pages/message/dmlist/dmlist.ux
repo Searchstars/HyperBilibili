@@ -3,9 +3,11 @@
 <template>
   <div class="page">
     <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
-      <title-bar title="dmlist.title"></title-bar>
+      <title-bar title="dmlist.title" static></title-bar>
+      
       <image style="position: absolute; margin-top: 245px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}">
       </image>
+      
       <div class="dmlist" for="{{sessions}}" if="{{show_dmlist}}">
         <div class="user" onclick="GoDMPage($item.talker_id)" onlongpress="LongPressHandle($item.talker_id)">
           <image class="userface" src="{{session_cards[$item.talker_id].face}}@75w_75h" alt="/common/fullgray.png"></image>
@@ -20,14 +22,15 @@
               }}
             </text>
           </div>
-          <image if="{{$item.pinned}}" src="/common/dmlist_pinned_mask.png"
-            style="position: absolute; top: 0px; right: 0px"></image>
+          <image if="{{$item.pinned}}" src.static="/common/dmlist_pinned_mask.png" style.static="position: absolute; top: 0px; right: 0px"></image>
         </div>
       </div>
-      <text style="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
+      
+      <text style.static="font-size: 18px; margin-top: 15px; font-weight: 600" show="{{Show20UserLimit}}">
         {{ $t("dmlist.userCountLimit") }}
       </text>
-      <text style="margin-top: 25px"></text>
+
+      <text style="margin-top: 25px" static></text>
     </scroll>
   </div>
 </template>
@@ -35,6 +38,7 @@
 <script>
 import router from "@system.router"
 import prompt from "@system.prompt"
+
 export default {
   private: {
     sessions: [],
@@ -64,7 +68,6 @@ export default {
         message: "成功固定该用户"
       })
     }
-
     this.InitSessions()
   },
   async InitSessions() {
@@ -72,37 +75,32 @@ export default {
       this.anims.loading.start()
       this.anims.show_loading = true
 
-      this.sessions = (await global.biliclient.getDMSessions(1, 2)).session_list
-      // 裁切至10个
-      this.sessions.length = Math.min(this.sessions.length, 10)
+      const dmData = await global.biliclient.getDMSessions(1, 2)
+      let sessionsData = dmData.session_list.slice(0, 10)
 
-      var session_uids = []
-      this.sessions.forEach((session) => {
+      let session_uids = []
+      let filteredSessions = []
+
+      sessionsData.forEach(session => {
         if (session.talker_id) {
-          session_uids.push(session.talker_id)
-        } else {
-          // Pass掉非法UID
-          this.sessions = this.sessions.filter((item) => item !== session)
-          global.logger.log("[InitSessions > if (session.talker_id)]  非法UID已剔除：", session.talker_id)
-        }
-
-        // Pinned去重
-        global.settings.SETTINGS.pinnedDMUsers.forEach((pinnedUid) => {
-          if (session.talker_id == pinnedUid) {
-            this.sessions = this.sessions.filter((item) => item !== session)
-            session_uids.pop()
-            global.logger.log("[InitSessions > if (session.talker_id == pinnedUid)]  重复UID已剔除：", session.talker_id)
+          if (global.settings.SETTINGS.pinnedDMUsers.indexOf(session.talker_id) === -1) {
+            filteredSessions.push(session)
+            session_uids.push(session.talker_id)
+          } else {
+            global.logger.log("[InitSessions] 重复UID已剔除：", session.talker_id)
           }
-        })
+        } else {
+          global.logger.log("[InitSessions] 非法UID已剔除：", session.talker_id)
+        }
       })
 
-      // pinned处理
-      var objectsArray = global.settings.SETTINGS.pinnedDMUsers.map((num) => {
-        return {talker_id: num, pinned: true}
+      const pinnedObjects = global.settings.SETTINGS.pinnedDMUsers.map(uid => {
+        return { talker_id: uid, pinned: true }
       })
-      this.sessions = objectsArray.concat(this.sessions)
-
+      const combinedSessions = pinnedObjects.concat(filteredSessions)
       session_uids = session_uids.concat(global.settings.SETTINGS.pinnedDMUsers)
+
+      this.sessions.splice(0, this.sessions.length, ...combinedSessions)
 
       this.session_cards = await global.biliclient.getMultiUserInfoByUID(session_uids)
 

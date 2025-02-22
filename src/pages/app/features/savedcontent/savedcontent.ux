@@ -8,11 +8,12 @@
       <switch-bar title="savedcontent.title" static></switch-bar>
       <div style="flex-direction: column; align-items: center; width: 100%" for="{{content}}">
         <div if="{{$item.type == 'article' ? true : false}}"
-          style="flex-direction: column; align-items: center; width: 100%" onclick="OpenArticle($item.id)">
+          style="flex-direction: column; align-items: center; width: 100%"
+          onclick="OpenArticle($item.id)" static>
           <articleshow article="{{$item}}"></articleshow>
         </div>
       </div>
-      <text style="margin-top: 25px"></text>
+      <text style="margin-top: 25px" static></text>
     </scroll>
   </div>
 </template>
@@ -31,18 +32,14 @@ export default {
   },
   PatchContent(origin_content) {
     try {
-      var new_content = []
-
-      // 暂无可进行的patch操作
-      new_content = origin_content
-
+      let new_content = origin_content
       return new_content
     } catch (e) {
       global.logger.error("[savedcontent.PatchContent] Patch Error: " + e.toString())
     }
   },
   async OpenArticle(id) {
-    var html = await global.savedcontent.SavedContentManager.getContent(id)
+    const html = await global.savedcontent.SavedContentManager.getContent(id)
     router.push({
       uri: "pages/article/articleshow",
       params: {
@@ -53,10 +50,9 @@ export default {
     })
   },
   async LoadContent() {
-    var origin_content = await global.savedcontent.SavedContentManager.listAllContent()
-    global.logger.log(origin_content)
-    this.content = this.PatchContent(origin_content)
-    global.logger.log(this.content)
+    const origin_content = await global.savedcontent.SavedContentManager.listAllContent()
+    const patched = this.PatchContent(origin_content)
+    this.content.splice(0, this.content.length, ...patched)
   },
   onInit() {
     this.LoadContent()

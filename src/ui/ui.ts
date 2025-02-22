@@ -5,7 +5,11 @@ class GlobalActions {
         global.vmPool[vm._name] = vm
     }
 
-    static ClearCurrentVmSrcClass() {
+    static UpdateCurrentPageName(){
+        global.currentPageName = router.getState().name
+    }
+
+    static ClearCurrentVmSrcClass(){
         global.vmPool[global.currentPageName].scrclass = ""
     }
 }
@@ -34,13 +38,14 @@ export function Init(){
 }
 
 export function InitPage(vm){
-    global.currentPageName = vm._name
+    GlobalActions.UpdateCurrentPageName()
     GlobalActions.AddToVmPool(vm)
     GlobalActions.ClearCurrentVmSrcClass()
     global.logger.log("[ui.InitPage] vm set successed. name=", global.currentPageName)
 }
 
 export function OnBackPressTriggered(){
+    GlobalActions.UpdateCurrentPageName()
     global.vmPool[global.currentPageName].scrclass = "scroll-backanim"
     setTimeout(() => {
         GlobalActions.ClearCurrentVmSrcClass()
@@ -51,5 +56,5 @@ export function OnBackPressTriggered(){
         global.logger.log("lastpage=", lastPageName, "currentPage=", global.currentPageName)
         global.vmPool[lastPageName].scrclass = ""
         global.vmPool[lastPageName].scrclass = "scroll-frombackanim"
-    }, 300)
+    }, 150)
 }

@@ -4,29 +4,27 @@
 <template>
   <div class="page">
     <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
-      <title-bar title="foldervideos.title"></title-bar>
+      <title-bar title="foldervideos.title" static></title-bar>
+      
       <div style="flex-direction: row; align-items: center">
-        <div @click="BackPN()" style="width: 40px; height: 40px; align-items: center; justify-content: center">
-          <image src="/common/changepage_left.png"></image>
+        <div static @click="BackPN()" style="width: 40px; height: 40px; align-items: center; justify-content: center">
+          <image src="/common/changepage_left.png" static></image>
         </div>
-        <text style="margin-left: 17px; font-size: 25px; font-weight: 600; color: #9e9e9e">
+        <text style.static="margin-left: 17px; font-size: 25px; font-weight: 600; color: #9e9e9e">
           {{ $t("foldervideos.no") }} {{ current_pn }} {{ $t("foldervideos.page") }}
         </text>
-        <div style="
-            margin-left: 17px;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
-          " @click="NextPN()">
-          <image src="/common/changepage_right.png"></image>
+        <div static style="margin-left: 17px; width: 40px; height: 40px; align-items: center; justify-content: center" @click="NextPN()">
+          <image src="/common/changepage_right.png" static></image>
         </div>
       </div>
+      
       <div class="foldervid_div">
-          <videoshow video="{{$item}}" for="{{foldervid_vids}}"></videoshow>
+        <videoshow video="{{$item}}" for="{{foldervid_vids}}"></videoshow>
       </div>
-      <text style="margin-top: 25px"></text>
+      
+      <text style="margin-top: 25px" static></text>
     </scroll>
+    
     <image style="position: absolute; margin-top: 265px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
 </template>
@@ -63,7 +61,7 @@ export default {
   OpenVideo(bvid) {
     router.replace({
       uri: "pages/video/videodetail",
-      params: {bvid}
+      params: { bvid }
     })
   },
   calcSpace(vid_title, isListItem) {
@@ -75,7 +73,7 @@ export default {
   },
   async LoadVideos() {
     this.anims.show_loading = true
-    this.foldervid_vids = [] // Clear Array
+    this.foldervid_vids.splice(0, this.foldervid_vids.length)
     this.anims.loading.start()
 
     try {
@@ -88,8 +86,8 @@ export default {
         global.biliclient.getVideoInfoByBVID(media.bvid)
       )
 
-      // 并行获取所有视频信息
-      this.foldervid_vids = await Promise.all(videoInfoPromises)
+      const videos = await Promise.all(videoInfoPromises)
+      this.foldervid_vids.splice(0, 0, ...videos)
     } catch (error) {
       global.logger.error("加载视频时发生错误:", error)
     } finally {
