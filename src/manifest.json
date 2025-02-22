@@ -34,12 +34,6 @@
             "name": "system.storage"
         },
         {
-            "name": "system.crypto"
-        },
-        {
-            "name": "system.folme"
-        },
-        {
             "name": "system.interconnect"
         },
         {
@@ -47,7 +41,7 @@
         }
     ],
     "config": {
-        "logLevel": "log",
+        "logLevel": "debug",
         "designWidth": 466,
         "background": {
             "features": [
@@ -60,7 +54,7 @@
         "backgroundColor": "#000000"
     },
     "router": {
-        "entry": "pages/app/entry/splash",
+        "entry": "pages/app/features/settings",
         "pages": {
             "pages/app/entry/splash": {
                 "component": "splash"

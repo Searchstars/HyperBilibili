@@ -27,31 +27,13 @@
     ]
   },
   "devDependencies": {
-    "@aiot-toolkit/jsc": "^1.0.7",
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
-    "aiot-toolkit": "2.0.4-beta.3",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^9.18.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-import-resolver-node": "^0.3.7",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-ux": "^0.0.4",
-    "husky": "^9.1.7",
-    "less": "^4.2.2",
-    "less-loader": "^12.2.0",
-    "lint-staged": "^15.4.1",
-    "postcss-html": "^1.8.0",
-    "postcss-less": "^6.0.0",
-    "prettier": "^3.4.2",
-    "stylelint": "^16.13.2",
-    "stylelint-config-recess-order": "^6.0.0",
-    "stylelint-config-standard": "^37.0.0",
-    "stylelint-order": "^6.0.4",
-    "ux-types": "^0.1.1"
+    "less": "^3.11.1",
+    "less-loader": "^4.1.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3"
   },
   "dependencies": {
+    "hap-toolkit": "^1.9.0",
     "dayjs": "^1.11.13",
     "jpeg-js": "^0.4.4",
     "semver": "^7.6.3"

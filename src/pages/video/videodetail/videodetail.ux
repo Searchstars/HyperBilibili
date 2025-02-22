@@ -215,6 +215,6 @@ export default {
 </script>
 
 <style lang="less">
-@import "@less/global.less";
+@import "~@less/global.less";
 @import "./videodetail.less";
 </style>

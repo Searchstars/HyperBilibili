@@ -27,7 +27,7 @@ export default {
   },
   async LoadEula(){
     this.anims.show_loading = true
-    this.anims.loading.start()
+    //this.anims.loading.start()
 
     // 预留init时间
     setTimeout(async() => {
@@ -36,7 +36,7 @@ export default {
 
       this.show_content = true
       this.anims.show_loading = false
-      this.anims.loading.stop()
+      //this.anims.loading.stop()
     }, 1500);
   },
   Agree(){
@@ -54,12 +54,12 @@ export default {
     router.back()
   },
   onInit(){
-    global.animengine.defaults.loading.CreateLoadingAnimation(this)
+    //global.animengine.defaults.loading.CreateLoadingAnimation(this)
     this.LoadEula()
   }
 }
 </script>
 
 <style lang="less">
-@import '@less/global.less';
+@import '~@less/global.less';
 </style>

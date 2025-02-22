@@ -1,4 +1,4 @@
-import { crypto } from '../../tsimports';
+//import { crypto } from '../../tsimports';
 import { getMixinKey } from '../utils/utils';
 import semver from 'semver';
 import * as eula from '../../eula';
@@ -42,6 +42,7 @@ export const BilibiliClientAPIRequestMethods = {
             .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key].toString().replace(/[!'()*]/g, ""))}`)
             .join("&");
 
+        var crypto = void 0 // not supported
         const wbi_sign = crypto.hashDigest({ data: query + mixin_key, algo: "MD5" });
         global.logger.log("wbi_sign: " + wbi_sign);
 

@@ -7,7 +7,7 @@
       <div class="bar" @click="SwitchPage()">
         <image src="/common/switch.png"></image>
         <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
-          {{ _parentVM.$t(title) }}
+          {{ title }}
         </text>
       </div>
     </div>
@@ -16,7 +16,7 @@
         <div style="align-items: center; justify-content: center">
           <image src="/common/switch.png" style="object-fit: scale-down; width: 32px; height: 32px"></image>
           <text style="font-weight: 600; font-size: 30px; margin-left: 15px">
-            {{ _parentVM.$t(title) }}
+            {{ title }}
           </text>
         </div>
         <time-view style="position: absolute"></time-view>
@@ -45,10 +45,10 @@ export default {
   },
   onInit() {
     global.ui.InitPage(this._parentVM)
-    this._parentVM.$options.onBackPress = () => {
-      global.ui.OnBackPressTriggered()
-      return true
-    }
+    //this._parentVM.$options.onBackPress = () => {
+    //  global.ui.OnBackPressTriggered()
+    //  return true
+    //}
 
     const deviceInfo = global.DEVICE_INFO
     if (deviceInfo.screenShape == "rect") {
@@ -60,7 +60,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "@less/global.less";
+@import "~@less/global.less";
 
 .comp-root {
   flex-direction: column;

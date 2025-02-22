@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "@less/global.less";
+@import "~@less/global.less";
 
 .comp-root {
   flex-direction: column;

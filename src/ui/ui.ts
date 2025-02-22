@@ -2,7 +2,7 @@ import { router } from "../tsimports"
 
 class GlobalActions {
     static AddToVmPool(vm){
-        global.vmPool[vm._name] = vm
+        global.vmPool[global.currentPageName] = vm
     }
 
     static UpdateCurrentPageName(){
@@ -10,7 +10,7 @@ class GlobalActions {
     }
 
     static ClearCurrentVmSrcClass(){
-        global.vmPool[global.currentPageName].scrclass = ""
+        //global.vmPool[global.currentPageName].scrclass = ""
     }
 }
 
@@ -46,7 +46,7 @@ export function InitPage(vm){
 
 export function OnBackPressTriggered(){
     GlobalActions.UpdateCurrentPageName()
-    global.vmPool[global.currentPageName].scrclass = "scroll-backanim"
+    //global.vmPool[global.currentPageName].scrclass = "scroll-backanim"
     setTimeout(() => {
         GlobalActions.ClearCurrentVmSrcClass()
         router.back()
@@ -54,7 +54,7 @@ export function OnBackPressTriggered(){
         var pageStack = router.getPages()
         var lastPageName = pageStack[pageStack.length - 2].name
         global.logger.log("lastpage=", lastPageName, "currentPage=", global.currentPageName)
-        global.vmPool[lastPageName].scrclass = ""
-        global.vmPool[lastPageName].scrclass = "scroll-frombackanim"
+        //global.vmPool[lastPageName].scrclass = ""
+        //global.vmPool[lastPageName].scrclass = "scroll-frombackanim"
     }, 150)
 }

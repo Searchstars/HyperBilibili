@@ -27,46 +27,51 @@ export default {
     }
   },
   onShow() {
-    this.anims.splash = new global.animengine.DomAnim(
-      "splashPage",
-      this.anims.splashimg.margin_top_str,
-      this.anims.splashimg.margin_left_str,
-      0,
-      0,
-      100
-    )
-    this.anims.splash_out = new global.animengine.DomAnim(
-      "splashPage",
-      this.anims.splashimg.margin_top_str,
-      this.anims.splashimg.margin_left_str,
-      800,
-      0,
-      100
-    )
-    this.anims.splash.start()
     setTimeout(() => {
-      this.anims.splash_out.start()
-      setTimeout(async() => {
-        if((await this.$app.$def.jumpcheck.NetworkCheck())){
-          if(!global.settings.SETTINGS.agreedAllAgreements){
+      router.replace({
+                uri: "pages/app/entry/eularead"
+              })
+      /*
+      this.anims.splash = new global.animengine.DomAnim(
+        "splashPage",
+        this.anims.splashimg.margin_top_str,
+        this.anims.splashimg.margin_left_str,
+        0,
+        0,
+        100
+      )
+      this.anims.splash_out = new global.animengine.DomAnim(
+        "splashPage",
+        this.anims.splashimg.margin_top_str,
+        this.anims.splashimg.margin_left_str,
+        800,
+        0,
+        100
+      )
+      this.anims.splash.start()
+      setTimeout(() => {
+        this.anims.splash_out.start()
+        setTimeout(async () => {
+          if (await this.$app.$def.jumpcheck.NetworkCheck()) {
+            if (!global.settings.SETTINGS.agreedAllAgreements) {
+              router.replace({
+                uri: "pages/app/entry/eularead"
+              })
+            } else {
+              this.$app.$def.jumpcheck.Jump()
+            }
+          } else {
             router.replace({
-              uri: "pages/app/entry/eularead"
+              uri: "pages/error/networkerror"
             })
           }
-          else{
-            this.$app.$def.jumpcheck.Jump()
-          }
-        }
-        else{
-          router.replace({
-            uri: "pages/error/networkerror"
-          })
-        }
-      }, 500)
-    }, 1000)
+        }, 500)
+      }, 1000)
+      */
+    }, 3000)
   },
   onDestroy() {
-    global.animengine.clearPageAnims("splashPage")
+    //global.animengine.clearPageAnims("splashPage")
   }
 }
 </script>
