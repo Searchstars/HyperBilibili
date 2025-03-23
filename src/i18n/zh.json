@@ -116,6 +116,7 @@
         "videoPushRelevance": "视频推荐相关性",
         "videoPushCount": "首页视频推荐数",
         "enableFullAnimation": "启用完整动画",
+        "startupPage": "起始页面",
         "clearTemp": "清除缓存",
         "logOut": "退出登录",
         "donation": "捐赠",

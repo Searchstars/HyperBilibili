@@ -20,9 +20,26 @@ export default {
   },
   async PreLogin() {
     await global.biliclient.login(false, null)
-    router.replace({
-      uri: "pages/app/features/main"
-    })
+    switch (global.settings.SETTINGS.startupPage) {
+      case "主页":
+        router.replace({
+          uri: "pages/app/features/main"
+        })
+        break;
+      case "私信":
+        router.replace({
+          uri: "pages/app/features/mypage"
+        })
+        router.push({
+          uri: "pages/message/dmlist"
+        })
+        break;
+      case "菜单":
+        router.replace({
+          uri: "pages/app/arealist"
+        })
+        break;
+    }
   },
   ReLogin(){
     global.biliclient.logOut()

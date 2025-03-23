@@ -4,10 +4,9 @@
   <div class="vid">
     <div class="loadedbox" @click="OpenVideo(video.bvid)" if="{{loadComp}}">
       <div style="{{vidinfo_style}}" class="vidinfo">
-        <div class="vidpicture" style="{{vidpicture_style}}">
-          <online-image width="{{vidpicture_style['max-width']}}" height="{{vidpicture_style['max-height']}}"
-            lock-size="true" border-radius="30px" object-fit="cover" loading-anim="true"
-            src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></online-image>
+        <div class="vidpicture">
+          <image class="vidpicture_img" style="width: {{vidpicture_style.width}} height: {{vidpicture_style.height}}"
+            src="{{video.pic}}@{{onlineimg_width}}w_{{onlineimg_height}}h"></image>
         </div>
         <text class="vidtitle" if="{{!useColumnTitle}}">{{ video.title }}</text>
       </div>
@@ -34,10 +33,8 @@ export default {
   data: {
     useColumnTitle: false,
     vidpicture_style: {
-      "min-width": "160px",
-      "min-height": "100px",
-      "max-width": "160px",
-      "max-height": "100px"
+      width: "160px",
+      height: "100px"
     },
     onlineimg_width: "160",
     onlineimg_height: "100",
@@ -56,10 +53,8 @@ export default {
   },
   // 在线图片展示大小（UI层）
   SetOnlineImageSize(width, height) {
-    this.vidpicture_style["min-width"] = width + "px"
-    this.vidpicture_style["max-width"] = width + "px"
-    this.vidpicture_style["min-height"] = height + "px"
-    this.vidpicture_style["max-height"] = height + "px"
+    this.vidpicture_style["width"] = width + "px"
+    this.vidpicture_style["height"] = height + "px"
   },
   // 在线图片加载大小（组件层）
   // 使用比展示大小更小的加载大小可以节省设备RAM、降低渲染压力、节省流量等
@@ -140,6 +135,11 @@ export default {
   background-color: rgba(255, 255, 255, 0);
   justify-content: center;
   align-items: center;
+}
+
+.vidpicture_img {
+  border-radius: 30px;
+  object-fit: scale-down;
 }
 
 .vidtitle {

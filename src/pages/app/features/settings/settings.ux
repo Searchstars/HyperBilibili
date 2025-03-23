@@ -5,20 +5,25 @@
     <scroll class="scroll {{scrclass}}" scroll-y="true" bounces="true">
       <switch-bar title="settings.title"></switch-bar>
       <img src="/common/settings_version.png" @click="GoAbout"></img>
-      <div class="setbase" onclick="ClickCountSet(countset_name[0])">
+      <div class="setbase" onclick="ClickCountSet('fresh_type')">
         <image class="seticon" src="/common/settings_freshtype.png"></image>
         <text class="setext_small">{{ $t("settings.videoPushRelevance") }}</text>
         <text class="countset_num">{{ fresh_type }}</text>
       </div>
-      <div class="setbase" onclick="ClickCountSet(countset_name[1])">
+      <div class="setbase" onclick="ClickCountSet('home_vid_count')">
         <image class="seticon" src="/common/settings_homevidcount.png"></image>
         <text class="setext_small">{{ $t("settings.videoPushCount") }}</text>
         <text class="countset_num">{{ home_vid_count }}</text>
       </div>
-      <div class="setbase" onclick="SwitchSet(switchset_name[0])">
+      <div class="setbase" onclick="SwitchSet('enable_full_anim')">
         <image class="seticon" src="/common/settings_enablefullanim.png"></image>
         <text class="setext_small">{{ $t("settings.enableFullAnimation") }}</text>
         <text class="countset_num">{{ enableFullAnimation ? "开" : "关" }}</text>
+      </div>
+      <div class="setbase" onclick="ItemsChangeSet('startup_page')">
+        <image class="seticon" src="/common/settings_startuppage.png"></image>
+        <text class="setext_small">{{ $t("settings.startupPage") }}</text>
+        <text class="countset_num">{{ startupPage }}</text>
       </div>
       <div class="setbase" @click="ClearTmp()">
         <image class="seticon" src="/common/settings_removetmp.png"></image>
@@ -59,8 +64,7 @@ export default {
     fresh_type: 3,
     home_vid_count: 10,
     enableFullAnimation: false,
-    switchset_name: ["enable_full_anim"],
-    countset_name: ["fresh_type", "home_vid_count"],
+    startupPage: "主页",
     countset: {
       fresh_type_max: 3,
       fresh_type_min: 1,
@@ -90,56 +94,62 @@ export default {
     })
   },
   SwitchSet(name) {
-    switch (name) {
-      case "enable_full_anim":
-        if (this.enableFullAnimation) {
-          this.enableFullAnimation = false
-          global.settings.saveSettings({
-            enableFullAnimation: this.enableFullAnimation
-          })
-        } else {
-          this.enableFullAnimation = true
-          global.settings.saveSettings({
-            enableFullAnimation: this.enableFullAnimation
-          })
-          prompt.showToast({
-            message: "开启此选项会导致首页等页面在低性能设备上严重卡顿，因此建议保持关闭！",
-            duration: 6000
-          })
-        }
-        this.UpdateNumView()
+    if (name === "enable_full_anim") {
+      this.enableFullAnimation = !this.enableFullAnimation;
+      global.settings.saveSettings({ enableFullAnimation: this.enableFullAnimation });
+
+      if (this.enableFullAnimation) {
+        prompt.showToast({
+          message: "开启此选项会导致首页等页面在低性能设备上严重卡顿，因此建议保持关闭！",
+          duration: 6000
+        });
+      }
+      this.UpdateNumView();
     }
   },
   ClickCountSet(name) {
-    switch (name) {
-      case "fresh_type":
-        var new_fresh_type = null
-        if (this.fresh_type < this.countset.fresh_type_max) {
-          new_fresh_type = this.fresh_type + 1
-        } else {
-          new_fresh_type = this.countset.fresh_type_min
-        }
-        global.settings.saveSettings({
-          fresh_type: new_fresh_type
-        })
-        setTimeout(() => {
-          this.UpdateNumView()
-        }, 100)
-        break
-      case "home_vid_count":
-        var new_home_vid_count = null
-        if (this.home_vid_count < this.countset.home_vid_count_max) {
-          new_home_vid_count = this.home_vid_count + 1
-        } else {
-          new_home_vid_count = this.countset.home_vid_count_min
-        }
-        global.settings.saveSettings({
-          home_vid_count: new_home_vid_count
-        })
-        setTimeout(() => {
-          this.UpdateNumView()
-        }, 100)
-        break
+    const mapping = {
+      "fresh_type": {
+        current: this.fresh_type,
+        max: this.countset.fresh_type_max,
+        min: this.countset.fresh_type_min,
+        key: "fresh_type"
+      },
+      "home_vid_count": {
+        current: this.home_vid_count,
+        max: this.countset.home_vid_count_max,
+        min: this.countset.home_vid_count_min,
+        key: "home_vid_count"
+      }
+    };
+
+    if (mapping[name]) {
+      const { current, max, min, key } = mapping[name];
+      const newValue = current < max ? current + 1 : min;
+      global.settings.saveSettings({ [key]: newValue });
+      
+      // 延时更新视图
+      setTimeout(() => {
+        this.UpdateNumView();
+      }, 100);
+    }
+  },
+  ItemsChangeSet(name) {
+    if (name === "startup_page") {
+      const pages = ["主页", "私信", "菜单"];
+      // 新建变量 startupPage 用于存储当前启动页状态，若未初始化则默认取 "主页"
+      if (!this.startupPage) {
+        this.startupPage = pages[0];
+      } else {
+        // 获取当前 startupPage 在 pages 数组中的索引，然后切换到下一个项（循环）
+        let index = pages.indexOf(this.startupPage);
+        index = (index + 1) % pages.length;
+        this.startupPage = pages[index];
+      }
+      global.settings.saveSettings({
+        startupPage: this.startupPage
+      });
+      this.UpdateNumView();
     }
   },
   logout() {
@@ -153,6 +163,7 @@ export default {
     this.fresh_type = global.settings.SETTINGS.fresh_type
     this.home_vid_count = global.settings.SETTINGS.home_vid_count
     this.enableFullAnimation = global.settings.SETTINGS.enableFullAnimation
+    this.startupPage = global.settings.SETTINGS.startupPage
   },
   onInit() {
     this.UpdateNumView()

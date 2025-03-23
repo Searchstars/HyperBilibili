@@ -7,7 +7,7 @@
   },
   "license": "GPL-3.0-only",
   "scripts": {
-    "start": "aiot server --watch --open-nuttx --enable-protobuf true",
+    "start": "aiot server --watch --open-nuttx",
     "build": "aiot build --enable-jsc --enable-protobuf",
     "release": "aiot release --enable-jsc --enable-protobuf --enable-image-png8",
     "watch": "aiot watch --open-nuttx",
