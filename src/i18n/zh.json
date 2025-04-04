@@ -3,12 +3,11 @@
         "title": "关于应用",
         "projectOwnerShip": "项目归属",
         "buildInfo": "构建信息",
-        "commitHash": "提交哈希",
-        "buildTime": "构建时间",
-        "builder": "构建者",
+        "designers": "参与设计的人员",
         "developers": "参与开发的人员",
         "moreResources": "更多资源请访问",
-        "osw": "开源项目/软件声明",
+        "osw": "开源项目声明",
+        "buildinfo": "构建信息",
         "disclaimer": "免责声明"
     },
     "arealist": {

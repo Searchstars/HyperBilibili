@@ -1,12 +1,12 @@
 {
     "about": {
         "title": "About the App",
+        "projectOwnerShip": "Project By",
+        "designers": "Designers Involved",
         "developers": "Developers Involved",
-        "commitHash": "Commit Hash",
-        "buildTime": "Build Time",
-        "builder": "Builder",
         "moreResources": "For more resources, visit",
-        "osw": "OpenSource Project/Software Statement",
+        "osw": "OpenSource Project Statement",
+        "buildinfo": "Build Info",
         "disclaimer": "Disclaimer"
     },
     "arealist": {

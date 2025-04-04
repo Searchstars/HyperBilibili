@@ -7,7 +7,7 @@
             <div class="bg" for="{{items}}" onclick="OpenLic($item.lic)">
                 <text class="t">{{ $item.name }}</text>
             </div>
-            <text style="margin-top: 30px"></text>
+            <text style="margin-top: 35px"></text>
         </scroll>
     </div>
 </template>
