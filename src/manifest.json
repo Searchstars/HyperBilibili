@@ -1,10 +1,10 @@
 {
-    "package": "com.searchstars.hyperbilibili.dev",
+    "package": "com.searchstars.hyperbilibili",
     "name": "澎湃哔哩",
     "versionName": "2.5.0",
     "versionCode": 2,
     "minPlatformVersion": 1000,
-    "icon": "/common/logoDEV.png",
+    "icon": "/common/logo.png",
     "deviceTypeList": [
         "watch"
     ],
