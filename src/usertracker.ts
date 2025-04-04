@@ -88,8 +88,8 @@ function uploadTrack(event: TIUPEvents, payload) {
     }
 }
 
-setTimeout(() => {
-    uploadTrack(TIUPEvents.ON_STARTUP, {
-        startTime: dayjs().format()
-    })
-}, 3000)
+//setTimeout(() => {
+//    uploadTrack(TIUPEvents.ON_STARTUP, {
+//        startTime: dayjs().format()
+//    })
+//}, 3000)

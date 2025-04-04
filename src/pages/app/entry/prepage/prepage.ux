@@ -27,12 +27,15 @@ export default {
         })
         break;
       case "私信":
-        router.replace({
-          uri: "pages/app/features/mypage"
-        })
-        router.push({
-          uri: "pages/message/dmlist"
-        })
+        setTimeout(() => {
+          // 预留时间给其它子模块初始化
+          router.replace({
+            uri: "pages/app/features/mypage"
+          })
+          router.push({
+            uri: "pages/message/dmlist"
+          })
+        }, 1000)
         break;
       case "菜单":
         router.replace({
