@@ -12,8 +12,17 @@
           onclick="OpenArticle($item.id)" static>
           <articleshow article="{{$item}}"></articleshow>
         </div>
+        <div if="{{$item.type == 'videoAudio' ? true : false}}"
+          class="video-audio-item"
+          onclick="PlayVideoAudio($item)" static>
+          <image class="video-audio-cover" src="{{$item.coverUrl}}"></image>
+          <div class="video-audio-info">
+            <text class="video-audio-title">{{$item.title}}</text>
+            <text class="video-audio-author">{{$item.author}}</text>
+          </div>
+        </div>
       </div>
-      <text style="margin-top: 25px" static></text>
+      <text class="bottom-spacer" static></text>
     </scroll>
   </div>
 </template>
@@ -49,6 +58,18 @@ export default {
       }
     })
   },
+  PlayVideoAudio(item) {
+    router.push({
+      uri: "pages/video/player",
+      params: {
+        bvid: item.bvid,
+        cachedAudioUri: item.fileUri,
+        cachedTitle: item.title,
+        cachedCoverUrl: item.coverUrl,
+        cachedAuthor: item.author
+      }
+    })
+  },
   async LoadContent() {
     const origin_content = await global.savedcontent.SavedContentManager.listAllContent()
     const patched = this.PatchContent(origin_content)
@@ -62,4 +83,5 @@ export default {
 
 <style lang="less">
 @import "@less/global.less";
+@import "./savedcontent.less";
 </style>

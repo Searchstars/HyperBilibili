@@ -36,12 +36,14 @@ export default {
     clearControl: {
       imgs: false,
       logs: false,
-      sc: false
+      sc: false,
+      videoAudio: false
     },
     typeColors: {
       imgs: "#434343",
       logs: "#434343",
       sc: "#434343",
+      videoAudio: "#434343",
       others: "#222222"
     },
     scrclass: ""
@@ -51,12 +53,14 @@ export default {
     this.clearControl = {
       imgs: false,
       logs: false,
-      sc: false
+      sc: false,
+      videoAudio: false
     }
     this.typeColors = {
       imgs: "#434343",
       logs: "#434343",
       sc: "#434343",
+      videoAudio: "#434343",
       others: "#222222"
     }
   },
@@ -88,6 +92,14 @@ export default {
       })
     }
 
+    if (this.clearControl.videoAudio) {
+      const contents = await global.savedcontent.SavedContentManager.listAllContent()
+      const videoAudioContents = contents.filter((ct) => ct.type === 'videoAudio')
+      videoAudioContents.forEach((ct) => {
+        tasks.push(global.savedcontent.SavedContentManager.deleteContent(ct.id))
+      })
+    }
+
     await Promise.all(tasks)
 
     prompt.showToast({
@@ -115,11 +127,11 @@ export default {
             success: (data) => {
               this.clearControl.sc = true
               this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343"
-              // 由于这是异步函数，因此需要重新做cantClear检测
               this.cantClear = !(
                 this.clearControl.imgs ||
                 this.clearControl.logs ||
-                this.clearControl.sc
+                this.clearControl.sc ||
+                this.clearControl.videoAudio
               )
             }
           })
@@ -128,9 +140,30 @@ export default {
           this.typeColors.sc = this.clearControl.sc ? "#FF7DA8" : "#434343"
         }
         break
+      case "videoAudio":
+        if (!this.clearControl.videoAudio) {
+          prompt.showDialog({
+            message:
+              "清除视频音频将删除所有已缓存的视频音频文件，且该操作不可逆。确定要继续吗？",
+            success: (data) => {
+              this.clearControl.videoAudio = true
+              this.typeColors.videoAudio = this.clearControl.videoAudio ? "#FF7DA8" : "#434343"
+              this.cantClear = !(
+                this.clearControl.imgs ||
+                this.clearControl.logs ||
+                this.clearControl.sc ||
+                this.clearControl.videoAudio
+              )
+            }
+          })
+        } else {
+          this.clearControl.videoAudio = false
+          this.typeColors.videoAudio = this.clearControl.videoAudio ? "#FF7DA8" : "#434343"
+        }
+        break
     }
 
-    this.cantClear = !(this.clearControl.imgs || this.clearControl.logs || this.clearControl.sc)
+    this.cantClear = !(this.clearControl.imgs || this.clearControl.logs || this.clearControl.sc || this.clearControl.videoAudio)
     global.logger.log("[ClearTmp.SelectHandler] cantClear: ", this.cantClear)
   },
   BytesToMB(bytes) {
@@ -141,17 +174,27 @@ export default {
       const contents = await global.savedcontent.SavedContentManager.listAllContent()
       const ret = await Promise.all(
         contents.map(async (content) => {
-          const data = await asyncFile.get({uri: content.fileUri})
-          return {
-            uri: content.fileUri,
-            length: data.length,
-            _labelIsSavedContent: true
+          try {
+            const fileExists = await asyncFile.access({uri: content.fileUri})
+            if (!fileExists) {
+              return null
+            }
+            const data = await asyncFile.get({uri: content.fileUri})
+            return {
+              uri: content.fileUri,
+              length: data.length,
+              _labelIsSavedContent: true
+            }
+          } catch (e) {
+            global.logger.log("缓存文件不存在，跳过：" + content.fileUri)
+            return null
           }
         })
       )
-      return ret
+      return ret.filter(item => item !== null)
     } catch (e) {
       global.logger.error("在扫描临时文件（统计缓存内容）时出错：", e.toString())
+      return []
     }
   },
   async ScanTemps() {
@@ -161,6 +204,7 @@ export default {
         images: {count: 0, size: 0, list: []},
         logs: {count: 0, size: 0, list: []},
         savedContent: {count: 0, size: 0},
+        videoAudio: {count: 0, size: 0, list: []},
         others: {count: 0, size: 0}
       }
 
@@ -184,6 +228,10 @@ export default {
           totalStats.logs.count++
           totalStats.logs.size += length
           totalStats.logs.list.push(uri)
+        } else if (/\.m4s$/i.test(uri)) {
+          totalStats.videoAudio.count++
+          totalStats.videoAudio.size += length
+          totalStats.videoAudio.list.push(uri)
         } else if (_labelIsSavedContent) {
           totalStats.savedContent.count++
           totalStats.savedContent.size += length
@@ -210,6 +258,12 @@ export default {
           name: "缓存内容",
           alias: "sc",
           size: `${this.BytesToMB(totalStats.savedContent.size)} MB`
+        },
+        {
+          name: "视频音频",
+          alias: "videoAudio",
+          size: `${this.BytesToMB(totalStats.videoAudio.size)} MB`,
+          list: totalStats.videoAudio.list
         },
         {
           name: "其它",
