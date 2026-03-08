@@ -257,6 +257,25 @@
           audio.pause();
         }
       };
+      audio.onctrlplay = () => {
+        if (!this.playerState.isPlaying) {
+          this.playerState.isPlaying = true;
+          this.isPlaying = true;
+          if (this.playTimeoutId) {
+            clearTimeout(this.playTimeoutId);
+            this.playTimeoutId = null;
+          }
+          audio.play();
+          this.pendingSongId = null;
+        }
+      };
+      audio.onctrlpause = () => {
+        if (this.playerState.isPlaying) {
+          this.playerState.isPlaying = false;
+          this.isPlaying = false;
+          audio.pause();
+        }
+      };
       audio.onstop = () => {
         this.playerState.isPlaying = false;
         this.isPlaying = false;
@@ -690,11 +709,26 @@
         audio.src = that.currSong.url;
         setTimeout(function() {
           if (!that.audioReady && that.isPlaying !== true) {
-            that.duration = audio.duration || 0;
-            that.audioReady = true;
-            that.isPlaying = true;
-            that.playerState.isPlaying = true;
-            audio.play();
+            const dur = audio.duration;
+            if (dur && dur > 0 && !isNaN(dur)) {
+              that.duration = dur;
+              that.audioReady = true;
+              that.isPlaying = true;
+              that.playerState.isPlaying = true;
+              audio.play();
+            } else {
+              console.log('音频时长无效，等待重试');
+              setTimeout(function() {
+                if (!that.audioReady && that.isPlaying !== true) {
+                  const dur2 = audio.duration;
+                  that.duration = dur2 || 0;
+                  that.audioReady = true;
+                  that.isPlaying = true;
+                  that.playerState.isPlaying = true;
+                  audio.play();
+                }
+              }, 500);
+            }
           }
         }, 500);
       } else {
@@ -721,11 +755,26 @@
           audio.src = that.currSong.url;
           setTimeout(function() {
             if (!that.audioReady && that.isPlaying !== true) {
-              that.duration = audio.duration || 0;
-              that.audioReady = true;
-              that.isPlaying = true;
-              that.playerState.isPlaying = true;
-              audio.play();
+              const dur = audio.duration;
+              if (dur && dur > 0 && !isNaN(dur)) {
+                that.duration = dur;
+                that.audioReady = true;
+                that.isPlaying = true;
+                that.playerState.isPlaying = true;
+                audio.play();
+              } else {
+                console.log('视频音频时长无效，等待重试');
+                setTimeout(function() {
+                  if (!that.audioReady && that.isPlaying !== true) {
+                    const dur2 = audio.duration;
+                    that.duration = dur2 || 0;
+                    that.audioReady = true;
+                    that.isPlaying = true;
+                    that.playerState.isPlaying = true;
+                    audio.play();
+                  }
+                }, 500);
+              }
             }
           }, 500);
           return;
@@ -936,7 +985,9 @@
                 that.toastLog('校验成功，准备播放');
                 that.currSong.url = result.uri;
                 that.saveVideoAudioToSavedContent(result.uri);
-                that.playCurrentSong();
+                setTimeout(() => {
+                  that.playCurrentSong();
+                }, 300);
               }).catch((error) => {
                 that.toastLog('校验异常，回退直链');
                 that.currSong.url = audioUrl;
@@ -992,7 +1043,9 @@
                 }
                 that.currSong.url = result.uri;
                 that.saveVideoAudioToSavedContent(result.uri);
-                that.playCurrentSong();
+                setTimeout(() => {
+                  that.playCurrentSong();
+                }, 300);
               }).catch((error) => {
                 that.toastLog('校验异常，回退直链');
                 that.currSong.url = audioUrl;

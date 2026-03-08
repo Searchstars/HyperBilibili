@@ -128,7 +128,7 @@ export class SavedContentManager {
 
   // 读取所有存储内容的 id 和 title 列表
   static async listAllContent(): Promise<any> {
-    return storageIndex;
+    return [...storageIndex];
   }
 
   // 删除内容

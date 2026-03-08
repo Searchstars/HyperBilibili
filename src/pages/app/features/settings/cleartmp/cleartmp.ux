@@ -87,17 +87,18 @@ export default {
 
     if (this.clearControl.sc) {
       const contents = await global.savedcontent.SavedContentManager.listAllContent()
-      contents.forEach((ct) => {
-        tasks.push(global.savedcontent.SavedContentManager.deleteContent(ct.id))
-      })
+      for (const ct of contents) {
+        await global.savedcontent.SavedContentManager.deleteContent(ct.id)
+      }
     }
 
     if (this.clearControl.videoAudio) {
       const contents = await global.savedcontent.SavedContentManager.listAllContent()
       const videoAudioContents = contents.filter((ct) => ct.type === 'videoAudio')
-      videoAudioContents.forEach((ct) => {
-        tasks.push(global.savedcontent.SavedContentManager.deleteContent(ct.id))
-      })
+      for (let i = 0; i < videoAudioContents.length; i++) {
+        const ct = videoAudioContents[i]
+        await global.savedcontent.SavedContentManager.deleteContent(ct.id)
+      }
     }
 
     await Promise.all(tasks)
