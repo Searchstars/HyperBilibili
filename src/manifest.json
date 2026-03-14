@@ -16,6 +16,9 @@
             "name": "system.request"
         },
         {
+            "name": "system.audio"
+        },
+        {
             "name": "system.file"
         },
         {
@@ -48,7 +51,7 @@
     ],
     "config": {
         "logLevel": "log",
-        "designWidth": 466,
+        "designWidth": "device-width",
         "background": {
             "features": [
                 "system.request",
@@ -73,6 +76,9 @@
             },
             "pages/video/videodetail": {
                 "component": "videodetail"
+            },
+            "pages/video/player": {
+                "component": "player"
             },
             "pages/app/arealist": {
                 "component": "arealist"

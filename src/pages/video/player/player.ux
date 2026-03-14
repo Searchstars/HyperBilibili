@@ -1,0 +1,1586 @@
+<template>
+  <stack class="player-container">
+    <!-- 缓存提示页面 -->
+    <div if="{{ showCacheTips }}" class="cache-tips-page">
+      <scroll class="cache-tips-scroll" scroll-y="true">
+        <div class="cache-tips-content">
+          <text class="cache-tips-title">缓存提示</text>
+          <text class="cache-tips-description">由于系统限制，视频需要先缓存到本地才能播放，您可以在缓存列表中删除已缓存的视频。</text>
+          <div class="cache-tips-checkbox">
+            <input type="checkbox" class="cache-remember-checkbox" checked="{{ rememberCacheTips }}" onchange="toggleRememberCacheTips"></input>
+            <text class="cache-remember-text">不再提示</text>
+          </div>
+          <div class="cache-tips-buttons">
+            <div class="cache-btn cache-btn-primary" onclick="cacheAndPlay">
+              <text class="cache-btn-text">缓存音频</text>
+            </div>
+            <div class="cache-btn cache-btn-secondary" onclick="goBack">
+              <text class="cache-btn-text">返回</text>
+            </div>
+          </div>
+        </div>
+      </scroll>
+    </div>
+    <!-- 进度调整界面 -->
+    <div if="{{ showAdjustProgress }}" class="adjust-progress-overlay">
+      <div class="adjust-progress-panel">
+        <text class="adjust-progress-title">调整进度</text>
+        <text class="adjust-progress-time">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</text>
+        <slider class="adjust-progress-slider" min="0" max="100" value="{{ sliderValue }}" @change="onProgressChange"></slider>
+        <div class="adjust-progress-buttons">
+          <div class="adjust-btn" onclick="cancelAdjustProgress">
+            <text class="adjust-btn-text">取消</text>
+          </div>
+          <div class="adjust-btn adjust-btn-primary" onclick="confirmAdjustProgress">
+            <text class="adjust-btn-text">确定</text>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 音量调整界面 -->
+    <div if="{{ showAdjustVolume }}" class="adjust-volume-overlay" onclick="closeVolumePanel">
+      <div class="adjust-volume-panel" onclick="stopPropagation">
+        <text class="adjust-volume-title">音量</text>
+        <text class="adjust-volume-value">{{ volumePercent }}%</text>
+        <slider class="adjust-volume-slider" min="0" max="100" value="{{ volumePercent }}" @change="onVolumeChange"></slider>
+      </div>
+    </div>
+    <!-- 主播放器内容 -->
+    <swiper if="{{ !showCacheTips }}" class="swiper-container" indicator="false" index="1" loop="false">
+      <!-- 功能栏页面（新播放器样式） -->
+      <stack class="swiper-page" if="{{ newPlayerStyle }}">
+      <div class="features-page">
+        <image class="background-image" src="{{ getImageUrl(currSong.al.picUrl) }}" oncomplete="onImageLoad"></image>
+        <div class="features-sidebar">
+          <image class="feature-icon" src="/common/icon/volume.png" onclick="goToVolume" />
+          <image class="feature-icon" src="/common/icon/play-list.png" onclick="goToList" />
+          <image class="feature-icon" src="{{ getPlayModeIcon() }}" onclick="togglePlayMode" />
+          <image class="feature-icon" src="/common/icon/progress.png" onclick="adjustProgress" />
+          <image class="feature-icon" src="/common/icon/exit.png" onclick="exitPlayer" />
+        </div>
+      </div>
+    </stack>
+    <!-- 主播放页面（两种风格） -->
+    <stack class="swiper-page">
+      <!-- 传统播放器样式 -->
+      <div if="{{ !newPlayerStyle }}" class="demo-page">
+        <image class="background-image" src="{{ getImageUrl(currSong.al.picUrl) }}" oncomplete="onImageLoad"></image>
+        <div class="song">
+          <marquee class="song-name" scrollamount="{{36}}">{{ currSong.name || "加载中..." }}</marquee>
+          <marquee class="singer-name" scrollamount="{{36}}">{{ (currSong.ar && currSong.ar[0].name) || "未知" }}</marquee>
+        </div>
+        <div class="controls">
+          <image class="control-icon" src="/common/icon/prev.png" onclick="change(-1)" />
+          <div class="play-button">
+            <div class="progress-container">
+              <progress class="play-progress" type="arc" percent="{{progress}}"></progress>
+            </div>
+            <image class="control-icon" if="{{isPlaying}}" src="/common/icon/pause.png" onclick="playOrPause" />
+            <image class="control-icon" else src="/common/icon/play.png" onclick="playOrPause" />
+          </div>
+          <image class="control-icon" src="/common/icon/next.png" onclick="change(1)" />
+        </div>
+        <div class="footer">
+          <image class="icon" src="/common/icon/volume.png" onclick="goToVolume" />
+          <image class="icon" src="/common/icon/play-list.png" onclick="goToList" />
+          <image class="icon" src="{{ getPlayModeIcon() }}" onclick="togglePlayMode" />
+          <!-- 喜欢图标已移除 -->
+          <image class="icon" src="/common/icon/progress.png" onclick="adjustProgress" />
+          <image class="icon" src="/common/icon/exit.png" onclick="exitPlayer" />
+        </div>
+      </div>
+      <!-- 新播放器样式 -->
+      <div if="{{ newPlayerStyle }}" class="new-player-page">
+        <image class="background-image" src="{{ getImageUrl(currSong.al.picUrl) }}" oncomplete="onImageLoad"></image>
+        <div class="new-player-center">
+          <image class="new-player-cover" src="{{ getCoverImageUrl(currSong.al.picUrl) }}"></image>
+          <text class="new-player-song-name">{{ currSong.name || "加载中..." }}</text>
+          <text class="new-player-artist-name">{{ (currSong.ar && currSong.ar[0].name) || "未知" }}</text>
+        </div>
+        <div class="new-player-controls">
+          <image class="control-icon" src="/common/icon/prev.png" onclick="change(-1)" />
+          <div class="play-button">
+            <div class="progress-container">
+              <progress class="play-progress" type="arc" percent="{{progress}}"></progress>
+            </div>
+            <image class="control-icon" if="{{isPlaying}}" src="/common/icon/pause.png" onclick="playOrPause" />
+            <image class="control-icon" else src="/common/icon/play.png" onclick="playOrPause" />
+          </div>
+          <image class="control-icon" src="/common/icon/next.png" onclick="change(1)" />
+        </div>
+      </div>
+    </stack>
+    <!-- 歌词页面 -->
+    <!--
+    <stack class="swiper-page">
+      <div class="lyric-page">
+        <image class="background-image" src="{{ getImageUrl(currSong.al.picUrl) }}" oncomplete="onImageLoad"></image>
+        <div class="applemusic-lyric-container">
+          <scroll class="applemusic-lyric-scroll" scroll-y="true" scroll-top="{{lyricScrollTop}}" id="appleMusicLyricScroll">
+            <div class="applemusic-lyric-list">
+              <div for="{{ (index, line) in lyricLines }}" id="applemusic-lyric-{{index}}">
+                <text class="applemusic-lyric-normal" if="{{ index !== currentLyricIndex }}" style="opacity: {{ calculateLyricOpacity(index) }}">{{ line.text }}</text>
+                <text class="applemusic-lyric-active" if="{{ index === currentLyricIndex }}">{{ line.text }}</text>
+              </div>
+            </div>
+          </scroll>
+        </div>
+      </div>
+    </stack>
+    -->
+  </swiper>
+  </stack>
+</template>
+<script>
+  import router from "@system.router";
+  import audio from "@system.audio";
+  import storage from "@system.storage";
+  import prompt from "@system.prompt";
+  import request from "@system.request";
+  import { asyncFile } from "../../../asyncapi/file";
+  export default {
+    props: { playlistId: { default: null }, startIndex: { default: 0 }, tracks: { default: null }, bvid: { default: null }, cachedAudioUri: { default: null }, cachedTitle: { default: null }, cachedCoverUrl: { default: null }, cachedAuthor: { default: null } },
+    data: {
+      index: 0,
+      songList: [],
+      currSong: { al: {}, ar: [{}] },
+      isPlaying: false,
+      progress: 0,
+      duration: 0,
+      imageLoaded: false,
+      audioReady: false,
+      lyricLines: [],
+      currentLyricIndex: -1,
+      lyricScrollTop: 0,
+      loadLyrics: true,
+      currentRequestId: 0,
+      playMode: 'loop',
+      lyricOffset: 0.3,
+      bitrate: 128000,
+      playerState: {
+        isPlaying: false,
+        playDuration: 0
+      },
+      playTimeoutId: null,
+      pendingSongId: null,
+      videoMode: false,
+      videoBvid: null,
+      showCacheTips: false,
+      showAdjustProgress: false,
+      currentTime: 0,
+      sliderValue: 0,
+      showAdjustVolume: false,
+      volumePercent: 50,
+      rememberCacheTips: false,
+      cachedCoverUri: null
+    },
+    getImageUrl(picUrl) {
+      if (!picUrl) return '/common/icon/default_album.png';
+      if (picUrl.startsWith('internal://files/')) return picUrl;
+      return picUrl + '@319w_150h';
+    },
+    getCoverImageUrl(picUrl) {
+      if (!picUrl) return '/common/icon/default_album.png';
+      if (picUrl.startsWith('internal://files/')) return picUrl;
+      return picUrl + '@319w_150h';
+    },
+    loadLyricSettings() {
+      const that = this;
+      storage.get({
+        key: 'lyricSettings',
+        success: function(data) {
+          if (data) {
+            try {
+              const settings = JSON.parse(data);
+              that.loadLyrics = settings.loadLyrics !== undefined ? settings.loadLyrics : true;
+              that.lyricOffset = settings.lyricOffset !== undefined ? settings.lyricOffset : 0.3;
+            } catch (e) {
+            }
+          }
+        },
+        fail: function(data, code) {
+        }
+      });
+    },
+    loadBitrateSettings() {
+      const that = this;
+      storage.get({
+        key: 'bitrateSettings',
+        success: function(data) {
+          if (data) {
+            try {
+              const settings = JSON.parse(data);
+              that.bitrate = settings.bitrate !== undefined ? settings.bitrate : 128000;
+            } catch (e) {
+              that.bitrate = 128000;
+            }
+          } else {
+            that.bitrate = 128000;
+          }
+        },
+        fail: function(data, code) {
+          that.bitrate = 128000;
+        }
+      });
+    },
+    handlePlaybackError(errorMessage) {
+      const that = this;
+      prompt.showToast({ message: errorMessage || '播放发生错误', duration: 3000 });
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      if (that.playTimeoutId) {
+        clearTimeout(that.playTimeoutId);
+        that.playTimeoutId = null;
+      }
+      that.pendingSongId = null;
+      if (that.songList && that.songList.length > 1) {
+        that.change(1);
+      }
+    },
+    bindAudioEvents() {
+      audio.onplay = () => {
+        if (!this.playerState.isPlaying) {
+          this.playerState.isPlaying = true;
+          this.isPlaying = true;
+          if (this.playTimeoutId) {
+            clearTimeout(this.playTimeoutId);
+            this.playTimeoutId = null;
+          }
+          audio.play();
+          this.pendingSongId = null;
+        }
+      };
+      audio.onpause = () => {
+        if (this.playerState.isPlaying) {
+          this.playerState.isPlaying = false;
+          this.isPlaying = false;
+          audio.pause();
+        }
+      };
+      audio.onctrlplay = () => {
+        if (!this.playerState.isPlaying) {
+          this.playerState.isPlaying = true;
+          this.isPlaying = true;
+          if (this.playTimeoutId) {
+            clearTimeout(this.playTimeoutId);
+            this.playTimeoutId = null;
+          }
+          audio.play();
+          this.pendingSongId = null;
+        }
+      };
+      audio.onctrlpause = () => {
+        if (this.playerState.isPlaying) {
+          this.playerState.isPlaying = false;
+          this.isPlaying = false;
+          audio.pause();
+        }
+      };
+      audio.onstop = () => {
+        this.playerState.isPlaying = false;
+        this.isPlaying = false;
+        if (this.playTimeoutId) {
+          clearTimeout(this.playTimeoutId);
+          this.playTimeoutId = null;
+        }
+        this.pendingSongId = null;
+      };
+      audio.onerror = () => {
+        this.handlePlaybackError("播放器发生错误");
+      };
+      audio.ontimeupdate = () => {
+        if (!this.pendingSongId) {
+          this.playerState.playDuration = audio.currentTime;
+          this.updateLyric();
+        }
+      };
+      audio.onended = () => {
+        const timeDifference = Math.abs(audio.duration - audio.currentTime);
+        if (audio.duration > 0 && timeDifference > 2) {
+        }
+        if (this.playMode === 'once') {
+          this.playCurrentSong();
+        } else {
+          this.change(1);
+        }
+      };
+      audio.onctrlplayprev = () => {
+        prompt.showToast({ message: '上一首' });
+        this.change(-1);
+      };
+      audio.onctrlplaynext = () => {
+        prompt.showToast({ message: '下一首' });
+        this.change(1);
+      };
+      audio.onctrlvolumeup = () => {
+        audio.getPlayState({
+          success: function (state) {
+            const newVolume = state.volume > 0.9 ? 1 : state.volume + 0.1;
+            audio.volume = newVolume;
+            prompt.showToast({ message: `音量: ${Math.round(newVolume * 100)}%` });
+          },
+          fail: function (data, code) {
+          }
+        });
+      };
+      audio.onctrlvolumedown = () => {
+        audio.getPlayState({
+          success: function (state) {
+            const newVolume = state.volume < 0.1 ? 0 : state.volume - 0.1;
+            audio.volume = newVolume;
+            prompt.showToast({ message: `音量: ${Math.round(newVolume * 100)}%` });
+          },
+          fail: function (data, code) {
+          }
+        });
+      };
+    },
+    onInit() {
+      const that = this;
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      if (that.cachedAudioUri && that.cachedTitle) {
+        that.videoMode = true;
+        that.videoBvid = that.bvid;
+        that.playlistId = `video_bvid_${that.bvid}`;
+        that.startIndex = 0;
+        that.tracks = null;
+        that.showCacheTips = false;
+       
+        that.songList = [{
+          id: that.bvid,
+          name: that.cachedTitle,
+          al: { picUrl: that.cachedCoverUrl || '' },
+          ar: [{ name: that.cachedAuthor || '未知' }],
+          url: that.cachedAudioUri
+        }];
+        that.currSong = that.songList[0];
+        that.index = 0;
+       
+        that.playCurrentSong();
+        return;
+      }
+      if (that.bvid) {
+        that.videoMode = true;
+        that.videoBvid = that.bvid;
+        that.playlistId = `video_bvid_${that.bvid}`;
+        that.startIndex = 0;
+        that.tracks = null;
+       
+        storage.get({
+          key: 'skipCacheTips',
+          success: function(data) {
+            if (data === 'true') {
+              that.showCacheTips = false;
+              that.cacheAndPlay();
+            } else {
+              that.showCacheTips = true;
+            }
+          },
+          fail: function() {
+            that.showCacheTips = true;
+          }
+        });
+      }
+      const fromAppStart = that.fromAppStart || false;
+      const hasNewPlaylist = that.playlistId && !fromAppStart;
+      if (hasNewPlaylist) {
+        that.index = that.startIndex || 0;
+        that.clearPlayerState();
+      } else if (fromAppStart) {
+        that.restorePlayerState(true);
+      } else {
+        that.index = that.startIndex;
+      }
+      that.loadLyricSettings();
+      that.loadBitrateSettings();
+      that.bindAudioEvents();
+      audio.ondurationchange = () => {
+        that.duration = audio.duration || 0;
+        if (that.duration > 0 && !that.audioReady) {
+          that.audioReady = true;
+        }
+      };
+      audio.ontimeupdate = () => {
+        that.progress = audio.percent;
+        that.updateLyric();
+      };
+      if (hasNewPlaylist || !fromAppStart) {
+        if (that.videoMode) {
+        } else {
+          that.fetchAndPlay();
+        }
+      }
+    },
+    clearPlayerState() {
+      const that = this;
+      if (audio.src) audio.stop();
+      that.songList = [];
+      that.currSong = { al: {}, ar: [{}] };
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      that.progress = 0;
+      that.duration = 0;
+      that.currentLyricIndex = -1;
+      that.lyricScrollTop = 0;
+      that.lyricLines = [{ text: '歌词加载中...' }];
+      that.audioReady = false;
+      that.imageLoaded = false;
+      storage.delete({
+        key: 'playerState',
+        success: function() { },
+        fail: function(data, code) { }
+      });
+    },
+    restorePlayerState(autoPlay = true) {
+      const that = this;
+      storage.get({
+        key: 'playerState',
+        success: function(data) {
+          if (data) {
+            try {
+              const playerState = JSON.parse(data);
+              if (playerState.playlistId) {
+                that.playlistId = playerState.playlistId;
+              }
+              if (playerState.index !== undefined) {
+                that.index = Number(playerState.index);
+                if (that.index < 0 || isNaN(that.index)) {
+                  that.index = 0;
+                }
+              }
+              if (playerState.songList && playerState.songList.length > 0) {
+                that.songList = playerState.songList;
+                if (that.index >= that.songList.length) {
+                  that.index = 0;
+                }
+              }
+              if (playerState.currSong) {
+                if (that.currSong && that.currSong.id === playerState.currSong.id) {
+                  that.isPlaying = autoPlay ? (playerState.isPlaying || false) : false;
+                  that.progress = playerState.progress || 0;
+                  that.duration = playerState.duration || 0;
+                  that.currentLyricIndex = playerState.currentLyricIndex || -1;
+                  that.lyricScrollTop = playerState.lyricScrollTop || 0;
+                  that.playMode = playerState.playMode || 'loop';
+                  if (that.isPlaying && audio.src && that.audioReady && autoPlay) {
+                    if (that.duration > 0) audio.currentTime = (that.duration * that.progress) / 100;
+                    audio.play();
+                  }
+                  return;
+                }
+                that.currSong = playerState.currSong;
+                that.isPlaying = autoPlay ? (playerState.isPlaying || false) : false;
+                that.progress = playerState.progress || 0;
+                that.duration = playerState.duration || 0;
+                that.currentLyricIndex = playerState.currentLyricIndex || -1;
+                that.lyricScrollTop = playerState.lyricScrollTop || 0;
+                that.playMode = playerState.playMode || 'loop';
+                that.lyricLines = playerState.lyricLines || [{ text: '歌词加载中...' }];
+                that.audioReady = playerState.audioReady || false;
+                that.imageLoaded = playerState.imageLoaded || false;
+                if (that.songList && that.songList.length > 0 && (!that.currSong || !that.currSong.id)) {
+                  if (that.index >= 0 && that.index < that.songList.length) {
+                    that.currSong = that.songList[that.index];
+                  }
+                }
+                if (that.isPlaying && autoPlay) {
+                  if (!audio.src || !that.audioReady) {
+                    that.playCurrentSong();
+                  } else {
+                    if (that.duration > 0) audio.currentTime = (that.duration * that.progress) / 100;
+                    audio.play();
+                  }
+                }
+                return;
+              }
+              that.playMode = playerState.playMode || 'loop';
+              if (audio.src && that.audioReady && autoPlay) {
+                that.isPlaying = true;
+                audio.play();
+              }
+            } catch (e) {
+              if (that.fromAppStart) {
+                that.fetchDefaultPlaylist();
+              }
+            }
+          } else {
+            if (that.fromAppStart) {
+              that.fetchDefaultPlaylist();
+            }
+          }
+        },
+        fail: function(data, code) {
+          if (that.fromAppStart) {
+            that.fetchDefaultPlaylist();
+          }
+        }
+      });
+    },
+    onShow() {
+      const that = this;
+      that.loadLyricSettings();
+      const hasNewPlaylist = that.playlistId && !(that.fromAppStart || false);
+      if (hasNewPlaylist) {
+        that.index = that.startIndex || 0;
+        return;
+      }
+      if (that.fromAppStart) {
+        if (!that.currSong || !that.currSong.id) {
+          that.restorePlayerState(false);
+          return;
+        }
+        if (!that.audioReady && !that.imageLoaded) {
+          that.playCurrentSong();
+          return;
+        }
+        return;
+      }
+      if (audio.src && that.audioReady && that.currSong) {
+        if (that.isPlaying) audio.play();
+      } else if (that.currSong && that.currSong.id) {
+        if (!that.audioReady && !that.imageLoaded) {
+          that.playCurrentSong();
+        }
+      } else {
+        that.restorePlayerState(true);
+      }
+    },
+    onHide() {
+      const that = this;
+      if (!that.currSong && that.songList && that.songList.length > 0 && that.index >= 0) {
+        that.currSong = that.songList[that.index];
+      }
+      const playerState = {
+        isPlaying: that.isPlaying,
+        progress: that.progress,
+        duration: that.duration,
+        currentLyricIndex: that.currentLyricIndex,
+        lyricScrollTop: that.lyricScrollTop,
+        playMode: that.playMode,
+        currSong: that.currSong,
+        lyricLines: that.lyricLines,
+        playlistId: that.playlistId,
+        index: that.index,
+        songList: that.songList,
+        audioReady: that.audioReady,
+        imageLoaded: that.imageLoaded
+      };
+      if (audio.src && that.duration > 0) {
+        playerState.progress = (audio.currentTime / that.duration) * 100;
+      }
+      storage.set({
+        key: 'playerState',
+        value: JSON.stringify(playerState),
+        success: function() { },
+        fail: function(data, code) { }
+      });
+    },
+    fetchAndPlay(forceReload = false) {
+      const that = this;
+      const requestId = that.currentRequestId;
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      if (!that.playlistId) return;
+      if (that.videoMode && that.videoBvid) {
+        (async () => {
+          try {
+            const info = await global.biliclient.getVideoInfoByBVID(that.videoBvid);
+            if (requestId !== that.currentRequestId) {
+              return;
+            }
+            that.currSong = {
+              id: that.videoBvid,
+              name: info.title,
+              al: { picUrl: info.pic },
+              ar: [{ name: info.owner?.name || "未知" }]
+            };
+            that.songList = [that.currSong];
+            const audioUrl = await global.biliclient.getVideoBestAudioUrlByBVID(that.videoBvid);
+            if (requestId !== that.currentRequestId) {
+              return;
+            }
+            const maxUrlLength = 500;
+            if (audioUrl && audioUrl.length > maxUrlLength) {
+              that.downloadVideoAudioToLocal(audioUrl, requestId);
+              return;
+            }
+            that.currSong.url = audioUrl;
+            that.playCurrentSong();
+          } catch (e) {
+            that.handlePlaybackError('获取视频音频失败');
+          }
+        })();
+        return;
+      }
+      if (that.playlistId.startsWith('downloaded_songs_') || that.playlistId.startsWith('local_playlist_')) {
+        storage.get({
+          key: 'temp_playlist_' + that.playlistId,
+          success: function(data) {
+            if (requestId !== that.currentRequestId) {
+              return;
+            }
+            if (data) {
+              try {
+                const playlistData = JSON.parse(data);
+                that.songList = playlistData.tracks || [];
+                if (that.index >= that.songList.length) that.index = 0;
+                if (that.songList.length > 0) {
+                  that.currSong = that.songList[that.index];
+                  that.playCurrentSong();
+                }
+              } catch (e) {
+              }
+            }
+          },
+          fail: function(data, code) {
+          }
+        });
+        return;
+      }
+    },
+    fetchAndPlayWithIndex(newIndex, forceReload = false) {
+      const that = this;
+      that.index = Number(newIndex);
+      that.fetchAndPlay(forceReload);
+    },
+    change(dir) {
+      const that = this;
+      if (!that.songList || that.songList.length === 0) return;
+      audio.stop();
+      that.currentRequestId++;
+      let newIndex = (that.index + dir + that.songList.length) % that.songList.length;
+      that.index = newIndex;
+      that.currSong = that.songList[newIndex];
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      that.progress = 0;
+      that.imageLoaded = false;
+      that.audioReady = false;
+      that.lyricLines = [{ text: '歌词加载中...' }];
+      that.currentLyricIndex = -1;
+      that.lyricScrollTop = 0;
+      that.playCurrentSong();
+    },
+    fetchDefaultPlaylist() {
+      const that = this;
+      const requestId = that.currentRequestId;
+    },
+    onImageLoad() {
+      const that = this;
+      that.imageLoaded = true;
+    },
+    playCurrentSong() {
+      const that = this;
+      const requestId = that.currentRequestId;
+      audio.stop();
+      that.lyricLines = [{ text: '歌词加载中...' }];
+      that.currentLyricIndex = -1;
+      that.lyricScrollTop = 0;
+      that.imageLoaded = false;
+      that.audioReady = false;
+      that.progress = 0;
+      if (!that.currSong || typeof that.currSong.id === 'undefined') return;
+      if (that.currSong.url && that.currSong.url.startsWith('internal://files/')) {
+        audio.oncanplay = function() {
+          that.duration = audio.duration || 0;
+          that.audioReady = true;
+          audio.oncanplay = null;
+          that.isPlaying = true;
+          that.playerState.isPlaying = true;
+          audio.play();
+        };
+        audio.ontimeupdate = function() {
+          that.progress = audio.percent;
+          that.updateLyric();
+        };
+        audio.onerror = function() {
+          that.audioReady = false;
+          audio.onerror = null;
+          audio.oncanplay = null;
+          audio.ontimeupdate = null;
+          console.log('音频播放错误');
+          setTimeout(() => {
+            if (requestId === that.currentRequestId) {
+              that.change(1);
+            }
+          }, 1000);
+        };
+        audio.src = that.currSong.url;
+        setTimeout(function() {
+          if (!that.audioReady && that.isPlaying !== true) {
+            const dur = audio.duration;
+            if (dur && dur > 0 && !isNaN(dur)) {
+              that.duration = dur;
+              that.audioReady = true;
+              that.isPlaying = true;
+              that.playerState.isPlaying = true;
+              audio.play();
+            } else {
+              console.log('音频时长无效，等待重试');
+              setTimeout(function() {
+                if (!that.audioReady && that.isPlaying !== true) {
+                  const dur2 = audio.duration;
+                  that.duration = dur2 || 0;
+                  that.audioReady = true;
+                  that.isPlaying = true;
+                  that.playerState.isPlaying = true;
+                  audio.play();
+                }
+              }, 500);
+            }
+          }
+        }, 500);
+      } else {
+        if (that.videoMode && that.currSong.url) {
+          audio.oncanplay = function() {
+            that.duration = audio.duration || 0;
+            that.audioReady = true;
+            audio.oncanplay = null;
+            that.isPlaying = true;
+            that.playerState.isPlaying = true;
+            audio.play();
+          };
+          audio.onerror = function() {
+            that.audioReady = false;
+            audio.onerror = null;
+            audio.oncanplay = null;
+            console.log('视频音频播放错误');
+            setTimeout(() => {
+              if (requestId === that.currentRequestId) {
+                that.change(1);
+              }
+            }, 1000);
+          };
+          audio.src = that.currSong.url;
+          setTimeout(function() {
+            if (!that.audioReady && that.isPlaying !== true) {
+              const dur = audio.duration;
+              if (dur && dur > 0 && !isNaN(dur)) {
+                that.duration = dur;
+                that.audioReady = true;
+                that.isPlaying = true;
+                that.playerState.isPlaying = true;
+                audio.play();
+              } else {
+                console.log('视频音频时长无效，等待重试');
+                setTimeout(function() {
+                  if (!that.audioReady && that.isPlaying !== true) {
+                    const dur2 = audio.duration;
+                    that.duration = dur2 || 0;
+                    that.audioReady = true;
+                    that.isPlaying = true;
+                    that.playerState.isPlaying = true;
+                    audio.play();
+                  }
+                }, 500);
+              }
+            }
+          }, 500);
+          return;
+        }
+        api.getSongUrl(that.currSong.id, {
+          success: function(res) {
+            if (requestId !== that.currentRequestId) {
+              return;
+            }
+            if (res && res.code === 200 && res.data.data[0] && res.data.data[0].url) {
+              audio.oncanplay = function() {
+                that.duration = audio.duration || 0;
+                that.audioReady = true;
+                audio.oncanplay = null;
+                that.isPlaying = true;
+                that.playerState.isPlaying = true;
+                audio.play();
+              };
+              audio.onerror = function() {
+                that.audioReady = false;
+                audio.onerror = null;
+                audio.oncanplay = null;
+                setTimeout(() => {
+                  if (requestId === that.currentRequestId) {
+                    that.change(1);
+                  }
+                }, 1000);
+              };
+              audio.src = res.data.data[0].url;
+            } else {
+              setTimeout(() => {
+                if (requestId === that.currentRequestId) {
+                  that.change(1);
+                }
+              }, 1000);
+            }
+          },
+          bitrate: that.bitrate
+        });
+      }
+      if (that.loadLyrics) {
+        if (that.playlistId && that.playlistId.startsWith('downloaded_songs_')) {
+          that.loadLocalLyric();
+        } else {
+          api.getLyric(that.currSong.id, {
+            success: function(res) {
+              if (requestId !== that.currentRequestId) {
+                return;
+              }
+              if (res && res.code === 200 && res.data.lrc && res.data.lrc.lyric) {
+                const parsedLyrics = that.parseLyric(res.data.lrc.lyric);
+                that.lyricLines = parsedLyrics;
+                that.currentLyricIndex = -1;
+              } else {
+                that.lyricLines = [{ text: '暂无歌词' }];
+                that.currentLyricIndex = 0;
+              }
+            },
+            fail: function() {
+              if (requestId !== that.currentRequestId) {
+                return;
+              }
+              that.lyricLines = [{ text: '暂无歌词' }];
+              that.currentLyricIndex = 0;
+            }
+          });
+        }
+      } else {
+        that.lyricLines = [{ text: '歌词加载已关闭' }];
+        that.currentLyricIndex = 0;
+      }
+    },
+    playOrPause() {
+      const that = this;
+      if (that.isPlaying) {
+        that.isPlaying = false;
+        that.playerState.isPlaying = false;
+        audio.pause();
+      } else {
+        if (!audio.src) {
+          that.playCurrentSong();
+        } else {
+          that.isPlaying = true;
+          that.playerState.isPlaying = true;
+          audio.play();
+        }
+      }
+    },
+    cacheAndPlay() {
+      const that = this;
+     
+      if (that.rememberCacheTips) {
+        storage.set({
+          key: 'skipCacheTips',
+          value: 'true',
+          success: function() {
+          },
+          fail: function(data, code) {
+          }
+        });
+      }
+     
+      that.showCacheTips = false;
+      that.currentRequestId++;
+      const requestId = that.currentRequestId;
+     
+      prompt.showToast({ message: '正在获取视频信息...', duration: 2000 });
+     
+      global.biliclient.getVideoInfoByBVID(that.videoBvid).then((videoInfo) => {
+        if (requestId !== that.currentRequestId) {
+          return;
+        }
+       
+        const coverUrl = videoInfo.pic ? videoInfo.pic + '@319w_150h' : '';
+       
+        that.songList = [{
+          id: that.videoBvid,
+          name: videoInfo.title,
+          al: { picUrl: coverUrl },
+          ar: [{ name: videoInfo.owner.name }]
+        }];
+        that.currSong = that.songList[0];
+        that.index = 0;
+        that.imageLoaded = false;
+        that.audioReady = false;
+       
+        if (coverUrl) {
+          that.downloadCoverImage(coverUrl, requestId);
+        }
+       
+        return global.biliclient.getVideoBestAudioUrlByBVID(that.videoBvid);
+      }).then((audioUrl) => {
+        if (requestId !== that.currentRequestId) {
+          return;
+        }
+        that.downloadVideoAudioToLocal(audioUrl, requestId);
+      }).catch((error) => {
+        if (requestId !== that.currentRequestId) {
+          return;
+        }
+        that.handlePlaybackError('获取视频信息失败');
+        that.showCacheTips = true;
+      });
+    },
+    goBack() {
+      router.back();
+    },
+    toastLog(message) {
+      if (!message) return;
+      prompt.showToast({ message: String(message), duration: 1200 });
+    },
+    downloadCoverImage(coverUrl, requestId) {
+      const that = this;
+      const coverFilename = `${that.videoBvid}_cover.jpg`;
+     
+      request.download({
+        url: coverUrl,
+        filename: coverFilename,
+        success: function(res) {
+          request.onDownloadComplete({
+            token: res.token,
+            success: function(result) {
+              if (requestId !== that.currentRequestId) {
+                return;
+              }
+              that.cachedCoverUri = result.uri;
+              that.currSong.al.picUrl = result.uri;
+              that.imageLoaded = true;
+            },
+            fail: function(error) {
+            }
+          });
+        },
+        fail: function(error) {
+        }
+      });
+    },
+    downloadVideoAudioToLocal(audioUrl, requestId) {
+      const that = this;
+      if (!audioUrl) {
+        that.toastLog('视频音频下载失败：URL为空');
+        that.handlePlaybackError('视频音频下载失败');
+        return;
+      }
+      const filename = `${that.videoBvid || 'video'}_audio.m4s`;
+      that.toastLog('开始下载视频音频');
+     
+      request.download({
+        url: audioUrl,
+        header: that.buildVideoAudioDownloadHeaders(),
+        filename,
+        success: function(res) {
+          that.toastLog('下载任务创建成功');
+          request.onDownloadComplete({
+            token: res.token,
+            success: function(result) {
+              if (requestId !== that.currentRequestId) {
+                return;
+              }
+              that.toastLog('下载完成，校验文件');
+              that.validateM4sFile(result.uri).then((isValid) => {
+                if (!isValid) {
+                  that.toastLog('校验失败，回退直链');
+                  that.currSong.url = audioUrl;
+                  that.playCurrentSong();
+                  return;
+                }
+                that.toastLog('校验成功，准备播放');
+                that.currSong.url = result.uri;
+                that.saveVideoAudioToSavedContent(result.uri);
+                setTimeout(() => {
+                  that.playCurrentSong();
+                }, 300);
+              }).catch((error) => {
+                that.toastLog('校验异常，回退直链');
+                that.currSong.url = audioUrl;
+                that.playCurrentSong();
+              });
+            },
+            fail: function(error) {
+              that.toastLog('下载失败');
+              that.handlePlaybackError('视频音频下载失败');
+            }
+          });
+        },
+        fail: function(error) {
+          that.toastLog('下载任务创建失败');
+          const errorText = error && (error.message || error);
+          if (errorText && String(errorText).includes('invalid header')) {
+            that.toastLog('头部无效，重试无头部');
+            that.retryDownloadVideoAudioWithoutHeaders(audioUrl, filename, requestId);
+            return;
+          }
+          that.handlePlaybackError('视频音频下载失败');
+        }
+      });
+    },
+    buildVideoAudioDownloadHeaders() {
+      return JSON.stringify({
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Referer': 'https://www.bilibili.com',
+        'Range': 'bytes=0-'
+      });
+    },
+    retryDownloadVideoAudioWithoutHeaders(audioUrl, filename, requestId) {
+      const that = this;
+      that.toastLog('无头部重试下载');
+      request.download({
+        url: audioUrl,
+        filename,
+        success: function(res) {
+          that.toastLog('无头部下载任务创建成功');
+          request.onDownloadComplete({
+            token: res.token,
+            success: function(result) {
+              if (requestId !== that.currentRequestId) {
+                return;
+              }
+              that.toastLog('无头部下载完成');
+              that.validateM4sFile(result.uri).then((isValid) => {
+                if (!isValid) {
+                  that.toastLog('校验失败，回退直链');
+                  that.currSong.url = audioUrl;
+                  that.playCurrentSong();
+                  return;
+                }
+                that.currSong.url = result.uri;
+                that.saveVideoAudioToSavedContent(result.uri);
+                setTimeout(() => {
+                  that.playCurrentSong();
+                }, 300);
+              }).catch((error) => {
+                that.toastLog('校验异常，回退直链');
+                that.currSong.url = audioUrl;
+                that.playCurrentSong();
+              });
+            },
+            fail: function(error) {
+              that.toastLog('无头部下载失败');
+              that.handlePlaybackError('视频音频下载失败');
+            }
+          });
+        },
+        fail: function(error) {
+          that.toastLog('无头部创建失败');
+          that.handlePlaybackError('视频音频下载失败');
+        }
+      });
+    },
+    async saveVideoAudioToSavedContent(audioUri) {
+      const that = this;
+      try {
+        const exists = await global.savedcontent.SavedContentManager.checkVideoAudioExists(that.videoBvid);
+        if (exists) {
+          return;
+        }
+       
+        const title = that.currSong.name || '未知视频';
+        const coverUrl = that.cachedCoverUri || that.currSong.al.picUrl || '';
+        const author = (that.currSong.ar && that.currSong.ar[0] && that.currSong.ar[0].name) || '未知作者';
+       
+        await global.savedcontent.SavedContentManager.storeVideoAudio(
+          title,
+          audioUri,
+          coverUrl,
+          author,
+          that.videoBvid
+        );
+        prompt.showToast({ message: '已保存到缓存列表', duration: 2000 });
+      } catch (e) {
+      }
+    },
+    async validateM4sFile(uri) {
+      try {
+        const fileInfo = await asyncFile.get({ uri });
+        if (!fileInfo || !fileInfo.length || fileInfo.length < 1024) {
+          return false;
+        }
+        const header = await asyncFile.readArrayBuffer({ uri, position: 0, length: 12 });
+        if (!header || header.length < 8) {
+          return false;
+        }
+        const boxType = String.fromCharCode(header[4], header[5], header[6], header[7]);
+        if (boxType !== 'ftyp') {
+          return false;
+        }
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+    parseLyric(lrc) {
+      const lines = lrc.split('\n');
+      const result = [];
+      for (let line of lines) {
+        const match = line.match(/\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)/);
+        if (match) {
+          const minutes = parseInt(match[1]);
+          const seconds = parseInt(match[2]);
+          const milliseconds = parseInt(match[3]);
+          const time = minutes * 60 + seconds + milliseconds / 1000;
+          const text = match[4].trim();
+          if (text) {
+            result.push({ time, text });
+          }
+        }
+      }
+      return result;
+    },
+    updateLyric() {
+      const that = this;
+      if (!that.lyricLines || that.lyricLines.length === 0) return;
+      let currentTime = 0;
+      if (audio.currentTime) {
+        currentTime = audio.currentTime;
+      } else if (that.duration && audio.percent) {
+        currentTime = (that.duration * audio.percent) / 100;
+      }
+      let nextLyricIndex = that.lyricLines.findIndex(line => line.time > currentTime + that.lyricOffset);
+      let highlightIndex = (nextLyricIndex === -1) ? (that.lyricLines.length - 1) : (nextLyricIndex - 1);
+      if (highlightIndex !== that.currentLyricIndex) {
+        that.currentLyricIndex = highlightIndex;
+        const appleMusicLyricScrollElement = that.$element('appleMusicLyricScroll');
+        const currentAppleMusicLyricElement = that.$element(`applemusic-lyric-${highlightIndex}`);
+        if (appleMusicLyricScrollElement && currentAppleMusicLyricElement) {
+          appleMusicLyricScrollElement.getBoundingClientRect({
+            success: function(scrollRect) {
+              currentAppleMusicLyricElement.getBoundingClientRect({
+                success: function(lyricRect) {
+                  const scrollTop = lyricRect.top - (scrollRect.height * 0.4 - lyricRect.height / 2);
+                  appleMusicLyricScrollElement.scrollBy({
+                    top: Math.max(scrollTop),
+                    behavior: 'smooth'
+                  });
+                },
+                fail: function(error) {
+                }
+              });
+            },
+            fail: function(error) {
+            }
+          });
+        }
+      }
+    },
+    getPlayModeIcon() {
+      const that = this;
+      switch(that.playMode) {
+        case 'loop': return '/common/icon/repeat.png';
+        case 'once': return '/common/icon/repeat-once.png';
+        case 'shuffle': return '/common/icon/shuffle.png';
+        default: return '/common/icon/repeat.png';
+      }
+    },
+    togglePlayMode() {
+      const that = this;
+      switch(that.playMode) {
+        case 'loop': that.playMode = 'once'; break;
+        case 'once': that.playMode = 'shuffle'; break;
+        case 'shuffle': that.playMode = 'loop'; break;
+      }
+    },
+    goToVolume() {
+      const that = this;
+      audio.getPlayState({
+        success: function(state) {
+          that.volumePercent = Math.round((state.volume || 0.5) * 100);
+          that.showAdjustVolume = true;
+        },
+        fail: function() {
+          that.volumePercent = 50;
+          that.showAdjustVolume = true;
+        }
+      });
+    },
+    exitPlayer() {
+      const that = this;
+      audio.stop();
+      that.isPlaying = false;
+      that.playerState.isPlaying = false;
+      router.back();
+    },
+    onVolumeChange(e) {
+      const that = this;
+      that.volumePercent = e.progress;
+      audio.volume = e.progress / 100;
+    },
+    closeVolumePanel() {
+      const that = this;
+      that.showAdjustVolume = false;
+    },
+    stopPropagation(e) {
+      e.stopPropagation();
+    },
+    toggleRememberCacheTips(e) {
+      const that = this;
+      that.rememberCacheTips = e.checked;
+    },
+    adjustProgress() {
+      const that = this;
+      let duration = that.duration;
+      if (!duration || duration <= 0 || isNaN(duration)) {
+        duration = audio.duration;
+      }
+      if (!duration || duration <= 0 || isNaN(duration)) {
+        prompt.showToast({ message: '无法调整进度：播放时长未知', duration: 2000 });
+        return;
+      }
+      that.duration = duration;
+      that.currentTime = Math.floor((that.progress / 100) * duration);
+      that.sliderValue = that.progress;
+      that.showAdjustProgress = true;
+    },
+    onProgressChange(e) {
+      const that = this;
+      that.sliderValue = e.progress;
+      that.currentTime = Math.floor((e.progress / 100) * that.duration);
+    },
+    confirmAdjustProgress() {
+      const that = this;
+      if (that.duration > 0) {
+        audio.currentTime = that.currentTime;
+        prompt.showToast({ message: '已调整进度', duration: 1500 });
+      }
+      that.showAdjustProgress = false;
+    },
+    cancelAdjustProgress() {
+      const that = this;
+      that.showAdjustProgress = false;
+    },
+    formatTime(seconds) {
+      if (!seconds || seconds < 0) return '0:00';
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' + sec : sec}`;
+    },
+    downloadCurrentSong() {
+      const that = this;
+      if (!that.currSong || typeof that.currSong.id === 'undefined') {
+        prompt.showToast({ message: '无法下载：当前歌曲信息不完整', duration: 2000 });
+        return;
+      }
+      prompt.showToast({ message: '开始下载: ' + that.currSong.name, duration: 1500 });
+      api.getSongUrl(that.currSong.id, {
+        success: function(res) {
+          if (res && res.code === 200 && res.data.data[0] && res.data.data[0].url) {
+            const downloadUrl = res.data.data[0].url;
+            storage.get({
+              key: 'downloadedSongs',
+              success: function(data) {
+                let downloadedSongs = [];
+                if (data) {
+                  try { downloadedSongs = JSON.parse(data); } catch (e) { }
+                }
+                const isDownloaded = downloadedSongs.some(song => song.id === that.currSong.id);
+                if (isDownloaded) {
+                  prompt.showToast({ message: '歌曲已下载过', duration: 2000 });
+                  return;
+                }
+                const downloadInfo = {
+                  id: that.currSong.id,
+                  name: that.currSong.name,
+                  artist: that.currSong.ar && that.currSong.ar[0] ? that.currSong.ar[0].name : '未知',
+                  album: that.currSong.al ? that.currSong.al.name : '未知',
+                  url: downloadUrl,
+                  cover: that.currSong.al ? that.currSong.al.picUrl : '',
+                  downloadTime: new Date().toISOString()
+                };
+                that.downloadSongFile(downloadInfo, downloadUrl);
+              },
+              fail: function() {
+                prompt.showToast({ message: '获取下载列表失败', duration: 2000 });
+              }
+            });
+          } else {
+            prompt.showToast({ message: '获取下载链接失败', duration: 2000 });
+          }
+        },
+        fail: function(error) {
+          prompt.showToast({ message: '网络请求失败', duration: 2000 });
+        },
+        bitrate: that.bitrate
+      });
+    },
+    downloadSongFile(downloadInfo, songUrl) {
+      const that = this;
+      let progressInterval = null;
+      let currentProgress = 0;
+      prompt.showToast({ message: '开始下载歌曲文件...', duration: 1000 });
+      function updateProgress() {
+        currentProgress += Math.random() * 15 + 5;
+        if (currentProgress > 95) currentProgress = 95;
+        prompt.showToast({ message: `下载进度: ${Math.round(currentProgress)}%`, duration: 1000 });
+      }
+      progressInterval = setInterval(updateProgress, 1500);
+      request.download({
+        url: songUrl,
+        filename: downloadInfo.name + '.mp3',
+        success: function(res) {
+          request.onDownloadComplete({
+            token: res.token,
+            success: function(result) {
+              if (progressInterval) clearInterval(progressInterval);
+              prompt.showToast({ message: '下载进度: 100%', duration: 1000 });
+              downloadInfo.filePath = result.uri;
+              prompt.showToast({ message: '歌曲文件下载完成，正在下载封面...', duration: 1000 });
+              if (downloadInfo.cover) {
+                that.downloadCoverFile(downloadInfo);
+              } else {
+                that.saveDownloadInfo(downloadInfo);
+              }
+            },
+            fail: function(error) {
+              if (progressInterval) clearInterval(progressInterval);
+              prompt.showToast({ message: '歌曲下载失败', duration: 2000 });
+            }
+          });
+        },
+        fail: function(error) {
+          if (progressInterval) clearInterval(progressInterval);
+          prompt.showToast({ message: '创建下载任务失败', duration: 2000 });
+        }
+      });
+    },
+    downloadCoverFile(downloadInfo) {
+      const that = this;
+      let progressInterval = null;
+      let currentProgress = 0;
+      let coverUrl = downloadInfo.cover;
+      if (coverUrl && !coverUrl.startsWith('internal://files/')) {
+        coverUrl = coverUrl + '?param=10y10';
+      }
+      prompt.showToast({ message: '开始下载封面...', duration: 1000 });
+      function updateCoverProgress() {
+        currentProgress += Math.random() * 20 + 10;
+        if (currentProgress > 90) currentProgress = 90;
+        prompt.showToast({ message: `封面下载进度: ${Math.round(currentProgress)}%`, duration: 1000 });
+      }
+      progressInterval = setInterval(updateCoverProgress, 1000);
+      request.download({
+        url: coverUrl,
+        filename: downloadInfo.name + '_cover.jpg',
+        success: function(res) {
+          request.onDownloadComplete({
+            token: res.token,
+            success: function(result) {
+              if (progressInterval) clearInterval(progressInterval);
+              prompt.showToast({ message: '封面下载进度: 100%', duration: 1000 });
+              downloadInfo.coverPath = result.uri;
+              that.downloadLyricFile(downloadInfo);
+            },
+            fail: function(error) {
+              if (progressInterval) clearInterval(progressInterval);
+              prompt.showToast({ message: '封面下载失败，继续下载歌词', duration: 1500 });
+              that.downloadLyricFile(downloadInfo);
+            }
+          });
+        },
+        fail: function(error) {
+          if (progressInterval) clearInterval(progressInterval);
+          prompt.showToast({ message: '封面下载失败，继续下载歌词', duration: 1500 });
+          that.downloadLyricFile(downloadInfo);
+        }
+      });
+    },
+    loadLocalLyric() {
+      const that = this;
+      const requestId = that.currentRequestId;
+      if (!that.loadLyrics) {
+        that.lyricLines = [{ text: '歌词加载已关闭' }];
+        that.currentLyricIndex = 0;
+        return;
+      }
+      storage.get({
+        key: 'downloadedSongs',
+        success: function(data) {
+          if (requestId !== that.currentRequestId) {
+            return;
+          }
+          if (data) {
+            try {
+              const downloadedSongs = JSON.parse(data);
+              const currentSong = downloadedSongs.find(song => song.id === that.currSong.id);
+              if (currentSong && currentSong.lyricPath) {
+                storage.get({
+                  key: currentSong.lyricPath,
+                  success: function(lyricData) {
+                    if (requestId !== that.currentRequestId) {
+                      return;
+                    }
+                    if (lyricData) {
+                      try {
+                        const parsedLyrics = typeof lyricData === 'string' ? JSON.parse(lyricData) : lyricData;
+                        if (Array.isArray(parsedLyrics) && parsedLyrics.length > 0) {
+                          that.lyricLines = parsedLyrics;
+                          that.currentLyricIndex = -1;
+                        } else {
+                          that.lyricLines = [{ text: '歌词格式错误' }];
+                          that.currentLyricIndex = 0;
+                        }
+                      } catch (e) {
+                        that.lyricLines = [{ text: '歌词解析失败' }];
+                        that.currentLyricIndex = 0;
+                      }
+                    } else {
+                      that.lyricLines = [{ text: '歌词文件为空' }];
+                      that.currentLyricIndex = 0;
+                    }
+                  },
+                  fail: function() {
+                    if (requestId !== that.currentRequestId) {
+                      return;
+                    }
+                    that.fetchLyricFromNetwork();
+                  }
+                });
+              } else {
+                that.fetchLyricFromNetwork();
+              }
+            } catch (e) {
+              that.lyricLines = [{ text: '歌词加载失败' }];
+              that.currentLyricIndex = 0;
+            }
+          } else {
+            that.fetchLyricFromNetwork();
+          }
+        },
+        fail: function() {
+          if (requestId !== that.currentRequestId) {
+            return;
+          }
+          that.fetchLyricFromNetwork();
+        }
+      });
+    },
+    fetchLyricFromNetwork() {
+      const that = this;
+      const requestId = that.currentRequestId;
+      if (!that.loadLyrics) {
+        that.lyricLines = [{ text: '歌词加载已关闭' }];
+        that.currentLyricIndex = 0;
+        return;
+      }
+      api.getLyric(that.currSong.id, {
+        success: function(res) {
+          if (requestId !== that.currentRequestId) {
+            return;
+          }
+          if (res && res.code === 200 && res.data.lrc && res.data.lrc.lyric) {
+            const parsedLyrics = that.parseLyric(res.data.lrc.lyric);
+            that.lyricLines = parsedLyrics;
+            that.currentLyricIndex = -1;
+          } else {
+            that.lyricLines = [{ text: '暂无歌词' }];
+            that.currentLyricIndex = 0;
+          }
+        },
+        fail: function() {
+          if (requestId !== that.currentRequestId) {
+            return;
+          }
+          that.lyricLines = [{ text: '暂无歌词' }];
+          that.currentLyricIndex = 0;
+        }
+      });
+    },
+    downloadLyricFile(downloadInfo) {
+      const that = this;
+      let lyricProgress = 0;
+      let progressInterval = null;
+      function updateLyricProgress() {
+        lyricProgress += Math.floor(Math.random() * 25) + 15;
+        if (lyricProgress > 90) lyricProgress = 90;
+        prompt.showToast({ message: '下载歌词进度: ' + lyricProgress + '%', duration: 800 });
+      }
+      prompt.showToast({ message: '正在下载歌词... 0%', duration: 1000 });
+      progressInterval = setInterval(updateLyricProgress, 800);
+      api.getLyric(downloadInfo.id, {
+        success: function(res) {
+          if (progressInterval) clearInterval(progressInterval);
+          if (res && res.code === 200 && res.data.lrc && res.data.lrc.lyric) {
+            prompt.showToast({ message: '下载歌词进度: 100%', duration: 1000 });
+            const parsedLyrics = that.parseLyric(res.data.lrc.lyric);
+            const lyricContent = JSON.stringify(parsedLyrics);
+            const lyricKey = 'lyric_' + downloadInfo.id + '_' + Date.now();
+            storage.set({
+              key: lyricKey,
+              value: lyricContent,
+              success: function() {
+                downloadInfo.lyricPath = lyricKey;
+                that.saveDownloadInfo(downloadInfo);
+              },
+              fail: function(error, code) {
+                prompt.showToast({ message: '歌词保存失败，继续保存歌曲信息', duration: 1500 });
+                that.saveDownloadInfo(downloadInfo);
+              }
+            });
+          } else {
+            prompt.showToast({ message: '无歌词内容，继续保存歌曲信息', duration: 1500 });
+            that.saveDownloadInfo(downloadInfo);
+          }
+        },
+        fail: function(error) {
+          if (progressInterval) clearInterval(progressInterval);
+          prompt.showToast({ message: '歌词获取失败，继续保存歌曲信息', duration: 1500 });
+          that.saveDownloadInfo(downloadInfo);
+        }
+      });
+    },
+    saveDownloadInfo(downloadInfo) {
+      const that = this;
+      storage.get({
+        key: 'downloadedSongs',
+        success: function(data) {
+          let downloadedSongs = [];
+          if (data) {
+            try { downloadedSongs = JSON.parse(data); } catch (e) { }
+          }
+          downloadedSongs.push(downloadInfo);
+          storage.set({
+            key: 'downloadedSongs',
+            value: JSON.stringify(downloadedSongs),
+            success: function() {
+              prompt.showToast({ message: '下载成功: ' + downloadInfo.name, duration: 2000 });
+            },
+            fail: function(data, code) {
+              prompt.showToast({ message: '保存下载信息失败', duration: 2000 });
+            }
+          });
+        },
+        fail: function() {
+          prompt.showToast({ message: '获取下载列表失败', duration: 2000 });
+        }
+      });
+    },
+    goToList() {
+      const that = this;
+      router.push({
+        uri: 'pages/songlist',
+        params: {
+          id: that.playlistId,
+          fromPlayer: true,
+          currentSongId: String(that.currSong.id),
+          isPlayerListView: true,
+          playlistName: '当前播放列表'
+        }
+      });
+    },
+    getCurrentLyricText() {
+      const that = this;
+      if (that.lyricLines && that.lyricLines.length > 0 && that.currentLyricIndex >= 0) {
+        return that.lyricLines[that.currentLyricIndex].text;
+      }
+      return '暂无歌词';
+    },
+    calculateLyricOpacity(index) {
+      const that = this;
+      if (that.currentLyricIndex < 0) return 0.8;
+      const distance = Math.abs(index - that.currentLyricIndex);
+      const maxDistance = 5;
+      let opacity = 0.8 - (distance * 0.14);
+      return Math.max(0.1, Math.min(0.8, opacity));
+    },
+  };
+</script>
+<style lang="less">
+@import "@less/global.less";
+@import "./player.less";
+</style>

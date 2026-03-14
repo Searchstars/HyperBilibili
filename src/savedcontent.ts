@@ -1,19 +1,19 @@
 import { asyncFile } from "./asyncapi/file";
 
-// 定义文件存储的基本结构
 interface StoredContent {
   id: string;
   title: string;
   type: string;
   fileUri: string;
+  coverUrl?: string;
+  author?: string;
+  bvid?: string;
 }
 
-// 模拟存储的内容列表
 let storageIndex: StoredContent[] = [];
 
-// 定义文件存储的基础路径
 const baseUri = 'internal://files/bilisavedcontent/';
-const indexFileUri = `${baseUri}index.json`; // 存储 storageIndex 的文件
+const indexFileUri = `${baseUri}index.json`;
 
 // 同步 storageIndex 到本地文件
 async function saveStorageIndex(): Promise<void> {
@@ -66,10 +66,8 @@ export class SavedContentManager {
       const id = generateUUID();
       const fileUri = `${baseUri}${id}.txt`;
 
-      // 写入文件
       await asyncFile.writeText({ uri: fileUri, text: data });
 
-      // 更新 storageIndex 并保存
       storageIndex.push({ id, title, type, fileUri });
       await saveStorageIndex();
 
@@ -77,6 +75,35 @@ export class SavedContentManager {
     } catch (e) {
       global.logger.error(`[SavedContentManager] storeContent Error: ${e.toString()}`);
     }
+  }
+
+  // 存储视频音频（直接引用已存在的文件）
+  static async storeVideoAudio(title: string, audioUri: string, coverUrl: string, author: string, bvid: string): Promise<string | void> {
+    try {
+      const id = generateUUID();
+
+      storageIndex.push({
+        id,
+        title,
+        type: 'videoAudio',
+        fileUri: audioUri,
+        coverUrl,
+        author,
+        bvid
+      });
+      await saveStorageIndex();
+
+      global.logger.log(`[SavedContentManager] 视频音频已保存: ${title}, id: ${id}`);
+      return id;
+    } catch (e) {
+      global.logger.error(`[SavedContentManager] storeVideoAudio Error: ${e.toString()}`);
+    }
+  }
+
+  // 检查视频音频是否已存在
+  static async checkVideoAudioExists(bvid: string): Promise<boolean> {
+    const exists = storageIndex.some(item => item.bvid === bvid && item.type === 'videoAudio');
+    return exists;
   }
 
   // 根据 id 或 title 读取内容
@@ -87,7 +114,10 @@ export class SavedContentManager {
 
       // 读取文件内容
       const fileExists = await asyncFile.access({ uri: content.fileUri });
-      if (!fileExists) throw new Error(`File does not exist: ${content.fileUri}`);
+      if (!fileExists) {
+        global.logger.log(`[SavedContentManager] 文件不存在：${content.fileUri}`);
+        return null;
+      }
 
       return await asyncFile.readText({ uri: content.fileUri });
     } catch (e) {
@@ -98,7 +128,7 @@ export class SavedContentManager {
 
   // 读取所有存储内容的 id 和 title 列表
   static async listAllContent(): Promise<any> {
-    return storageIndex;
+    return [...storageIndex];
   }
 
   // 删除内容
@@ -107,9 +137,12 @@ export class SavedContentManager {
       const contentIndex = storageIndex.findIndex(item => item.id === identifier || item.title === identifier);
       if (contentIndex === -1) throw new Error('Content not found');
 
-      // 删除文件
+      // 删除文件（如果文件存在）
       const fileUri = storageIndex[contentIndex].fileUri;
-      await asyncFile.delete({ uri: fileUri });
+      const fileExists = await asyncFile.access({ uri: fileUri });
+      if (fileExists) {
+        await asyncFile.delete({ uri: fileUri });
+      }
 
       // 从 storageIndex 中删除记录并保存
       storageIndex.splice(contentIndex, 1);

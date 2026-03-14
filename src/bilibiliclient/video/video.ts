@@ -55,4 +55,66 @@ export const BilibiliClientVideoMethods = {
         global.logger.log(response);
         return response.data.data;
     },
+
+    async getVideoBestAudioUrlByBVID(this: any, bvid: string): Promise<string> {
+        const info = await this.getVideoInfoByBVID(bvid);
+        const cid = info.cid || info.pages?.[0]?.cid;
+        if (!cid) {
+            throw new Error("cid not found");
+        }
+
+        const url = `https://api.bilibili.com/x/player/wbi/playurl`;
+        const response = await this.getRequestWbi(url, {
+            bvid,
+            cid,
+            fnval: 4048,
+            fourk: 1,
+            platform: "pc"
+        });
+
+        const payload = response && response.data ? response.data : response;
+        if (!payload) {
+            global.logger.error("[getVideoBestAudioUrlByBVID] empty response");
+            throw new Error("empty response");
+        }
+        global.logger.log("[getVideoBestAudioUrlByBVID] response code:", payload.code, "message:", payload.message);
+
+        const dash = payload.data?.dash || payload.dash;
+        const audioTracks = dash?.audio || [];
+        global.logger.log("[getVideoBestAudioUrlByBVID] audioTracks length:", audioTracks.length);
+        if (!audioTracks.length) {
+            const keys = Object.keys(payload.data || payload || {});
+            global.logger.error("[getVideoBestAudioUrlByBVID] no audio tracks, payload keys:", keys);
+            throw new Error("audio stream not found");
+        }
+
+        audioTracks.sort((a: any, b: any) => (b.bandwidth || 0) - (a.bandwidth || 0));
+        const best = audioTracks[0] || {};
+
+        const candidates: Array<string> = [];
+        const baseUrl = best.baseUrl || best.base_url;
+        if (baseUrl) candidates.push(baseUrl);
+
+        const backupUrls = best.backupUrl || best.backup_url;
+        if (Array.isArray(backupUrls)) {
+            backupUrls.forEach((u: any) => {
+                if (typeof u === "string" && u.length > 0) candidates.push(u);
+            });
+        }
+
+        const uniqueCandidates = candidates.filter((u, idx) => candidates.indexOf(u) === idx);
+        uniqueCandidates.sort((a, b) => {
+            const score = (u: string) => {
+                let s = 0;
+                if (u.includes("mcdn")) s -= 10;
+                if (u.includes("upos")) s += 2;
+                return s;
+            };
+            return score(b) - score(a);
+        });
+
+        const selected = uniqueCandidates[0];
+        global.logger.log("[getVideoBestAudioUrlByBVID] selected url:", selected);
+        return selected;
+    },
 };

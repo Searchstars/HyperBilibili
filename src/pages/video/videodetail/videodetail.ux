@@ -22,6 +22,10 @@
         </div>
       </div>
       <scroll scroll-x="true" class="vidtoolbar" style="margin-top: 25px" bounces="true">
+        <div class="vidtool" style="margin-left: 0px" @click="OpenPlayer()">
+          <image class="vidtoolimg" src="/common/vidtool_generatemanifest.png"></image>
+          <text class="vidtooltext">听视频</text>
+        </div>
         <div class="vidtool" style="margin-left: 0px" @click="LikeClick()" @longpress="PowerIt()">
           <image class="vidtoolimg" src="{{likesrc}}"></image>
           <text class="vidtooltext">{{ stat_like }}</text>
@@ -97,6 +101,33 @@ export default {
   WIPTips() {
     prompt.showToast({
       message: "该功能仍在开发中"
+    })
+  },
+  async OpenPlayer() {
+    const exists = await global.savedcontent.SavedContentManager.checkVideoAudioExists(this.bvid)
+    if (exists) {
+      const contents = await global.savedcontent.SavedContentManager.listAllContent()
+      const cachedItem = contents.find((ct) => ct.bvid === this.bvid && ct.type === 'videoAudio')
+      if (cachedItem) {
+        prompt.showToast({ message: '正在加载缓存...', duration: 1000 })
+        router.push({
+          uri: "pages/video/player",
+          params: {
+            bvid: this.bvid,
+            cachedAudioUri: cachedItem.fileUri,
+            cachedTitle: cachedItem.title,
+            cachedCoverUrl: cachedItem.coverUrl,
+            cachedAuthor: cachedItem.author
+          }
+        })
+        return
+      }
+    }
+    router.push({
+      uri: "pages/video/player",
+      params: {
+        bvid: this.bvid
+      }
     })
   },
   OpenOwnerHome() {
