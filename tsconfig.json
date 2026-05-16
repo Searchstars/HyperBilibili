@@ -1,15 +1,19 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "esModuleInterop": true,
-        "module": "commonjs",
-        "target": "es5",
-        "outDir": "./dist"
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "src/**/*.ux"
-    ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@astralsight/astroforge-core",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": false,
+    "types": []
+  },
+  "include": ["src/**/*", "astroforge.config.ts", "rsbuild.config.ts"]
 }

@@ -1,59 +1,24 @@
 {
-  "name": "hyper-bilibili",
-  "version": "1.0.0",
-  "description": "",
-  "engines": {
-    "yarn": ">=1.22.0"
-  },
-  "license": "GPL-3.0-only",
-  "scripts": {
-    "start": "aiot server --watch --open-nuttx",
-    "build": "aiot build --enable-jsc --enable-protobuf",
-    "release": "aiot release --enable-jsc --enable-protobuf --enable-image-png8",
-    "watch": "aiot watch --open-nuttx",
-    "lint": "eslint --format codeframe --fix --ext .ux,.js src/",
-    "postinstall": "node -e \"if (process.env.npm_execpath && !process.env.npm_execpath.includes('yarn')) { console.error('Please use Yarn to install dependencies!'); process.exit(1); }\""
-  },
-  "lint-staged": {
-    "*.{ux,js}": [
-      "prettier --write",
-      "eslint --format codeframe --fix",
-      "git add"
-    ],
-    "*.{less,css}": [
-      "prettier --write",
-      "stylelint --fix --custom-syntax postcss-less",
-      "git add"
-    ]
-  },
   "devDependencies": {
-    "@aiot-toolkit/jsc": "^1.0.7",
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
-    "aiot-toolkit": "2.0.4-beta.3",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^9.18.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-import-resolver-node": "^0.3.7",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-ux": "^0.0.4",
-    "husky": "^9.1.7",
-    "less": "^4.2.2",
-    "less-loader": "^12.2.0",
-    "lint-staged": "^15.4.1",
-    "postcss-html": "^1.8.0",
-    "postcss-less": "^6.0.0",
-    "prettier": "^3.4.2",
-    "stylelint": "^16.13.2",
-    "stylelint-config-recess-order": "^6.0.0",
-    "stylelint-config-standard": "^37.0.0",
-    "stylelint-order": "^6.0.4",
-    "ux-types": "^0.1.1"
+    "@astralsight/astroforge": "^0.0.6",
+    "@rsbuild/core": "^2.0.0",
+    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5.0.0"
+  },
+  "name": "astroforge-app",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "generate:vela-tailwind": "node scripts/generate-vela-tailwind.mjs",
+    "build": "pnpm generate:vela-tailwind && astroforge build --target vela",
+    "release": "pnpm generate:vela-tailwind && astroforge release --target vela",
+    "dev": "pnpm generate:vela-tailwind && astroforge dev",
+    "inspect": "astroforge inspect rpk dist/*.debug.rpk"
   },
   "dependencies": {
-    "dayjs": "^1.11.13",
-    "jpeg-js": "^0.4.4",
-    "semver": "^7.6.3"
+    "@astralsight/astroforge-core": "^0.0.6",
+    "@astralsight/astroforge-rsbuild-plugin": "^0.0.6"
   }
 }
