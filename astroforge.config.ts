@@ -45,7 +45,7 @@ export default {
       backgroundColor: "#000000",
     },
     router: {
-      entry: "pages/app/arealist",
+      entry: "pages/app/entry/splash",
     },
   },
   plugin: {

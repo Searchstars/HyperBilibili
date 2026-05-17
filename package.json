@@ -14,7 +14,7 @@
     "inspect": "astroforge inspect rpk dist/*.debug.rpk"
   },
   "devDependencies": {
-    "@astralsight/astroforge": "^0.0.10",
+    "@astralsight/astroforge": "^0.0.11",
     "@rsbuild/core": "^2.0.0",
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4.3.0",
@@ -24,12 +24,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@astralsight/astroforge-core": "^0.0.10",
-    "@astralsight/astroforge-rsbuild-plugin": "^0.0.10"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@astralsight/astroforge-rsbuild-plugin@0.0.10": "patches/@astralsight__astroforge-rsbuild-plugin@0.0.10.patch"
-    }
+    "@astralsight/astroforge-core": "^0.0.11",
+    "@astralsight/astroforge-rsbuild-plugin": "^0.0.11"
   }
 }
