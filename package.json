@@ -1,24 +1,35 @@
 {
+  "name": "hyperbilibili",
+  "private": true,
+  "version": "2.5.0",
+  "type": "module",
+  "scripts": {
+    "prebuild": "node scripts/gen-buildinfo.mjs && pnpm generate:vela-tailwind",
+    "prerelease": "node scripts/gen-buildinfo.mjs && pnpm generate:vela-tailwind",
+    "build": "astroforge build --target vela",
+    "release": "astroforge release --target vela",
+    "dev": "pnpm generate:vela-tailwind && astroforge dev",
+    "generate:vela-tailwind": "node scripts/generate-vela-tailwind.mjs",
+    "build:gifs": "node scripts/build-gifs.mjs",
+    "inspect": "astroforge inspect rpk dist/*.debug.rpk"
+  },
   "devDependencies": {
     "@astralsight/astroforge": "^0.0.10",
     "@rsbuild/core": "^2.0.0",
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4.3.0",
+    "gifenc": "^1.0.3",
+    "sharp": "^0.34.1",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.0.0"
-  },
-  "name": "astroforge-app",
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "generate:vela-tailwind": "node scripts/generate-vela-tailwind.mjs",
-    "build": "pnpm generate:vela-tailwind && astroforge build --target vela",
-    "release": "pnpm generate:vela-tailwind && astroforge release --target vela",
-    "dev": "pnpm generate:vela-tailwind && astroforge dev",
-    "inspect": "astroforge inspect rpk dist/*.debug.rpk"
   },
   "dependencies": {
     "@astralsight/astroforge-core": "^0.0.10",
     "@astralsight/astroforge-rsbuild-plugin": "^0.0.10"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@astralsight/astroforge-rsbuild-plugin@0.0.10": "patches/@astralsight__astroforge-rsbuild-plugin@0.0.10.patch"
+    }
   }
 }

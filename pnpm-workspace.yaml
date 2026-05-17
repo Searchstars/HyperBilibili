@@ -1,2 +1,5 @@
 onlyBuiltDependencies:
   - '@parcel/watcher'
+
+patchedDependencies:
+  '@astralsight/astroforge-rsbuild-plugin@0.0.10': patches/@astralsight__astroforge-rsbuild-plugin@0.0.10.patch
