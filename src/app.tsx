@@ -1,12 +1,10 @@
-// 应用顶层模块。
+// AstroForge 应用级模块。
 //
-// AstroForge 0.0.10 会把 app 生命周期函数体按源码片段写入 app.js，但不会把
-// shared 模块 import 一起打包进 Vela 运行时入口。这里保持顶层生命周期无副
-// 作用，避免设备启动阶段引用未定义的 helper 导致直接退出。
-
+// `default export` 的对象会被前端提取为 IR 的 `app.lifecycle`，对应 Vela
+// 厂商运行时 app.js 的 `$app_script$` 默认导出。常用 hook：`onCreate` /
+// `onDestroy` / `onError` / `onPageNotFound`，按需添加。
 export default {
-  onCreate() {},
-  onDestroy() {
-    // 当前没有持久 socket 或后台任务；保留 hook 方便后续接入。
+  onCreate() {
+    // 应用初始化时调用一次。可在此初始化全局状态或注册系统监听。
   },
 };

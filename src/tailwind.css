@@ -1,19 +1,1 @@
 @import "tailwindcss";
-
-/* 全局根样式。
- *
- * Vela 渲染层不会自动给页面 root 元素分配尺寸；旧版每个 .ux 重复写
- * width/height/background-color，新版集中到这里。design width 已锁为
- * device-width，单位 px 与设备真实像素一致。 */
-
-.page-root {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    color: #ffffff;
-    overflow: hidden;
-}
