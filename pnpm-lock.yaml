@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@astralsight/astroforge-core':
-        specifier: ^0.0.11
-        version: 0.0.11
+        specifier: ^0.0.12
+        version: 0.0.12
       '@astralsight/astroforge-rsbuild-plugin':
-        specifier: ^0.0.11
-        version: 0.0.11(@rsbuild/core@2.0.6)
+        specifier: ^0.0.12
+        version: 0.0.12(@rsbuild/core@2.0.6)
       dayjs:
         specifier: ^1.11.10
         version: 1.11.20
@@ -22,8 +22,8 @@ importers:
         version: 7.8.0
     devDependencies:
       '@astralsight/astroforge':
-        specifier: ^0.0.11
-        version: 0.0.11
+        specifier: ^0.0.12
+        version: 0.0.12
       '@rsbuild/core':
         specifier: ^2.0.0
         version: 2.0.6
@@ -46,54 +46,54 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  '@astralsight/astroforge-cli-darwin-arm64@0.0.11':
-    resolution: {integrity: sha512-B/jirwDPgqzt3hUnim7PWq/ejAW3ndJwA/cYGgL8e+Zce7UhV4YL8oUNnJHR93BOZWA2evKv4r/jdZe7idxZ2g==}
+  '@astralsight/astroforge-cli-darwin-arm64@0.0.12':
+    resolution: {integrity: sha512-9pCBNm//9OPsgRYw2kZXWGf4dUlZPdsNMHd2x+yYqPFYWRZCmlrgR99O4EMoRKYxud0njkK8dGaxKLGYWQ8/IA==}
     engines: {node: '>=18.18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@astralsight/astroforge-cli-darwin-x64@0.0.11':
-    resolution: {integrity: sha512-Inco1hebZz7mlfSrGYZZivE3xFkL2BtsQh+xHU7LP8sQP9g0EUPnNdF94qU+lPfojdHpcp7xJwWHpW3Yao9BIw==}
+  '@astralsight/astroforge-cli-darwin-x64@0.0.12':
+    resolution: {integrity: sha512-4jbt8EDNur+msUOlimYNUj3ZBK/XtaiNeWw0XThtrRW1yws3qHw5PCtwNd2mS/qjBDKh2/+rwQZErL0TemMACQ==}
     engines: {node: '>=18.18'}
     cpu: [x64]
     os: [darwin]
 
-  '@astralsight/astroforge-cli-linux-arm64-gnu@0.0.11':
-    resolution: {integrity: sha512-rKU5aZCyWgX7NVhFPEqUIrA3sr0BZzt/zFRlz0B5SbwoNVio8gnRMXAjp3SKic5CUYT9SbbR/Dqn8wqO6Khiew==}
+  '@astralsight/astroforge-cli-linux-arm64-gnu@0.0.12':
+    resolution: {integrity: sha512-uDN9fynkqn2LNW6bXsK8jCJ5x8D8vvDKV2K8HXNYZYONj5ZKEuovN9+Vtv7Pgdys3eG+cxzSB03Ok4/HrKtJ0w==}
     engines: {node: '>=18.18'}
     cpu: [arm64]
     os: [linux]
 
-  '@astralsight/astroforge-cli-linux-x64-gnu@0.0.11':
-    resolution: {integrity: sha512-OQxy4uA8sNq9BN1et7I9sPbcPHOFjqNpwzwZreT6VLFcCf1O1CUfvr9IBDuEQu1SRgsGLHKYJOpXr8jKaKhofA==}
+  '@astralsight/astroforge-cli-linux-x64-gnu@0.0.12':
+    resolution: {integrity: sha512-suj+eLMh/vbYMmAw8707edGoxpjBTipuwrBAgFyVe/XXyYuXVkRkuRWq0eX2LPmAbCuCjPSqzHxWzxvFr1PllQ==}
     engines: {node: '>=18.18'}
     cpu: [x64]
     os: [linux]
 
-  '@astralsight/astroforge-cli-win32-arm64-msvc@0.0.11':
-    resolution: {integrity: sha512-qrig8eEsBFIlJHrFYgKZ3aLX2lGgFrlis6KgfVDX/tgIptmyIXlQ7t3qRf9YujLHC1SJeplXCAadfZjccoXcTQ==}
+  '@astralsight/astroforge-cli-win32-arm64-msvc@0.0.12':
+    resolution: {integrity: sha512-STCvA5FYBN+pvJPTfl/KvdmaOWTdZ0Su+CL1S+Yzu8P/kWILM9hS37SQ9ZPKLfnia+rFO96N4BpMI5EtzPeQyg==}
     engines: {node: '>=18.18'}
     cpu: [arm64]
     os: [win32]
 
-  '@astralsight/astroforge-cli-win32-x64-msvc@0.0.11':
-    resolution: {integrity: sha512-99KcJixkhbhAWeKYQE8Vq9JlLJl1G/IzaMa8dOeD3mydMMRlP31GcHO0vaA3ypMKxnsPSU7NwGM0AKRAw+yFLw==}
+  '@astralsight/astroforge-cli-win32-x64-msvc@0.0.12':
+    resolution: {integrity: sha512-rZfHJHlkX2e20wEIHJCceKSkQ9ksodhqaNGHgTo63O3eKj0P76e5ShXQHN/1fR4XT28iI3s1A5Jv44GHOOPABA==}
     engines: {node: '>=18.18'}
     cpu: [x64]
     os: [win32]
 
-  '@astralsight/astroforge-core@0.0.11':
-    resolution: {integrity: sha512-ty5bbYBdMFpQ+EzdD8AF12WtTFBPIzIx9RlDRgpluB6M5d+ifwdyOeyZdkmnYr3E5ivcXNxB3kIW6BWdOKtF/A==}
+  '@astralsight/astroforge-core@0.0.12':
+    resolution: {integrity: sha512-EMxakOrkeWm4/K/ggjKkVuCgBSNreGubbYD43HM0q1bLPsox1qtHR4zEbhl0RmISOnCGC+DP4SoqIfVaCqzbvA==}
     engines: {node: '>=18.18'}
 
-  '@astralsight/astroforge-rsbuild-plugin@0.0.11':
-    resolution: {integrity: sha512-8nXQs83fFOlNVbqQtdMtRNPOxdqaTE4IYo2UhyLOs830p4oM4oTeKF7vbsLHt79Y6rRkLb1LtT52gwkMWnAPkg==}
+  '@astralsight/astroforge-rsbuild-plugin@0.0.12':
+    resolution: {integrity: sha512-0V4JlVGUGYCpjf4HZjnuoVd7EqobsL/rE7ikgqULVWj7L/kZP3oMvjQ4knGM0E4/J8Byn7vi/xMHlq4efhqzFA==}
     engines: {node: '>=18.18'}
     peerDependencies:
       '@rsbuild/core': '>=1.0.0'
 
-  '@astralsight/astroforge@0.0.11':
-    resolution: {integrity: sha512-HIn3dKqgD7jmoZ4rcMrFw5u06Krg1EDnoGZzDbqKo+NenU3Gu6zGSQEye2L+Y2PEeNyqlS8WByEntwZzcQOgPg==}
+  '@astralsight/astroforge@0.0.12':
+    resolution: {integrity: sha512-2Gaj9d/Fwl+pHXkcAFbB/tShe4lcPWr05kWA51BTejy3BwaP2UugsgKPM0PRvR3KNNtSEAbCrBNrkXycCYPhWw==}
     engines: {node: '>=18.18'}
     hasBin: true
 
@@ -549,40 +549,40 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
-  '@astralsight/astroforge-cli-darwin-arm64@0.0.11':
+  '@astralsight/astroforge-cli-darwin-arm64@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-cli-darwin-x64@0.0.11':
+  '@astralsight/astroforge-cli-darwin-x64@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-cli-linux-arm64-gnu@0.0.11':
+  '@astralsight/astroforge-cli-linux-arm64-gnu@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-cli-linux-x64-gnu@0.0.11':
+  '@astralsight/astroforge-cli-linux-x64-gnu@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-cli-win32-arm64-msvc@0.0.11':
+  '@astralsight/astroforge-cli-win32-arm64-msvc@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-cli-win32-x64-msvc@0.0.11':
+  '@astralsight/astroforge-cli-win32-x64-msvc@0.0.12':
     optional: true
 
-  '@astralsight/astroforge-core@0.0.11': {}
+  '@astralsight/astroforge-core@0.0.12': {}
 
-  '@astralsight/astroforge-rsbuild-plugin@0.0.11(@rsbuild/core@2.0.6)':
+  '@astralsight/astroforge-rsbuild-plugin@0.0.12(@rsbuild/core@2.0.6)':
     dependencies:
-      '@astralsight/astroforge-core': 0.0.11
+      '@astralsight/astroforge-core': 0.0.12
       '@babel/parser': 7.29.3
       '@rsbuild/core': 2.0.6
 
-  '@astralsight/astroforge@0.0.11':
+  '@astralsight/astroforge@0.0.12':
     optionalDependencies:
-      '@astralsight/astroforge-cli-darwin-arm64': 0.0.11
-      '@astralsight/astroforge-cli-darwin-x64': 0.0.11
-      '@astralsight/astroforge-cli-linux-arm64-gnu': 0.0.11
-      '@astralsight/astroforge-cli-linux-x64-gnu': 0.0.11
-      '@astralsight/astroforge-cli-win32-arm64-msvc': 0.0.11
-      '@astralsight/astroforge-cli-win32-x64-msvc': 0.0.11
+      '@astralsight/astroforge-cli-darwin-arm64': 0.0.12
+      '@astralsight/astroforge-cli-darwin-x64': 0.0.12
+      '@astralsight/astroforge-cli-linux-arm64-gnu': 0.0.12
+      '@astralsight/astroforge-cli-linux-x64-gnu': 0.0.12
+      '@astralsight/astroforge-cli-win32-arm64-msvc': 0.0.12
+      '@astralsight/astroforge-cli-win32-x64-msvc': 0.0.12
 
   '@babel/helper-string-parser@7.27.1': {}
 

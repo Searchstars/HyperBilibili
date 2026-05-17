@@ -16,7 +16,7 @@
     "inspect": "astroforge inspect rpk dist/*.debug.rpk"
   },
   "devDependencies": {
-    "@astralsight/astroforge": "^0.0.11",
+    "@astralsight/astroforge": "^0.0.12",
     "@rsbuild/core": "^2.0.0",
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4.3.0",
@@ -24,8 +24,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@astralsight/astroforge-core": "^0.0.11",
-    "@astralsight/astroforge-rsbuild-plugin": "^0.0.11",
+    "@astralsight/astroforge-core": "^0.0.12",
+    "@astralsight/astroforge-rsbuild-plugin": "^0.0.12",
     "dayjs": "^1.11.10",
     "semver": "^7.6.0"
   }
