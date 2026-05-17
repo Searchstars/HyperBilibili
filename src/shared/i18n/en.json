@@ -1,0 +1,159 @@
+{
+    "about": {
+        "title": "About the App",
+        "projectOwnerShip": "Project By",
+        "designers": "Designers Involved",
+        "developers": "Developers Involved",
+        "moreResources": "For more resources, visit",
+        "osw": "OpenSource Project Statement",
+        "buildinfo": "Build Info",
+        "disclaimer": "Disclaimer"
+    },
+    "arealist": {
+        "title": "Features",
+        "home": "Home",
+        "dynamic": "Dynamic",
+        "my": "My Profile",
+        "settings": "Settings",
+        "downloads": "Downloads",
+        "scrollToSearch": "Swipe up to search"
+    },
+    "dmlist": {
+        "title": "Messages",
+        "currentNoMessage": "No messages currently",
+        "userCountLimit": "Currently only supports displaying up to 10 users~"
+    },
+    "dmpage": {
+        "withdrawn": "[Withdrawn]",
+        "notSupportedMessage": "This message cannot be displayed"
+    },
+    "eularead": {
+        "title": "Agreement",
+        "sectitle": "Before using Hyperbili, you must read and agree to the User Agreement and Privacy Policy."
+    },
+    "favfolders": {
+        "title": "Favorites",
+        "count": "Count"
+    },
+    "foldervideos": {
+        "title": "Favorite Folder",
+        "no": "Page",
+        "page": ""
+    },
+    "history": {
+        "title": "History"
+    },
+    "login": {
+        "scanToLogin": "Scan to Login",
+        "goToOfficialApp": "Please visit the official app",
+        "doScan": "Perform scan to log in"
+    },
+    "main": {
+        "title": "Home"
+    },
+    "messages": {
+        "title": "My Messages",
+        "replyMe": "Replies to Me",
+        "recvLike": "Likes Received",
+        "atMe": "Mentions",
+        "systemNotification": "System Notifications"
+    },
+    "mypage": {
+        "title": "My Profile",
+        "favourite": "My Favorites",
+        "history": "History",
+        "showLater": "Watch Later",
+        "messages": "My Messages"
+    },
+    "networkerror": {
+        "title": "Hmm... You seem to be offline!",
+        "sectitle": "Please check if your device is connected to Wi-Fi or mobile data.",
+        "retry": "Retry",
+        "downloads": "My Downloads >",
+        "exit": "Exit"
+    },
+    "picturedetail": {
+        "bigImageTip": "Image too large, may not display",
+        "scaleTip": "Scale Adjustment"
+    },
+    "prepage": {
+        "loadingTip": "Loading account data...",
+        "gotProblems": "Having trouble? Re-login"
+    },
+    "replytools": {
+        "title": "Comments",
+        "like": "Like this comment",
+        "showReply": "View Replies",
+        "showDetail": "View Details"
+    },
+    "savedcontent": {
+        "title": "Saved Content"
+    },
+    "search": {
+        "title": "Search",
+        "clickToSearch": "Click to Search",
+        "hotSearch": "Trending Searches"
+    },
+    "searchresult": {
+        "title": "Search",
+        "all": "All",
+        "video": "Video",
+        "user": "User",
+        "article": "Article"
+    },
+    "video": {
+        "title": "Video",
+        "aisummary": "Video Summary",
+        "manifest": "Video List",
+        "showLater": "Watch Later",
+        "showOnPhone": "Watch on Phone",
+        "sendReply": "Send Comment"
+    },
+    "settings": {
+        "title": "Settings",
+        "videoPushRelevance": "Video Recommendation Relevance",
+        "videoPushCount": "Number of Recommended Videos on Homepage",
+        "enableFullAnimation": "Enable Full Animation",
+        "startupPage": "Startup Page",
+        "clearTemp": "Clear Cache",
+        "logOut": "Log Out",
+        "donation": "Donate",
+        "about": "About the App"
+    },
+    "dynamic": {
+        "title": "Dynamic",
+        "detail": {
+            "title": "Dynamic Detail"
+        }
+    },
+    "user": {
+        "title": "User",
+        "videos": "Videos",
+        "dynamices": "Dynamic",
+        "nocontent": "There is no content to show at present.",
+        "senddm": "Send DM",
+        "uservideos": {
+            "title": "User contributions"
+        }
+    },
+    "sessionood": {
+        "title": "Some problems have occurred",
+        "sectitle": "Your account login seems to have expired, please try to log in again!",
+        "relogin": "Login again",
+        "exit": "Exit"
+    },
+    "permissionerror": {
+        "title": "Permission Error",
+        "sectitle": "You have not granted the necessary permissions to run HyperBili. Please restart the app and make sure that all permissions requested by the app have been granted.",
+        "exit": "Exit"
+    },
+    "screenwidtherror": {
+        "title": "Screen width does not match",
+        "sectitle": "The target design screen width of this version of HyperBili is not equal to the screen width of the device you are currently using. Please make sure that you download the correct version for your device from the official website, otherwise this may mean that HyperBili does not currently support your device.",
+        "exit": "Exit"
+    },
+    "cleartmp": {
+        "title": "Clear cache",
+        "clear": "Clear now"
+    }
+}

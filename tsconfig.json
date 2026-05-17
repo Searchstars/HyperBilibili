@@ -3,7 +3,9 @@
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "jsx": "react-jsx",
     "jsxImportSource": "@astralsight/astroforge-core",
     "allowSyntheticDefaultImports": true,
@@ -13,7 +15,13 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": false,
-    "types": []
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@shared/*": ["src/shared/*"],
+      "@features/*": ["src/features/*"]
+    }
   },
   "include": ["src/**/*", "astroforge.config.ts", "rsbuild.config.ts"]
 }

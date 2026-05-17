@@ -1,10 +1,48 @@
-// AstroForge 应用级模块。
-//
-// `default export` 的对象会被前端提取为 IR 的 `app.lifecycle`，对应 Vela
-// 厂商运行时 app.js 的 `$app_script$` 默认导出。常用 hook：`onCreate` /
-// `onDestroy` / `onError` / `onPageNotFound`，按需添加。
+import { BilibiliClient } from "./shared/api/client";
+import { initI18n } from "./shared/i18n";
+import { loadSettings } from "./shared/settings";
+import { state } from "./shared/state";
+import { getDeviceInformation, getDeviceSerial, getNetworkType } from "./shared/utils/tools";
+
+// 注意：AstroForge plugin 把 onCreate 解析成普通函数，不保留 async 关键字，
+// 所以这里不能用 await，只能用 promise.then 链式调用。
+
 export default {
   onCreate() {
-    // 应用初始化时调用一次。可在此初始化全局状态或注册系统监听。
+    console.log("[app] onCreate");
+    initI18n();
+
+    loadSettings().then((s) => {
+      state.settings = s;
+      console.log("[app] settings loaded");
+    });
+
+    getDeviceInformation()
+      .then((info) => {
+        state.device.info = info;
+      })
+      .catch((e) => console.warn("[app] getDeviceInformation failed", e));
+
+    getDeviceSerial()
+      .then((serial) => {
+        state.device.serial = serial;
+      })
+      .catch((e) => console.warn("[app] getDeviceSerial failed", e));
+
+    getNetworkType()
+      .then((nt) => {
+        state.device.networkType = nt;
+      })
+      .catch((e) => console.warn("[app] getNetworkType failed", e));
+
+    const client = new BilibiliClient();
+    state.biliclient = client;
+    client.updateBUVID().catch((e) => console.warn("[app] updateBUVID failed", e));
+
+    state.ready = true;
+    console.log("[app] ready (init promises still resolving)");
+  },
+  onDestroy() {
+    console.log("[app] onDestroy");
   },
 };

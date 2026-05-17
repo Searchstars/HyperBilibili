@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bili-pink: #ff7da8;
+  --color-bili-pink-soft: #ffb8c8;
+  --color-bili-bg: #000000;
+  --color-bili-card: #222222;
+  --color-bili-text: #ffffff;
+  --color-bili-text-sub: #aaaaaa;
+
+  --animate-slide-in-up: slide-in-up 250ms ease-out;
+  --animate-slide-out-down: slide-out-down 250ms ease-in forwards;
+  --animate-fade-in: fade-in 300ms ease-out;
+  --animate-fade-out: fade-out 300ms ease-in forwards;
+
+  @keyframes slide-in-up {
+    from { transform: translateY(800px); }
+    to { transform: translateY(0); }
+  }
+  @keyframes slide-out-down {
+    from { transform: translateY(0); }
+    to { transform: translateY(800px); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+}
