@@ -245,7 +245,6 @@ export default {
       // 未收藏：弹出收藏夹选择窗口
       await this.ShowFavFolderPicker()
     }
-    this.UpdateVideoToolbarStatus()
   },
   async ShowFavFolderPicker() {
     try {
@@ -291,6 +290,7 @@ export default {
     var result = await global.biliclient.starVideoToFavFolders(this.vid.aid, selectedIds)
     var message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
     prompt.showToast({message: message})
+    this.UpdateVideoToolbarStatus()
   },
   async ConfirmUnstarAll() {
     try {
@@ -309,6 +309,7 @@ export default {
       var result = await global.biliclient.unstarVideoFromFavFolders(this.vid.aid, staredFolderIds)
       var message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
       prompt.showToast({message: message})
+      this.UpdateVideoToolbarStatus()
     } catch (e) {
       global.logger.error("取消收藏失败: ", e)
       prompt.showToast({message: "取消收藏失败，请重试"})
