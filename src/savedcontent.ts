@@ -35,8 +35,7 @@ async function loadStorageIndex(): Promise<void> {
     const fileExists = await asyncFile.access({ uri: indexFileUri });
     if (fileExists) {
       const indexData = await asyncFile.readText({ uri: indexFileUri });
-      const parsed = JSON.parse(indexData);
-      storageIndex = Array.isArray(parsed) ? parsed : [];
+      storageIndex = JSON.parse(indexData);
     } else {
       storageIndex = [];
     }

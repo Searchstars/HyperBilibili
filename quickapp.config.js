@@ -4,21 +4,16 @@ const os = require('os');
 const fs = require('fs');
 
 // 注入buildinfo
-let gitCommitHash = "unknown";
-try {
-    gitCommitHash = childProcess.execSync('git rev-parse HEAD').toString().trim();
-} catch (e) {
-    console.warn('Failed to get git commit hash:', e.message);
-}
-const username = process.env.CI ? "ci" : os.userInfo().username;
+const gitCommitHash = childProcess.execSync('git rev-parse HEAD').toString().trim();
+const username = os.userInfo().username;
 const buildTime = new Date().toISOString();
-const designWidth = JSON.parse(fs.readFileSync(path.resolve(__dirname, "src/manifest.json"))).config.designWidth
+const designWidth = JSON.parse(fs.readFileSync("src/manifest.json")).config.designWidth
 
 const buildInfoContent = `
-  export const GIT_COMMIT_HASH = "${gitCommitHash.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}";
+  export const GIT_COMMIT_HASH = "${gitCommitHash}";
   export const BUILD_TIME = "${buildTime}";
-  export const BUILD_USER = "${username.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}";
-  export const DESIGN_WIDTH = ${JSON.stringify(designWidth)};
+  export const BUILD_USER = "${username}";
+  export const DESIGN_WIDTH = ${designWidth};
 `;
 
 const buildInfoPath = path.resolve(__dirname, 'src/buildinfo.ts');

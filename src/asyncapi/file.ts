@@ -158,7 +158,7 @@ class FileAPI {
             file.access({
                 ...options,
                 success: () => resolve(true),
-                fail: () => resolve(false),
+                fail: (_, code: number) => reject(new Error(`Access failed with code ${code}`)),
             });
         });
     }

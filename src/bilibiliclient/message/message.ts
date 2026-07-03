@@ -48,6 +48,8 @@ export const BilibiliClientMessageMethods = {
         headers["Host"] = "api.vc.bilibili.com"
         headers["Origin"] = "https://message.bilibili.com"
         headers["Referer"] = "https://message.bilibili.com/"
+        headers["Content-Length"] = body.length.toString()
+
         const response = await this.postRequestWbi(url, {
             w_sender_uid: this.accountInfo.mid,
             w_receiver_id: receiver_id,

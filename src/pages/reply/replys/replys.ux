@@ -48,8 +48,7 @@ export default {
     },
     replymode: false,
     reply_target: null,
-    scrclass: "",
-    input_text: { content: "" }
+    scrclass: ""
   },
   async SendReply(evt) {
     this.replymode = false
@@ -63,17 +62,17 @@ export default {
     let result
     try {
       result = this.secmode
-        ? await global.biliclient.GiveSecReply(
-            this.type,
-            this.oid,
-            this.reply_target,
-            content
-          )
-        : await global.biliclient.GiveTreeReply(
+        ? await global.biliclient.GiveTreeReply(
             this.type,
             this.oid,
             this.reply_target,
             this.rootrpid,
+            content
+          )
+        : await global.biliclient.GiveSecReply(
+            this.type,
+            this.oid,
+            this.reply_target,
             content
           )
 

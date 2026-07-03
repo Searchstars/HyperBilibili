@@ -1,8 +1,6 @@
 import { device, network, router } from "./tsimports"
 
 export function formatNumber(num: number): string {
-    if (num == null || isNaN(num)) return "0";
-    if (num < 0) return "0";
     if (num < 1000) {
         return num.toString();
     }
