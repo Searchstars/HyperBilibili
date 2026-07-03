@@ -63,7 +63,15 @@ class SequenceAnim extends Anim {
     }
 
     stop(): void {
-        clearInterval(this.intervalId!);
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+        // Remove self from global.animations to prevent memory leak
+        if (global.animations && global.animations[this.pageId]) {
+            const idx = global.animations[this.pageId].indexOf(this);
+            if (idx !== -1) global.animations[this.pageId].splice(idx, 1);
+        }
     }
 }
 
@@ -124,7 +132,15 @@ class DomAnim extends Anim {
     }
 
     stop(): void {
-        clearInterval(this.intervalId!);
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+        // Remove self from global.animations to prevent memory leak
+        if (global.animations && global.animations[this.pageId]) {
+            const idx = global.animations[this.pageId].indexOf(this);
+            if (idx !== -1) global.animations[this.pageId].splice(idx, 1);
+        }
     }
 }
 

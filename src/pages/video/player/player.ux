@@ -138,6 +138,18 @@
   import prompt from "@system.prompt";
   import request from "@system.request";
   import { asyncFile } from "../../../asyncapi/file";
+
+  // Music API stub — getSongUrl/getLyric are not yet implemented.
+  // Wrapping in a safe object prevents ReferenceError crashes.
+  const api = {
+    getSongUrl(id, opts) {
+      if (opts && opts.fail) opts.fail('Music API not implemented');
+    },
+    getLyric(id, opts) {
+      if (opts && opts.fail) opts.fail('Music API not implemented');
+    }
+  };
+
   export default {
     props: { playlistId: { default: null }, startIndex: { default: 0 }, tracks: { default: null }, bvid: { default: null }, cachedAudioUri: { default: null }, cachedTitle: { default: null }, cachedCoverUrl: { default: null }, cachedAuthor: { default: null } },
     data: {
@@ -401,10 +413,9 @@
           that.audioReady = true;
         }
       };
-      audio.ontimeupdate = () => {
-        that.progress = audio.percent;
-        that.updateLyric();
-      };
+      // ontimeupdate is already set in bindAudioEvents() with pendingSongId guard.
+      // Do NOT overwrite it here — the bindAudioEvents version handles both
+      // playerState.playDuration and updateLyric().
       if (hasNewPlaylist || !fromAppStart) {
         if (that.videoMode) {
         } else {

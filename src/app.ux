@@ -42,16 +42,39 @@ export default {
     global.settings = settings
 
     console.log("appinit > initSavedContentManager")
-    await savedcontent.SavedContentManager.initialize()
+    try {
+      await savedcontent.SavedContentManager.initialize()
+    } catch (e) {
+      console.error("Failed to init SavedContentManager:", e)
+    }
     global.savedcontent = savedcontent
 
     console.log("appinit > initDeviceInfo")
-    global.DEVICE_INFO = await tools.getDeviceInformation()
-    global.DEVICE_SERIAL = await tools.getDeviceSerial()
-    global.DEVICE_NETWORK_TYPE = await tools.getNetworkType()
+    try {
+      global.DEVICE_INFO = await tools.getDeviceInformation()
+    } catch (e) {
+      console.error("Failed to get device info:", e)
+      global.DEVICE_INFO = { screenShape: "round", product: "unknown" }
+    }
+    try {
+      global.DEVICE_SERIAL = await tools.getDeviceSerial()
+    } catch (e) {
+      console.error("Failed to get device serial:", e)
+      global.DEVICE_SERIAL = "unknown"
+    }
+    try {
+      global.DEVICE_NETWORK_TYPE = await tools.getNetworkType()
+    } catch (e) {
+      console.error("Failed to get network type:", e)
+      global.DEVICE_NETWORK_TYPE = "unknown"
+    }
 
     console.log("appinit > initBgImg")
-    this.bgimg.Init()
+    try {
+      this.bgimg.Init()
+    } catch (e) {
+      console.error("Failed to init bgimg:", e)
+    }
     global.bgimg = this.bgimg
 
     console.log("appinit > createBiliClient")

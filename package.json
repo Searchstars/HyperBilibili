@@ -11,7 +11,7 @@
     "build": "aiot build --enable-jsc --enable-protobuf",
     "release": "aiot release --enable-jsc --enable-protobuf",
     "watch": "aiot watch --open-nuttx",
-    "lint": "eslint --format codeframe --fix --ext .ux,.js src/",
+    "lint": "eslint --format codeframe --fix src/",
     "postinstall": "node -e \"if (process.env.npm_execpath && !process.env.npm_execpath.includes('yarn')) { console.error('Please use Yarn to install dependencies!'); process.exit(1); }\""
   },
   "lint-staged": {

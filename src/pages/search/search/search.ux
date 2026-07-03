@@ -29,7 +29,7 @@
 import router from "@system.router"
 export default {
   private: {
-    hotwords: {},
+    hotwords: [],
     showHotwordsList: false,
     input_mode: false,
     anims: {

@@ -34,11 +34,15 @@ export function loadSettings(): void {
     key: 'settings',
     success: function (data) {
       if (data) {
-        const storedSettings = JSON.parse(data);
-        SETTINGS = {
-          ...SETTINGS,
-          ...storedSettings
-        };
+        try {
+          const storedSettings = JSON.parse(data);
+          SETTINGS = {
+            ...SETTINGS,
+            ...storedSettings
+          };
+        } catch (e) {
+          global.logger.warn('Failed to parse settings, using defaults:', e);
+        }
       }
       global.logger.log('Settings loaded:', SETTINGS);
     },

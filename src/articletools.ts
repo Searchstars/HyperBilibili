@@ -35,6 +35,7 @@ export function PatchArticleContent(doms: any) {
             if (!dom) continue; // 避免空节点
 
             if (dom.type === "img") {
+                if (!dom.attributes || !dom.attributes.src) continue;
                 // 如果图片的 src 包含 .png 或 .jpg 扩展名
                 if (dom.attributes.src.includes(".png") || dom.attributes.src.includes(".jpg")) {
                     // 确保 src 包含 http:// 或 https:// 前缀
@@ -46,7 +47,7 @@ export function PatchArticleContent(doms: any) {
 
                     if(dom.attributes){
                         // 如果图片过大，调整其尺寸
-                        if (parseInt(dom.attributes.height) > 500 || parseInt(dom.attributes.height) > 500) {
+                        if (parseInt(dom.attributes.height) > 500 || parseInt(dom.attributes.width) > 500) {
                             dom.attributes.src += "@250h"; // 对应补丁操作
                             dom.attributes._patched_sign = "large_picture_scaled"
                         }

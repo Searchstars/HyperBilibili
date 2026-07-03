@@ -4,7 +4,7 @@ export async function Jump() {
     storage.get({
         key: "bilibili_account",
         success: async (bilibili_account) => {
-            if (bilibili_account.length < 1) {
+            if (!bilibili_account || bilibili_account.length < 1) {
                 router.replace({
                     uri: "pages/app/entry/login"
                 })
@@ -13,6 +13,11 @@ export async function Jump() {
                     uri: "pages/app/entry/prepage"
                 })
             }
+        },
+        fail: function () {
+            router.replace({
+                uri: "pages/app/entry/login"
+            })
         }
     })
 }

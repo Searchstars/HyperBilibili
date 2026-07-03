@@ -18,7 +18,7 @@ function runVmPoolGC(){
     for(var name in global.vmPool){
         if(global.vmPool[name]){
             if(global.vmPool[name].$valid){
-                return
+                continue
             }
         }
 
@@ -46,15 +46,20 @@ export function InitPage(vm){
 
 export function OnBackPressTriggered(){
     GlobalActions.UpdateCurrentPageName()
-    global.vmPool[global.currentPageName].scrclass = "scroll-backanim"
+    if (global.vmPool[global.currentPageName]) {
+        global.vmPool[global.currentPageName].scrclass = "scroll-backanim"
+    }
     setTimeout(() => {
         GlobalActions.ClearCurrentVmSrcClass()
         router.back()
 
         var pageStack = router.getPages()
+        if (pageStack.length < 2) return
         var lastPageName = pageStack[pageStack.length - 2].name
         global.logger.log("lastpage=", lastPageName, "currentPage=", global.currentPageName)
-        global.vmPool[lastPageName].scrclass = ""
-        global.vmPool[lastPageName].scrclass = "scroll-frombackanim"
+        if (global.vmPool[lastPageName]) {
+            global.vmPool[lastPageName].scrclass = ""
+            global.vmPool[lastPageName].scrclass = "scroll-frombackanim"
+        }
     }, 150)
 }
