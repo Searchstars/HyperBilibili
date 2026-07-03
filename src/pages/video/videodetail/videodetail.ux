@@ -249,16 +249,19 @@ export default {
   },
   async ShowFavFolderPicker() {
     try {
-      const data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
+      var self = this
+      var data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
         global.biliclient.accountInfo.mid,
         this.vid.aid
       )
-      const list = data.list || []
-      this.favFolders = list.map((folder: any) => ({
-        id: folder.id,
-        title: folder.title,
-        selected: folder.fav_state === 1
-      }))
+      var list = data.list || []
+      this.favFolders = list.map(function(folder) {
+        return {
+          id: folder.id,
+          title: folder.title,
+          selected: folder.fav_state === 1
+        }
+      })
       this.favFolderPickerVisible = true
     } catch (e) {
       global.logger.error("获取收藏夹列表失败: ", e)
@@ -268,44 +271,44 @@ export default {
   HideFavFolderPicker() {
     this.favFolderPickerVisible = false
   },
-  ToggleFolder(folderId: string) {
-    this.favFolders = this.favFolders.map((f: any) => {
+  ToggleFolder(folderId) {
+    this.favFolders = this.favFolders.map(function(f) {
       if (f.id === folderId) {
-        return { ...f, selected: !f.selected }
+        return Object.assign({}, f, { selected: !f.selected })
       }
       return f
     })
   },
   async ConfirmAddToFav() {
-    const selectedIds = this.favFolders
-      .filter((f: any) => f.selected)
-      .map((f: any) => f.id)
+    var selectedIds = this.favFolders
+      .filter(function(f) { return f.selected })
+      .map(function(f) { return f.id })
     this.favFolderPickerVisible = false
     if (selectedIds.length === 0) {
       prompt.showToast({message: "未选择任何收藏夹"})
       return
     }
-    const result = await global.biliclient.starVideoToFavFolders(this.vid.aid, selectedIds)
-    const message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
-    prompt.showToast({message})
+    var result = await global.biliclient.starVideoToFavFolders(this.vid.aid, selectedIds)
+    var message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
+    prompt.showToast({message: message})
   },
   async ConfirmUnstarAll() {
     try {
-      const data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
+      var data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
         global.biliclient.accountInfo.mid,
         this.vid.aid
       )
-      const list = data.list || []
-      const staredFolderIds = list
-        .filter((f: any) => f.fav_state === 1)
-        .map((f: any) => f.id)
+      var list = data.list || []
+      var staredFolderIds = list
+        .filter(function(f) { return f.fav_state === 1 })
+        .map(function(f) { return f.id })
       if (staredFolderIds.length === 0) {
         prompt.showToast({message: "该视频未被收藏"})
         return
       }
-      const result = await global.biliclient.unstarVideoFromFavFolders(this.vid.aid, staredFolderIds)
-      const message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
-      prompt.showToast({message})
+      var result = await global.biliclient.unstarVideoFromFavFolders(this.vid.aid, staredFolderIds)
+      var message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
+      prompt.showToast({message: message})
     } catch (e) {
       global.logger.error("取消收藏失败: ", e)
       prompt.showToast({message: "取消收藏失败，请重试"})
