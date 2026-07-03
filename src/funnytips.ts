@@ -1,3 +1,5 @@
+const date = new Date()
+
 const tips = [
     "你所热爱的，就是你热爱的",
     "让我猜猜你现在使用的设备是...？",
@@ -30,7 +32,6 @@ const AprilFoolsDayTips = [
 ]
 
 export function getTips(): string{
-    const date = new Date()
     // 愚人节特供
     if(date.getMonth() === 3 && date.getDate() === 1){
         return AprilFoolsDayTips[Math.floor(Math.random() * AprilFoolsDayTips.length)]

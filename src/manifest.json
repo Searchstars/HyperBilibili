@@ -50,7 +50,7 @@
         }
     ],
     "config": {
-        "logLevel": "warn",
+        "logLevel": "log",
         "designWidth": "device-width",
         "background": {
             "features": [

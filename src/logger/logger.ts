@@ -58,7 +58,7 @@ class Logger {
         const message = args.map((arg) => this.safeStringify(arg)).join(' ');
 
         // 在控制台输出日志
-        console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+        console.log(`%c[${timestamp}] [${level.toUpperCase()}] ${message}`, style);
 
         // 同步日志到文件
         this.flushLogToFile(`[${timestamp}] [${level.toUpperCase()}] ${message}`);

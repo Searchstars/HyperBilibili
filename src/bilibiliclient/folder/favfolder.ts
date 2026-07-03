@@ -7,14 +7,6 @@ export const BilibiliClientFavFolderMethods = {
         return response.data.data;
     },
 
-    // 获取用户所有收藏夹及目标视频在各收藏夹中的收藏状态
-    // 返回的每个 folder 对象中包含 fav_state 字段：0=未收藏, 1=已收藏
-    async getUserFavouriteFoldersWithVideoState(this: any, mid: string, aid: string): Promise<any> {
-        const url = `https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=${mid}&type=2&rid=${aid}`;
-        const response = await this.getRequest(url);
-        return response.data.data;
-    },
-
     // 获取目标收藏夹元数据
     async getFavouriteFolderMetadata(this: any, mlid: string): Promise<any> {
         const url = `https://api.bilibili.com/x/v3/fav/folder/info?media_id=${mlid}`;

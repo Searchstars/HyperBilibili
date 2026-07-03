@@ -55,10 +55,8 @@ export const BilibiliClientAPIRequestMethods = {
             const response = await this.fetch.fetch({
                 url,
                 responseType: responseType,
-                header: this.getHeaders(),
-                timeout: 15000
+                header: this.getHeaders()
             });
-            if (!response || !response.data) return void 0;
             return response.data;
         } catch (error) {
             global.logger.error(`GET请求失败，详细数据：`, error);
@@ -88,10 +86,8 @@ export const BilibiliClientAPIRequestMethods = {
                 responseType: 'json',
                 method: 'POST',
                 data,
-                header: headers,
-                timeout: 15000
+                header: headers
             });
-            if (!response || !response.data) return void 0;
             return response.data;
         } catch (error) {
             global.logger.error(`POST请求失败，详细数据：`, error);

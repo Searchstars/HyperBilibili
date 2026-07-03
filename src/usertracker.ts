@@ -1,8 +1,8 @@
 import dayjs from "dayjs"
 import { fetch } from "./tsimports"
 
-const TRACKER_URL: string = "https://tracker.hyperbili.astralsight.space/trackreport"
-// const TRACKER_URL: string = "http://192.168.1.247:4080/trackreport"
+//const TRACKER_URL: string = "https://tracker.hyperbili.astralsight.space/trackreport"
+const TRACKER_URL: string = "http://192.168.1.247:4080/trackreport"
 const TRACKER_SERVER_PROTOCOL_VERSION = "v1"
 
 interface TrackedInfoUploadPacket {

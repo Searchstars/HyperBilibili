@@ -4,7 +4,7 @@
 /sign
 /dist
 /build
-# .husky/ — hooks are tracked in version control
+.husky/
 */__pycache__
 src/buildinfo.ts
 **/.DS_Store
