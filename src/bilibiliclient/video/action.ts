@@ -38,4 +38,28 @@ export const BilibiliClientVideoActionMethods = {
             return false;
         }
     },
+
+    // 取消收藏视频从默认收藏夹
+    async unstarVideoFromDefaultFavFolderByBVID(this: any, bvid: string): Promise<any> {
+        let defaultFolderID = 0;
+        const folders = await this.getUserFavouriteFolders(this.accountInfo.mid);
+        folders.list.forEach((folder: any) => {
+            if (folder.title === "默认收藏夹") {
+                defaultFolderID = folder.id;
+            }
+        });
+        if (!defaultFolderID) return false;
+
+        try {
+            const videoInfo = await this.getVideoInfoByBVID(bvid);
+            const aid = videoInfo.aid;
+            const url = `https://api.bilibili.com/x/v3/fav/resource/deal`;
+            const data = `rid=${aid}&csrf=${this.biliJct}&type=2&add_media_ids=&del_media_ids=${defaultFolderID}`;
+            const response = await this.postRequest(url, data, "application/x-www-form-urlencoded");
+            return response.data.code;
+        } catch (error) {
+            global.logger.error("Error unstarring video: ", error);
+            return false;
+        }
+    },
 }

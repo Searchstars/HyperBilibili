@@ -220,9 +220,16 @@ export default {
     })
   },
   async AddToFav() {
-    const result = await global.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
-    const message = result ? "收藏失败，请重试，或重新登录后再试" : "收藏成功"
-    prompt.showToast({message})
+    let result;
+    if (this.stared) {
+      result = await global.biliclient.unstarVideoFromDefaultFavFolderByBVID(this.bvid)
+      const message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
+      prompt.showToast({message})
+    } else {
+      result = await global.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
+      const message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
+      prompt.showToast({message})
+    }
     this.UpdateVideoToolbarStatus()
   },
   async GenBlur(evt) {
