@@ -54,6 +54,22 @@
     </scroll>
     <full-screen-input style="position: absolute" if="{{replymode}}" @send="SendReply"
       @exit="ExitInput"></full-screen-input>
+    <div class="fav-folder-overlay" if="{{favFolderPickerVisible}}">
+      <div class="fav-folder-picker">
+        <text class="fav-folder-picker-title">选择收藏夹</text>
+        <scroll scroll-y="true" class="fav-folder-list">
+          <div class="fav-folder-item {{folder.selected ? 'fav-folder-item-selected' : ''}}"
+            for="folder in favFolders" @click="ToggleFolder(folder.id)">
+            <text class="fav-folder-checkmark">{{folder.selected ? '✓' : '○'}}</text>
+            <text class="fav-folder-name">{{folder.title}}</text>
+          </div>
+        </scroll>
+        <div class="fav-folder-buttons">
+          <default-button text="取消" @click="HideFavFolderPicker"></default-button>
+          <default-button text="确认" @click="ConfirmAddToFav"></default-button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,7 +93,9 @@ export default {
     starsrc: "/common/vidtool_star.png",
     replymode: false,
     renderingCover: false,
-    scrclass: ""
+    scrclass: "",
+    favFolderPickerVisible: false,
+    favFolders: []
   },
   computed: {
     stat_view() {
@@ -220,17 +238,78 @@ export default {
     })
   },
   async AddToFav() {
-    let result;
     if (this.stared) {
-      result = await global.biliclient.unstarVideoFromDefaultFavFolderByBVID(this.bvid)
-      const message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
-      prompt.showToast({message})
+      // 已收藏：从所有包含此视频的收藏夹中删除
+      await this.ConfirmUnstarAll()
     } else {
-      result = await global.biliclient.starVideoToDefaultFavFolderByBVID(this.bvid)
-      const message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
-      prompt.showToast({message})
+      // 未收藏：弹出收藏夹选择窗口
+      await this.ShowFavFolderPicker()
     }
     this.UpdateVideoToolbarStatus()
+  },
+  async ShowFavFolderPicker() {
+    try {
+      const data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
+        global.biliclient.accountInfo.mid,
+        this.vid.aid
+      )
+      const list = data.list || []
+      this.favFolders = list.map((folder: any) => ({
+        id: folder.id,
+        title: folder.title,
+        selected: folder.fav_state === 1
+      }))
+      this.favFolderPickerVisible = true
+    } catch (e) {
+      global.logger.error("获取收藏夹列表失败: ", e)
+      prompt.showToast({message: "获取收藏夹列表失败，请重试"})
+    }
+  },
+  HideFavFolderPicker() {
+    this.favFolderPickerVisible = false
+  },
+  ToggleFolder(folderId: string) {
+    this.favFolders = this.favFolders.map((f: any) => {
+      if (f.id === folderId) {
+        return { ...f, selected: !f.selected }
+      }
+      return f
+    })
+  },
+  async ConfirmAddToFav() {
+    const selectedIds = this.favFolders
+      .filter((f: any) => f.selected)
+      .map((f: any) => f.id)
+    this.favFolderPickerVisible = false
+    if (selectedIds.length === 0) {
+      prompt.showToast({message: "未选择任何收藏夹"})
+      return
+    }
+    const result = await global.biliclient.starVideoToFavFolders(this.vid.aid, selectedIds)
+    const message = result === 0 ? "收藏成功" : "收藏失败，请重试，或重新登录后再试"
+    prompt.showToast({message})
+  },
+  async ConfirmUnstarAll() {
+    try {
+      const data = await global.biliclient.getUserFavouriteFoldersWithVideoState(
+        global.biliclient.accountInfo.mid,
+        this.vid.aid
+      )
+      const list = data.list || []
+      const staredFolderIds = list
+        .filter((f: any) => f.fav_state === 1)
+        .map((f: any) => f.id)
+      if (staredFolderIds.length === 0) {
+        prompt.showToast({message: "该视频未被收藏"})
+        return
+      }
+      const result = await global.biliclient.unstarVideoFromFavFolders(this.vid.aid, staredFolderIds)
+      const message = result === 0 ? "取消收藏成功" : "取消收藏失败，请重试，或重新登录后再试"
+      prompt.showToast({message})
+    } catch (e) {
+      global.logger.error("取消收藏失败: ", e)
+      prompt.showToast({message: "取消收藏失败，请重试"})
+    }
   },
   async GenBlur(evt) {
     // 该Feature在现在任何设备上运行都会卡死，故注释
