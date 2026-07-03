@@ -15,7 +15,7 @@ def getGitCommitHash():
             return commit_hash
         else:
             print("Failed to get commit hash. Make sure you are in a Git repository.")
-            Exception(f"Error: {result.stderr}")
+            raise Exception(f"Error: {result.stderr}")
     except Exception as e:
         print(f"An error occurred: {e}")
 
@@ -25,10 +25,8 @@ def getBuildTime():
     return formatted_datetime
 
 def readFileToJson(path):
-    f = open(path, "r")
-    f = f.read()
-    f = json.loads(f)
-    return f
+    with open(path, "r", encoding="utf-8") as f:
+        return json.loads(f.read())
 
 def writeJsonToFile(path, obj):
     with open(path, "w+", encoding="utf-8") as f:

@@ -20,7 +20,7 @@ export const BilibiliClientVideoActionMethods = {
         let defaultFolderID = 0;
         const folders = await this.getUserFavouriteFolders(this.accountInfo.mid);
         folders.list.forEach((folder: any) => {
-            if (folder.title === "默认收藏夹") {
+            if (folder.attr === 1 || folder.id === 0) {
                 defaultFolderID = folder.id;
             }
         });
@@ -44,7 +44,7 @@ export const BilibiliClientVideoActionMethods = {
         let defaultFolderID = 0;
         const folders = await this.getUserFavouriteFolders(this.accountInfo.mid);
         folders.list.forEach((folder: any) => {
-            if (folder.title === "默认收藏夹") {
+            if (folder.attr === 1 || folder.id === 0) {
                 defaultFolderID = folder.id;
             }
         });

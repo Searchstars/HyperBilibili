@@ -81,7 +81,7 @@ import {kmeansCircleGradientImage} from "@src/image/jpegkmeans.ts"
 
 export default {
   public: {
-    bvid: 1 // 视频BVID
+    bvid: "" // 视频BVID
   },
   private: {
     vid: {},
@@ -199,7 +199,7 @@ export default {
   },
   async SendReply(evt) {
     this.replymode = false
-    if (evt.detail.content === 0) {
+    if (!evt.detail.content || evt.detail.content.length === 0) {
       return prompt.showToast({
         message: "评论内容不得为空！",
         duration: 2000

@@ -7,8 +7,6 @@ module.exports = {
   ignoreFiles: ["node_modules", "test", "dist", "**/*.js"],
   rules: {
     "no-descending-specificity": null,
-    "color-hex-case": "lower",
-    "color-hex-length": "short",
     "at-rule-no-unknown": null,
     "block-no-empty": null,
     "selector-pseudo-class-no-unknown": [

@@ -50,7 +50,7 @@ export default {
     user: {},
     stat: {},
     navnum: {},
-    masterpiece: {},
+    masterpiece: [],
     dynamiclist: {},
     anims: {
       show_loading: false

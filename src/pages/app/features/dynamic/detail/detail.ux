@@ -84,7 +84,7 @@ export default {
   onInit() {
     // 来自子组件push的object传递会变成字符串
     // 因此需要进行类型检查和手动parse
-    if (typeof this.dyn != Object) {
+    if (typeof this.dyn !== "object") {
       this.dyn = JSON.parse(this.dyn)
       console.log(this.dyn)
     }
