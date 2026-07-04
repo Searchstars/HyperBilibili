@@ -94,7 +94,6 @@ export default {
   },
   Reply(evt) {
     this.replymode = true
-    this.input_text.content = ""
     this.reply_target = evt.detail.rpid
   },
   ShowTools(evt) {
