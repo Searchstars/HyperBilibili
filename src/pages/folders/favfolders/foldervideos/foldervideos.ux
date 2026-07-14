@@ -1,29 +1,18 @@
 <import name="title-bar" src="@components/TitleBar/TitleBar.ux"></import>
 <import name="videoshow" src="@components/Video/Video.ux"></import>
+<import name="floating-page-changer" src="@components/FloatingPageChanger/FloatingPageChanger.ux"></import>
 
 <template>
   <div class="page">
     <scroll scroll-y="true" class="scroll {{scrclass}}" bounces="true">
       <title-bar title="foldervideos.title" static></title-bar>
-      
-      <div style="flex-direction: row; align-items: center">
-        <div static @click="BackPN()" style="width: 40px; height: 40px; align-items: center; justify-content: center">
-          <image src="/common/changepage_left.png" static></image>
-        </div>
-        <text style.static="margin-left: 17px; font-size: 25px; font-weight: 600; color: #9e9e9e">
-          {{ $t("foldervideos.no") }} {{ current_pn }} {{ $t("foldervideos.page") }}
-        </text>
-        <div static style="margin-left: 17px; width: 40px; height: 40px; align-items: center; justify-content: center" @click="NextPN()">
-          <image src="/common/changepage_right.png" static></image>
-        </div>
-      </div>
-      
       <div class="foldervid_div">
         <videoshow video="{{$item}}" for="{{foldervid_vids}}"></videoshow>
       </div>
       
       <text style="margin-top: 25px" static></text>
     </scroll>
+    <floating-page-changer style="position: absolute" current_pn="{{current_pn}}" @backpn="BackPN" @nextpn="NextPN"></floating-page-changer>
     
     <image style="position: absolute; margin-top: 265px" if="{{anims.show_loading}}" src="{{anims.loading_src.value}}"></image>
   </div>
